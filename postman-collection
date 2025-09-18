@@ -1,0 +1,67 @@
+{
+  "info": {
+    "_postman_id": "gpsyemek-api",
+    "name": "GpsYemek API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Orders",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer rstr_1a2b3c4d5e6f",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"get_orders\"\n}"
+        },
+        "url": {
+          "raw": "https://gpsyemek.com/api/v1/webhook/orders",
+          "protocol": "https",
+          "host": ["gpsyemek","com"],
+          "path": ["api","webhook"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Order Status",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer rstr_1a2b3c4d5e6f",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"order_updated\",\n  \"order\": {\n    \"id\": 123,\n    \"status\": 14\n  }\n}"
+        },
+        "url": {
+          "raw": "https://gpsyemek.com/api/v1/webhook/orders",
+          "protocol": "https",
+          "host": ["gpsyemek","com"],
+          "path": ["api","webhook"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
