@@ -108,7 +108,7 @@
                     <path d="M4.87492 7.20801L2.08325 9.99967L4.87492 12.7913" stroke-width="1.5"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                <span>{{ __('logout') }}</span>
+                <span>{{ __('Çıkış Yap') }}</span>
             </a>
             <form class="d-none" id="logout-form" action="{{ route('logout') }}" method="POST">
                 {{ csrf_field() }}

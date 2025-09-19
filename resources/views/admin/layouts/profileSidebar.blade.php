@@ -1,11 +1,11 @@
 <aside id="profileSidebar" class="ltr:translate-x-[105%] rtl:-translate-x-[105%] fixed top-0 ltr:right-0 rtl:left-0 z-[60] w-full h-full max-w-sm ltr:shadow-sidebar-left rtl:shadow-sidebar-right transition-all duration-500 bg-white">
     <div class="w-fit mx-auto text-center py-5">
         <button class="fa-solid fa-xmark absolute top-4 ltr:right-4 rtl:left-4 text-white bg-[#FB4E4E] xmark-btn"></button>
-        <figure class="relative z-10 w-[98px] h-[98px] border-2 border-dashed rounded-full inline-flex items-center justify-center border-white bg-gradient-to-t from-[#FF7A00] to-[#FF016C] 
+        <figure class="relative z-10 w-[98px] h-[98px] border-2 border-dashed rounded-full inline-flex items-center justify-center border-white bg-gradient-to-t from-[#FF7A00] to-[#FF016C]
         before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-24 before:h-24 before:rounded-full before:-z-10 before:bg-white">
             <img class="w-[90px] h-[90px] rounded-full shadow-avatar" src="{{ auth()->user()->image }}" alt="avatar">
         </figure>
-        
+
         <h3 class="font-medium text-sm leading-6 capitalize mb-0.5">{{ auth()->user()->name }}</h3>
         <p class="text-xs mb-0.5">{{ auth()->user()?->email ?? "" }}</p>
         <p class="text-xs">{{ auth()->user()?->phone ?? "" }}</p>
@@ -20,16 +20,16 @@
             </svg>
             <span class="text-sm leading-6 capitalize">{{ __('Profile') }}</span>
         </a>
-       
+
         <a href="{{ route('admin.profile.edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.33333 1.33301H5.99999C2.66666 1.33301 1.33333 2.66634 1.33333 5.99967V9.99967C1.33333 13.333 2.66666 14.6663 5.99999 14.6663H9.99999C13.3333 14.6663 14.6667 13.333 14.6667 9.99967V8.66634" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M10.6933 2.0135L5.44 7.26684C5.24 7.46684 5.04 7.86017 5 8.14684L4.71333 10.1535C4.60666 10.8802 5.12 11.3868 5.84666 11.2868L7.85333 11.0002C8.13333 10.9602 8.52666 10.7602 8.73333 10.5602L13.9867 5.30684C14.8933 4.40017 15.32 3.34684 13.9867 2.0135C12.6533 0.680168 11.6 1.10684 10.6933 2.0135Z" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M9.94 2.7666C10.3867 4.35993 11.6333 5.6066 13.2333 6.05993" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg> 
+            </svg>
             <span class="text-sm leading-6 capitalize">{{ __('levels.edit_profile') }}</span>
         </a>
-       
+
         @if (!blank(auth()->user()->bank))
         <a href="{{ route('admin.profile.bank-edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" enable-background="new 0 0 67 67" viewBox="0 0 67 67">
@@ -58,7 +58,7 @@
             <span class="text-sm leading-6 capitalize">{{ __('levels.bank') }}</span>
         </a>
         @endif
-        
+
         {{-- need to edit it by login as restaurant owner --}}
         @if(auth()->user()->myrole == 3 && auth()->user()->restaurant)
         <a href="{{ route('admin.restaurant.restaurant-edit',auth()->user()->restaurant) }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
@@ -68,7 +68,7 @@
             <span class="text-sm leading-6 capitalize">{{ __('validation.attributes.restaurant_id') }}</span>
         </a>
         @endif
-        
+
         <a href="{{ route('admin.profile.address-index') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.6667 5.99968V9.99968C14.6667 11.6664 14.3333 12.833 13.5867 13.5864L9.33333 9.33302L14.4867 4.17969C14.6067 4.70635 14.6667 5.30635 14.6667 5.99968Z" stroke-linecap="round" stroke-linejoin="round"/>
@@ -93,7 +93,7 @@
                 <path d="M10 8H2.41333" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M3.90001 5.7666L1.66667 7.99994L3.90001 10.2333" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span class="text-sm leading-6 capitalize">{{ __('Logout') }}</span>
+            <span class="text-sm leading-6 capitalize">{{ __('Çıkış Yap') }}</span>
         </a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
             @csrf
