@@ -10,17 +10,17 @@
 load_data();
 
 $('#date-search').on('click', function () {
-  let status = $('#status').val();
-  $('#maintable').DataTable().destroy();
-  load_data(status);
+    let status = $('#status').val();
+    $('#maintable').DataTable().destroy();
+    load_data(status);
 });
 
 
 $('#refresh').on('click', function () {
-  let activeStatus = $('#maintable').attr('data-status');
-  $('#status').val(activeStatus);
-  $('#maintable').DataTable().destroy();
-  load_data();
+    let activeStatus = $('#maintable').attr('data-status');
+    $('#status').val(activeStatus);
+    $('#maintable').DataTable().destroy();
+    load_data();
 });
 
 function load_data(status = '') {
@@ -32,6 +32,17 @@ function load_data(status = '') {
             data : {status : status}
         },
         columns : [
+            {
+                data : 'image',
+                name : 'image',
+                render: function(data, type, row) {
+                    if (data) {
+                        console.log({datas:data})
+                        return '<img src="'+data+'" width="50" class="img-thumbnail">';
+                    }
+                    return '<img src="/images/no-image.png" width="50" class="img-thumbnail">';
+                }
+            },
             {data : 'name', name : 'name'},
             {data : 'categories', name : 'categories'},
             {data : 'status', name : 'status'},

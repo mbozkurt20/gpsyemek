@@ -119,7 +119,7 @@ class BannerController extends BackendController
             $banner->addMediaFromRequest('image')->toMediaCollection('banner');
         }
 
-        return redirect(route('admin.banner.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.banner.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     /**

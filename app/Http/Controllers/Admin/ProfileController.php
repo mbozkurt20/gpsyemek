@@ -38,18 +38,18 @@ class ProfileController extends BackendController
 
     }
 
-    public function edit () 
+    public function edit ()
     {
         $this->data['user'] = auth()->user();
         return view('admin.profile.edit', $this->data);
     }
 
-    public function passwordEdit () 
+    public function passwordEdit ()
     {
         return view('admin.profile.passwordEdit');
     }
 
-    public function bankEdit () 
+    public function bankEdit ()
     {
         $this->data['bank'] = auth()->user()->bank;
         return view('admin.profile.bankEdit', $this->data);
@@ -81,7 +81,7 @@ class ProfileController extends BackendController
             $user->addMedia(request()->file('image'))->toMediaCollection('user');
         }
 
-        return redirect(route('admin.profile.edit'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.profile.edit'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     public function change(ChangePasswordRequest $request)
@@ -92,7 +92,7 @@ class ProfileController extends BackendController
         return redirect(route('admin.profile.password-edit'))->withSuccess('The Password updated successfully');
     }
 
-    public function addressindex() 
+    public function addressindex()
     {
         $this->data['addresses'] = auth()->user()->addresses;
         return view('admin.profile.address', $this->data);
@@ -157,7 +157,7 @@ class ProfileController extends BackendController
             'latitude'    => ['nullable', 'string', 'max:32'],
             'longitude'   => ['nullable', 'string', 'max:32'],
         ];
-        
+
         if($request->label == AddressType::OTHER) {
             $validate['label_name'] =  ['required', 'string', 'max:80'];
         }
@@ -196,6 +196,6 @@ class ProfileController extends BackendController
         $bank->paypal_id           = $request->paypal_id;
         $bank->upi_id              = $request->upi_id;
         $bank->save();
-        return redirect(route('admin.profile'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.profile'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 }

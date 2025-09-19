@@ -126,7 +126,7 @@ class RequestWithdrawController extends BackendController
         }
 
 
-        return redirect(route('admin.request-withdraw.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.request-withdraw.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     /**

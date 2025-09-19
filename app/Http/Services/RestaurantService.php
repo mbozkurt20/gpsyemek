@@ -192,7 +192,7 @@ class RestaurantService
                     $restaurant->media()->delete($restaurant->id);
                     $restaurant->addMediaFromRequest('image')->toMediaCollection('restaurant');
                 }
-                $message='The data updated successfully.';
+                $message='Bilgiler başarıyla güncellendi..';
                 return $message;
             }
             $message=$depositService->message;

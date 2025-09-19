@@ -1,7 +1,8 @@
 <header class="db-header">
     <a href="{{ route('home') }}" class="w-32 flex-shrink-0"><img class="w-full" src="{{ themeSetting('site_logo') ? themeSetting('site_logo')->logo : asset('images/seeder/settings/logo.png') }}" alt="logo"></a>
     <div class="flex items-center justify-end w-full gap-2">
-        <div class="sub-header flex items-center gap-4 transition xh:justify-between xh:fixed xh:left-0 xh:w-full xh:p-4 xh:border-y xh:border-[#EFF0F6] xh:bg-white">
+        {{--
+               <div class="sub-header flex items-center gap-4 transition xh:justify-between xh:fixed xh:left-0 xh:w-full xh:p-4 xh:border-y xh:border-[#EFF0F6] xh:bg-white">
             <div class="flex items-center justify-between md:justify-center gap-4">
 
                 <div class="language-group dropdown-group relative">
@@ -33,6 +34,8 @@
                 </div>
             </div>
         </div>
+
+        --}}
         <button class="fa-solid fa-align-left db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5"></button>
         <button data-account="#profileSidebar" class="flex items-center gap-1 sm:gap-2">
             <img class="flex-shrink w-9 h-9 object-cover rounded-lg" src="{{ auth()->user()->image }}" alt="avatar">

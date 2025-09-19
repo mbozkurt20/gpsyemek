@@ -27,7 +27,7 @@
                             <h3 class="db-card-title">{{ __('restaurant.product_variation') }}</h3>
                             <button class="db-btn h-[38px] text-white bg-primary" id="variation-add">
                                 <i class="fa-solid fa-circle-plus"></i>
-                                <span>add new</span>
+                                <span>Yeni Ekle</span>
                             </button>
                         </div>
                         <div class="db-card-body">
@@ -35,10 +35,10 @@
                                 <table class="db-table">
                                     <thead class="db-table-head border-none">
                                         <tr class="db-table-head-tr">
-                                            <th class="db-table-head-th">Name</th>
-                                            <th class="db-table-head-th">Price</th>
-                                            <th class="db-table-head-th">Discount</th>
-                                            <th class="db-table-head-th">Actions</th>
+                                            <th class="db-table-head-th">İsim</th>
+                                            <th class="db-table-head-th">Fiyat</th>
+                                            <th class="db-table-head-th">İndirim</th>
+                                            <th class="db-table-head-th">İşlemler</th>
                                         </tr>
                                     </thead>
                                     <tbody class="db-table-body" id="variationTbody">
@@ -85,10 +85,10 @@
                                 </table>
                             </div>
 
-                                
+
                         </div>
                     </div>
-                    
+
                     <div class="mt-4"></div>
 
                     <div class="db-card">
@@ -104,9 +104,9 @@
                                 <table class="db-table">
                                     <thead class="db-table-head border-none">
                                         <tr class="db-table-head-tr">
-                                            <th class="db-table-head-th">Name</th>
-                                            <th class="db-table-head-th">Price</th>
-                                            <th class="db-table-head-th">Actions</th>
+                                            <th class="db-table-head-th">İsim</th>
+                                            <th class="db-table-head-th">Fiyat</th>
+                                            <th class="db-table-head-th">İşlemler</th>
                                         </tr>
                                     </thead>
                                     <tbody class="db-table-body" id="optionTbody">

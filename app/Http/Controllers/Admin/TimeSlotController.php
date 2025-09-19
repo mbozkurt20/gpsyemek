@@ -90,7 +90,7 @@ class TimeSlotController extends BackendController
         $timeSlot->restaurant_id     = $request->restaurant_id;
         $timeSlot->status     = $request->status;
         $timeSlot->save();
-        return redirect(route('admin.time-slots.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.time-slots.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     /**
@@ -126,7 +126,7 @@ class TimeSlotController extends BackendController
                     $button_array   = [];
                     $button_array['edit']   = ['route' => route('admin.time-slots.edit', $timeSlot),'permission' => 'time-slots_edit'];
                     $button_array['delete'] = ['route' => route('admin.time-slots.destroy', $timeSlot),'permission' => 'time-slots_delete'];
-                    
+
                     return action_button($button_array);
                 })
                 ->editColumn('id', function ($timeSlot) use (&$i) {

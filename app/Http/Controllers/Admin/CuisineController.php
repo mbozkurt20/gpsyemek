@@ -112,7 +112,7 @@ class CuisineController extends BackendController
             $cuisine->addMediaFromRequest('image')->toMediaCollection('cuisines');
         }
 
-        return redirect(route('admin.cuisine.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.cuisine.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     /**
@@ -143,11 +143,11 @@ class CuisineController extends BackendController
             $i = 0;
             return Datatables::of($cuisines)
                 ->addColumn('action', function ($cuisine) {
-                    
+
                     $button_array   = [];
                     $button_array['edit']   = ['route' => route('admin.cuisine.edit', $cuisine),'permission' => 'category_edit'];
                     $button_array['delete'] = ['route' => route('admin.cuisine.destroy', $cuisine),'permission' => 'category_delete'];
-                    
+
                     return action_button($button_array);
                 })
                 ->editColumn('status', function ($cuisine) {

@@ -84,7 +84,7 @@ class CategoryController extends BackendController
             $category->addMediaFromRequest('image')->toMediaCollection('categories');
         }
 
-        return redirect(route('admin.category.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.category.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
 
@@ -98,7 +98,7 @@ class CategoryController extends BackendController
     {
         if (request()->ajax()) {
             $queryArray = [];
-            
+
             if(!auth()->user()->myrole == UserRole::ADMIN ){
                 $queryArray['status'] = Status::ACTIVE;
             }
@@ -116,7 +116,7 @@ class CategoryController extends BackendController
                     $button_array           = [];
                     $button_array['edit']   = ['route' => route('admin.category.edit', $category),'permission' => 'category_edit'];
                     $button_array['delete'] = ['route' => route('admin.category.destroy', $category),'permission' => 'category_delete'];
-                    
+
                     return action_button($button_array);
                 })
                 ->editColumn('status', function ($category) {

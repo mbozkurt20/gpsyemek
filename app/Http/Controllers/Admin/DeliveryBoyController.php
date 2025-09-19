@@ -170,7 +170,7 @@ class DeliveryBoyController extends BackendController
                         $user->addMedia(request()->file('image'))->toMediaCollection('user');
                     }
                     $user->assignRole($role->name);
-                    return redirect(route('admin.delivery-boys.index'))->withSuccess('The Data Updated Successfully');
+                    return redirect(route('admin.delivery-boys.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
                 } else {
                     return redirect(route('admin.delivery-boys.index'))->withError($depositService->message);
                 }

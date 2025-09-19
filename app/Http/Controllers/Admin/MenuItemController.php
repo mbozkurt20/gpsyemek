@@ -144,7 +144,7 @@ class MenuItemController extends BackendController
             $menuItem->addMediaFromRequest('image')->toMediaCollection('menu-items');
         }
 
-        return redirect()->back()->withSuccess('The data updated successfully!');
+        return redirect()->back()->withSuccess('Bilgiler başarıyla güncellendi.!');
     }
 
     /**
@@ -202,9 +202,13 @@ class MenuItemController extends BackendController
                 ->editColumn('status', function ($menuItem) {
                     return $menuItem->statusName;
                 })
+                ->addColumn('image', function ($menuItem) {
+                   return !blank($menuItem->image) ? $menuItem->image : '';
+                })
                 ->rawColumns(['name' ,'status', 'action'])
                 ->make(true);
         }
+
         return view('admin.menu-item.index', $this->data);
     }
 

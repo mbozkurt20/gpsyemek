@@ -155,7 +155,7 @@ class OrderController extends BackendController
         $productReceive = app(OrderService::class)->productReceive($id, $request->post('product_received'));
 
         if ($productReceive->status) {
-            return redirect(route('admin.orders.show', $id))->withSuccess('The Data Updated Successfully');
+            return redirect(route('admin.orders.show', $id))->withSuccess('Bilgiler başarıyla güncellendi.');
         } else {
             return redirect(route('admin.orders.show', $id))->withError($productReceive->message);
         }
@@ -410,7 +410,7 @@ class OrderController extends BackendController
         $productReceive = app(OrderService::class)->productReceive($id, $status);
 
         if ($productReceive->status) {
-            return redirect(route('admin.orders.show', $id))->withSuccess('The Data Updated Successfully');
+            return redirect(route('admin.orders.show', $id))->withSuccess('Bilgiler başarıyla güncellendi.');
         } else {
             return redirect(route('admin.orders.show', $id))->withError($productReceive->message);
         }

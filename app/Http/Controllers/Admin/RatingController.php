@@ -35,7 +35,7 @@ class RatingController extends BackendController
         $rating->status = $rating->status == 10 ? RatingStatus::ACTIVE : RatingStatus::INACTIVE;
         $rating->save();
 
-        return redirect(route('admin.rating.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.rating.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     public function destroy($id)
@@ -56,7 +56,7 @@ class RatingController extends BackendController
             }
 
             $i           = 1;
-            $ratingArray = []; 
+            $ratingArray = [];
 
             if (!blank($ratings)) {
                 foreach ($ratings as $rating) {
@@ -72,9 +72,9 @@ class RatingController extends BackendController
 
             return Datatables::of($ratingArray)
                 ->addColumn('action', function ($rating) {
-                    
+
                     $button_array['delete'] = ['route' => route('admin.rating.delete', $rating),'permission' => 'rating'];
-                    
+
                     return action_button($button_array);
                 })
                 ->escapeColumns([])

@@ -129,7 +129,7 @@ class AdministratorController extends BackendController
                 $user->media()->delete();
                 $user->addMedia(request()->file('image'))->toMediaCollection('user');
             }
-            return $this->successresponse(['status'=>200, 'message'=>'The Data Updated Successfully']);
+            return $this->successresponse(['status'=>200, 'message'=>'Bilgiler başarıyla güncellendi.']);
         }
         return $this->successresponse(['status'=>200, 'message'=>'You don\'t have permission to update this data']);
     }

@@ -90,7 +90,7 @@ class TableController extends BackendController
         $table->restaurant_id     = $request->restaurant_id;
         $table->status   = $request->status;
         $table->save();
-        return redirect(route('admin.tables.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.tables.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     /**
@@ -124,11 +124,11 @@ class TableController extends BackendController
             $i = 0;
             return Datatables::of($tables)
                 ->addColumn('action', function ($table) {
-                    
+
                     $button_array   = [];
                     $button_array['edit']   = ['route' => route('admin.tables.edit', $table),'permission' => 'tables_edit'];
                     $button_array['delete'] = ['route' => route('admin.tables.destroy', $table),'permission' => 'tables_delete'];
-                    
+
                     return action_button($button_array);
                 })
                 ->editColumn('restaurant_id', function ($table) {

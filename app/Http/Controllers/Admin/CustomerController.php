@@ -104,7 +104,7 @@ class CustomerController extends BackendController
         $role = Role::find(2);
         $user->assignRole($role->name);
 
-        return redirect(route('admin.customers.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.customers.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     public function getCustomers()

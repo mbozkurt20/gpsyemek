@@ -126,7 +126,7 @@ class RequestProductController extends BackendController
         $product->unit_price      = $request->get('unit_price');
         $product->save();
         $product->categories()->sync($request->get('categories'));
-        return redirect()->route('admin.request-products.index')->withSuccess('The data updated successfully!');
+        return redirect()->route('admin.request-products.index')->withSuccess('Bilgiler başarıyla güncellendi.!');
     }
 
     /**

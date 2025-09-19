@@ -19,10 +19,6 @@
                     <i class="fa-solid fa-circle-info"></i>
                     <span>{{ __('levels.coupon_info') }}</span>
                 </button>
-                <button type="button" class="db-tabBtn" data-tab="#image">
-                    <i class="fa-solid fa-cube"></i>
-                    <span>{{ __('levels.image') }}</span>
-                </button>
             </div>
             <div class="db-tabDiv active" id="information">
                 <ul class="db-list multiple">
@@ -42,19 +38,16 @@
                         <span class="db-list-item-title">{{ __('levels.description') }}</span>
                         <span class="db-list-item-text">{{ strip_tags($menuItem->description) }}</span>
                     </li>
-                   
                 </ul>
-            </div>
-            <div class="db-tabDiv" id="image">
+                <hr class="py-3">
                 @if(!blank($menuItem->image))
-                    <div class="col-lg-4 sm:col-4">
+                    <div class="col-lg-4 sm:col-4 mt-4">
                         <div class="db-card p-3">
                             <img class="d-block w-100 h-232 rounded" src="{{ $menuItem->image }}">
-                        </div>  
+                        </div>
                     </div>
                 @endif
             </div>
-    
         </div>
 
     </div>

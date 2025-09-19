@@ -108,7 +108,7 @@ class CouponController extends BackendController
     public function update(CouponRequest $request, $id)
     {
         $coupon = $this->couponService->update($id, $request);
-        return redirect(route('admin.coupon.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.coupon.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
 
@@ -150,10 +150,10 @@ class CouponController extends BackendController
                 $coupons = Coupon::descending()->get();
             }
 
-            $i = 0; 
+            $i = 0;
            return Datatables::of($coupons)
                 ->addColumn('action', function ($coupon) {
-                    
+
                     return action_button([
                         'view'   => ['route' => route('admin.coupon.show', $coupon),'permission' => 'coupon_show'],
                         'edit'   => ['route' => route('admin.coupon.edit', $coupon),'permission' => 'coupon_edit'],

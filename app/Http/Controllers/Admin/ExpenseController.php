@@ -82,7 +82,7 @@ class ExpenseController extends BackendController
             $expense->addMedia($request->file('attachment'))->toMediaCollection('expense');
         }
 
-        return redirect()->route('admin.expense.index')->with('success', 'The data updated successfully.');
+        return redirect()->route('admin.expense.index')->with('success', 'Bilgiler başarıyla güncellendi..');
     }
 
 

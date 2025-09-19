@@ -219,7 +219,7 @@ class RestaurantController extends BackendController
                     $restaurant->addMediaFromRequest('restaurant_logo')->toMediaCollection('restaurant_logo');
                 }
 
-                return redirect(route('admin.restaurants.index'))->withSuccess('The data updated successfully.');
+                return redirect(route('admin.restaurants.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
             }
             return redirect(route('admin.restaurants.index'))->withError($depositService->message);
         }
@@ -418,7 +418,7 @@ class RestaurantController extends BackendController
             $this->deleteMedia('restaurant_logo', $restaurant->id);
             $restaurant->addMediaFromRequest('restaurant_logo')->toMediaCollection('restaurant_logo');
         }
-        return redirect(route('admin.restaurants.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.restaurants.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     public function deleteMedia($mediaName, $mediaId)

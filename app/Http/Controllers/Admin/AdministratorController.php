@@ -140,7 +140,7 @@ class AdministratorController extends BackendController
                 $user->addMedia(request()->file('image'))->toMediaCollection('user');
             }
 
-            return redirect(route('admin.administrators.index'))->withSuccess('The Data Updated Successfully');
+            return redirect(route('admin.administrators.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
         }
         return redirect(route('admin.administrators.index'))->withError('You don\'t have permission to update this data');
     }

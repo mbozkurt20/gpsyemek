@@ -140,7 +140,7 @@ class ReservationController extends BackendController
         $reservation->user_id = $request->user_id;
         $reservation->save();
 
-        return redirect(route('admin.reservation.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.reservation.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     public function show(Reservation $reservation)
@@ -163,7 +163,7 @@ class ReservationController extends BackendController
                 //
             }
         }
-        return redirect(route('admin.reservation.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.reservation.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     /**
@@ -239,9 +239,9 @@ class ReservationController extends BackendController
     {
         $user = User::find($request->userID);
         return $user;
-        
+
     }
-    
+
     public function statusUpdate ($id,$status) {
         $reservation              = Reservation::findOrFail($id);
         if(!blank($reservation)){
@@ -250,7 +250,7 @@ class ReservationController extends BackendController
             try {
                 app(PushNotificationService::class)->NotificationReservationRestaurant($reservation, $reservation->restaurant->user,'store');
                 app(PushNotificationService::class)->NotificationReservationCustomer($reservation, auth()->user(), 'customer');
-                $_Session['success'] = 'The data updated successfully!';
+                $_Session['success'] = 'Bilgiler başarıyla güncellendi.!';
             } catch (\Exception $exception) {
                 Log::error('Reservation Status Update Error: ' . $exception->getMessage());
             }

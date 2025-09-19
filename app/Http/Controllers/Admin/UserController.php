@@ -136,7 +136,7 @@ class UserController extends BackendController
                 }
                 $user->assignRole($role->name);
             }
-            return redirect(route('admin.user.index'))->withSuccess('The Data Updated Successfully');
+            return redirect(route('admin.user.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
         } else {
             return redirect(route('admin.user.index'))->withError('The User Not Found');
         }

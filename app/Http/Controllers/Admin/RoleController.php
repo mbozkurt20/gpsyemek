@@ -114,7 +114,7 @@ class RoleController extends BackendController
         $role       = Role::findOrFail($id);
         $role->name = $request->name;
         $role->save();
-        return redirect(route('admin.role.index'))->withSuccess('The Data Updated Successfully');
+        return redirect(route('admin.role.index'))->withSuccess('Bilgiler başarıyla güncellendi.');
     }
 
     /**

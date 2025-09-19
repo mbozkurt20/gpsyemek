@@ -73,7 +73,7 @@ class RestaurantOwnerController extends BackendController
             $user->addMedia(request()->file('image'))->toMediaCollection('user');
         }
 
-        return redirect(route('admin.restaurant-owners.index'))->withSuccess('The data updated successfully.');
+        return redirect(route('admin.restaurant-owners.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 
     /**
