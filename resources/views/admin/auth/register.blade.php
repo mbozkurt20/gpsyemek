@@ -23,7 +23,9 @@
                                         {{ old('roles', 2)== 2 ? 'checked' : 'checked'}}>
                                         <label for="CustomerRegister">{{ __('register.customer') }}</label>
                                     </li>
-                                    <li>
+                                    {{--
+
+                                      <li>
                                         <input type="radio" id="RestaurantOwnerRegister" name="roles" value="3"
                                         {{ old('roles')== 3 ? 'checked' : ''}}>
                                         <label for="RestaurantOwnerRegister">{{ __('register.restaurant_owner') }}</label>
@@ -33,6 +35,7 @@
                                         {{ old('roles')== 4 ? 'checked' : ''}}>
                                         <label for="DeliveryRegister">{{ __('register.delivery_man') }}</label>
                                     </li>
+                                    --}}
                                 </ul>
 
                                 <div class="row">
