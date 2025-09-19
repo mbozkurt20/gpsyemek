@@ -22,7 +22,8 @@
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.tami') }}</span>
             </button>
-            <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'razorpay' ? 'active' : '' }}" data-tab="#razorpay">
+            {{--
+             <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'razorpay' ? 'active' : '' }}" data-tab="#razorpay">
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.razorpay') }}</span>
             </button>
@@ -42,6 +43,7 @@
                     <button class="db-tab-sub-btn w-full flex items-center whitespace-nowrap justify-start my-0.5 gap-2.5 pl-3 pr-6 py-1.5 text-sm rounded-md capitalize transition text-gray-500 hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'sslcommerz' ? 'active' : '' }}" data-tab="#sslcommerz"><i class="fa-solid fa-credit-card"></i>{{ __('setting.sslcommerz') }}</button>
                 </div>
             </div>
+              --}}
         </div>
 
         <div id="stripe" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'stripe' || old('settingtypepayment', setting('settingtypepayment')) == '' ? 'active' : '' }}">
