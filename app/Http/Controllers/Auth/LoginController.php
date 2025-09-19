@@ -46,7 +46,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        $this->data['site_title'] = 'login';
+        $this->data['site_title'] = 'Giriş Yap';
         return view('auth.login', $this->data);
     }
 
@@ -66,7 +66,7 @@ class LoginController extends Controller
         // if ($this->checkCartContent()) {
         //     return redirect(route('checkout.index'));
         // }
-        if('admin' == $request->type){
+        if('admin' == $request->type || $request->type == 'restaurant'){
             return redirect(route('admin.dashboard.index'));
         }else{
             return redirect(route('home'));
