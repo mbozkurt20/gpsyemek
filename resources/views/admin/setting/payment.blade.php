@@ -42,8 +42,7 @@
                     <button class="db-tab-sub-btn w-full flex items-center whitespace-nowrap justify-start my-0.5 gap-2.5 pl-3 pr-6 py-1.5 text-sm rounded-md capitalize transition text-gray-500 hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'phonePe' ? 'active' : '' }}" data-tab="#phonePe"><i class="fa-solid fa-credit-card"></i>{{ __('setting.phonePe') }}</button>
                     <button class="db-tab-sub-btn w-full flex items-center whitespace-nowrap justify-start my-0.5 gap-2.5 pl-3 pr-6 py-1.5 text-sm rounded-md capitalize transition text-gray-500 hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'sslcommerz' ? 'active' : '' }}" data-tab="#sslcommerz"><i class="fa-solid fa-credit-card"></i>{{ __('setting.sslcommerz') }}</button>
                 </div>
-            </div>
-              --}}
+            </div>  --}}
         </div>
 
         <div id="stripe" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'stripe' || old('settingtypepayment', setting('settingtypepayment')) == '' ? 'active' : '' }}">

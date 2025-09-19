@@ -224,7 +224,7 @@ if (!function_exists('view_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action view modal-btn">
                 <i class="fa-solid fa-eye"></i>
-                <span class="db-tooltip">view</span>
+                <span class="db-tooltip">Görüntüle</span>
                 </a>';
         }
         return '';
@@ -236,7 +236,7 @@ if (!function_exists('permission_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action view modal-btn">
                       <i class="fas fa-plus"></i>
-                      <span class="db-tooltip">permission</span>
+                      <span class="db-tooltip">İzinler</span>
                     </a>';
         }
         return '';
@@ -248,7 +248,7 @@ if (!function_exists('modify_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action view modal-btn">
                       <i class="far fa-list-alt"></i>
-                      <span class="db-tooltip">add variation/ option</span>
+                      <span class="db-tooltip">Varyasyon/seçenek ekle</span>
                     </a>';
         }
         return '';
@@ -259,7 +259,7 @@ if (!function_exists('accept_button')) {
     {
         return '<a href="' . $route . '" class="db-table-action db-btn-fill purple p-0 me-2">
         <i class="fa-solid fa-check"></i>
-        <span class="db-tooltip">Accept</span>
+        <span class="db-tooltip">Onayla</span>
         </a>';
     }
 }
@@ -268,7 +268,7 @@ if (!function_exists('reject_button')) {
     {
         return '<a href="' . $route . '" class="db-table-action db-btn-fill p-0 red">
         <i class="fa-solid fa-ban"></i>
-        <span class="db-tooltip">Reject</span>
+        <span class="db-tooltip">İptal</span>
         </a>';
     }
 }
@@ -278,7 +278,7 @@ if (!function_exists('edit_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action edit modal-btn">
                       <i class="fa-solid fa-pencil"></i>
-                      <span class="db-tooltip">edit</span>
+                      <span class="db-tooltip">Düzenle</span>
                     </a>';
         }
         return '';
@@ -289,7 +289,7 @@ if (!function_exists('delete_button')) {
     {
         if (auth()->user()->can($permission)) {
             return '<form class="inline-block" action="' . $route . '" method="POST">' . method_field('DELETE') . csrf_field() .
-                '<button class="db-table-action delete modal-btn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button></form>';
+                '<button class="db-table-action delete modal-btn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button></form>';
         }
     }
 }
@@ -299,7 +299,7 @@ if (!function_exists('delivery_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action edit modal-btn">
                         <i class="fa-solid fa-bicycle"></i>
-                        <span class="db-tooltip">delivery</span>
+                        <span class="db-tooltip">Teslimat</span>
                     </a>';
         }
         return '';
@@ -371,7 +371,7 @@ if (!function_exists('view_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action view modal-btn">
                 <i class="fa-solid fa-eye"></i>
-                <span class="db-tooltip">view</span>
+                <span class="db-tooltip">Görüntüle</span>
                 </a>';
         }
         return '';
@@ -383,7 +383,7 @@ if (!function_exists('edit_button')) {
         if (auth()->user()->can($permission)) {
             return '<a href="' . $route . '" class="db-table-action edit modal-btn">
                       <i class="fa-solid fa-pencil"></i>
-                      <span class="db-tooltip">edit</span>
+                      <span class="db-tooltip">Düzenle</span>
                     </a>';
         }
         return '';
@@ -394,7 +394,7 @@ if (!function_exists('delete_button')) {
     {
         if (auth()->user()->can($permission)) {
             return '<form class="inline-block" action="' . $route . '" method="POST">' . method_field('DELETE') . csrf_field() .
-                '<button class="db-table-action delete modal-btn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button></form>';
+                '<button class="db-table-action delete modal-btn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button></form>';
         }
     }
 }
@@ -441,7 +441,7 @@ if (!function_exists('greeting')) {
             case $time->hour >= 17 && $time->hour <= 24:
                 $greet = __('dashboard.good_evening');
                 break;
-            
+
             default:
                 $greet = __('dashboard.good_morning');
                 break;
