@@ -156,7 +156,9 @@
             </div>
         </div>
 
-        <div id="razorpay" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'razorpay' ? 'active' : '' }}">
+        {{--
+
+                <div id="razorpay" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'razorpay' ? 'active' : '' }}">
             <div class="db-card-header">
                 <h3 class="db-card-title">{{ __('setting.razorpay_setting') }}</h3>
             </div>
@@ -524,5 +526,6 @@
                 </form>
             </div>
         </div>
+        --}}
     </div>
 @endsection
