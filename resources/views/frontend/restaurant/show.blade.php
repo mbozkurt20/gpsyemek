@@ -133,7 +133,7 @@
                                 </div>
                             @endforeach
                         @endif
-                                
+
                         <div class="rest-menu-wrapper" id="scrollspy-menu">
                             <div class="rest-menu-group">
                                 <button type="button" class="rest-swiper-prev fa-solid fa-chevron-left"></button>

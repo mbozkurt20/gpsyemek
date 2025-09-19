@@ -5,7 +5,6 @@ return array (
   'subtitle'                        => 'En çok beğenilen mekanları, aktiviteleri ve daha fazlasını keşfedin',
   'location'                        => 'Konum',
   'by_location'                     => 'Konuma göre ara',
-  'search'                          => 'Ara',
   'cuisines_title'                  => 'Veya öne çıkan mutfaklara göz atın',
   'popular_cuisines'                => 'Popüler Mutfaklar',
   'most_visited_restaurants'        => 'En Çok Ziyaret Edilen Restoranlar',

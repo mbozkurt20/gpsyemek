@@ -70,7 +70,7 @@
                         <div class="filter-select">
                             <div class="dropdownParent">
                                 <span class="custonDropdown d-flex justify-content-center">
-                                    {{ __('Cuisines') }}
+                                    {{ __('Mutfaklar') }}
                                 </span>
                                 <ul class="cDrop">
                                     <div class="row checkNew">
