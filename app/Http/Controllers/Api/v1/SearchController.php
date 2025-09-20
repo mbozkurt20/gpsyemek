@@ -31,7 +31,6 @@ class SearchController extends BackendController
     {
         parent::__construct();
         $this->data['siteTitle'] = 'Restaurants';
-        $this->middleware('auth:api');
         $this->restaurantService = $restaurantService;
     }
     /**
@@ -68,7 +67,7 @@ class SearchController extends BackendController
         $queryArray = [];
         $queryArray['status']=RestaurantStatus::ACTIVE;
         $queryArray['current_status']=CurrentStatus::YES;
-        
+
         if (!blank($expedition)) {
             if ($expedition == 'delivery') {
                 $queryArray['delivery_status'] = DeliveryStatus::ENABLE;
