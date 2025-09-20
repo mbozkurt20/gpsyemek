@@ -67,6 +67,7 @@ use App\Http\Controllers\Admin\RestaurantController as RestaurantsController;
 use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 
+Route::view('/restoran','restoran.auth.login');
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Auth::routes(['verify' => false]);
