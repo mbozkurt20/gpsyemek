@@ -184,7 +184,7 @@ class OrderService
 
     {
         $order = Order::where([
-            'status' => OrderStatus::ACCEPT,
+            'status' => OrderStatus::PROCESS,
             'id'     => $orderId,
         ])->first();
         if (!blank($order)) {

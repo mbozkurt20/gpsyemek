@@ -97,214 +97,354 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-12 md:col-3">
-        <div class="db-card">
-            <h3 class="db-card-header">{{__('order.new_order')}}</h3>
-            <div class="db-card-body">
-                @if($new_orders)
-                @foreach($new_orders as $order)
-                <div class="p-3 ticket border-b last:border-none">
-                    <div class="list-info col-8">
-                        <p class="mb-1">{{__('order.just_created')}}</p>
-                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
-                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
-                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
-                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
-                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
-                    </div>
-
-                    <div class="flex flex-wrap gap-4">
-                        <div class="col-4">
-                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
-                        </div>
-                        <div class="relative cursor-pointer">
-                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
-                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
-                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::ON_THE_WAY }}">{{ __('order.on_the_way') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                    <p class="fw-bold text-center mx-auto">Yeni Sipariş Bulunmuyor</p>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-12 md:col-3">
-        <div class="db-card">
-            <h3 class="text-success db-card-header">{{__('order.accepted')}}</h3>
-            <div class="db-card-body">
-                @if($accepted_orders)
-                @foreach($accepted_orders as $order)
-                <div class="p-3 ticket border-b last:border-none">
-                    <div class="list-info col-8">
-                        <p class="mb-1"><b>{{__('order.accepted_by')}}&nbsp;</b>{{$order->restaurant->user->name}}</p>
-                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
-                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
-                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
-                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
-                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="col-4">
-                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
-                        </div>
-                        <div class="relative cursor-pointer">
-                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
-                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
-                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::ON_THE_WAY }}">{{ __('order.on_the_way') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                    <p class="fw-bold text-center mx-auto">Kabul Edilen Sipariş Bulunmuyor</p>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-12 md:col-3">
-        <div class="db-card">
-            <h3 class="text-yellow-600 db-card-header">{{__('order.process')}}</h3>
-            <div class="db-card-body">
-                @if($courier_orders)
-                @foreach($process_orders as $order)
-                <div class="p-3 ticket border-b last:border-none">
-                    <div class="list-info col-8">
-                        <p class="mb-1"><b>{{__('order.accepted_by')}}&nbsp;</b>{{$order->restaurant->user->name}}</p>
-                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
-                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
-                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
-                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
-                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="col-4">
-                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
-                        </div>
-                        <div class="relative cursor-pointer">
-                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
-                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
-                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                    <p class="fw-bold text-center mx-auto">Kuryede Sipariş Bulunmuyor</p>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-12 md:col-3">
-        <div class="db-card">
-            <h3 class="text-green-500 db-card-header">{{__('order.on_the_way')}}</h3>
-            <div class="db-card-body">
-                @if($courier_orders)
-                @foreach($courier_orders as $order)
-                <div class="p-3 ticket border-b last:border-none">
-                    <div class="list-info col-8">
-                        <p class="mb-1"><b>{{__('order.accepted_by')}}&nbsp;</b>{{$order->restaurant->user->name}}</p>
-                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
-                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
-                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
-                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
-                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="col-4">
-                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
-                        </div>
-                        <div class="relative cursor-pointer">
-                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
-                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
-                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
-                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                    <p class="fw-bold text-center mx-auto">Kuryede Sipariş Bulunmuyor</p>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-12 md:col-3">
-        <div class="db-card">
-            <h3 class="text-primary db-card-header">{{__('order.completed')}}</h3>
-            <div class="db-card-body">
-                @if($done_orders)
-                @foreach($done_orders as $order)
-                <div class="p-3 ticket border-b last:border-none">
-                    <div class="list-info col-8">
-                        <p class="mb-1">{{ trans('order_status.'.$order->status)}}</p>
-                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
-                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
-                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
-                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
-                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="col-4">
-                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
-                        </div>
-                        <div class="relative cursor-pointer">
-                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
-                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
-                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                    <p class="fw-bold text-center mx-auto">Tamamlanan Sipariş Bulunmuyor</p>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 @php
     $baseUrl = env('APP_URL');
 @endphp
 
+<style>
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #f5f5f5;
+        transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+        background: #e9ecef;
+    }
+
+    .tab-btn.active {
+        background: #259A38;
+        border-color: #259A38;
+        color: white;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    table.custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    table.custom-table thead {
+        background: #259A38;
+        color: white;
+    }
+
+    table.custom-table th,
+    table.custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px 10px;
+        text-align: center;
+    }
+
+    table.custom-table tbody tr:hover {
+        background: #f9f9f9;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s;
+        border: none;
+    }
+
+    .btn-primary {
+        background: #259A38;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #1f7d2d;
+    }
+
+    .btn-indigo {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-indigo:hover {
+        background: #3730a3;
+    }
+</style>
+
+<div class="db-card">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="new">{{__('order.new_order')}}</button>
+        <button class="tab-btn" data-tab="accepted">{{__('order.accepted')}}</button>
+        <button class="tab-btn" data-tab="process">{{__('order.process')}}</button>
+        <button class="tab-btn" data-tab="courier">{{__('order.on_the_way')}}</button>
+        <button class="tab-btn" data-tab="done">{{__('order.completed')}}</button>
+    </div>
+
+    {{-- New Orders --}}
+    <div class="tab-content active py-5" id="tab-new">
+        @if($new_orders && count($new_orders))
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Restoran</th>
+                    <th>Kullanıcı</th>
+                    <th>Tarih</th>
+                    <th>Tip</th>
+                    <th>Toplam</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($new_orders as $order)
+                    <tr>
+                        <td>#{{$order->id}}</td>
+                        <td>{{$order->restaurant->name}}</td>
+                        <td>{{ ucwords($order->user->name) ?? '' }}</td>
+                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{$order->getOrderType}}</td>
+                        <td>{{currencyFormat($order->total)}}</td>
+                        <td>{{ trans('order_status.' . $order->status) }}</td>
+                        <td>
+                            <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
+                                {{__('order.details')}}
+                            </a>
+                            <button class="btn btn-indigo order-status-btn"
+                                    data-id="{{ $order->id }}"
+                                    data-url="/admin/order/change-status/"
+                                    data-status="{{ App\Enums\OrderStatus::ACCEPT }}">
+                                {{ __('order.accept') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-center fw-bold">Yeni Sipariş Bulunmuyor</p>
+        @endif
+    </div>
+
+    {{-- Accepted Orders --}}
+    <div class="tab-content py-5" id="tab-accepted">
+        @if($accepted_orders && count($accepted_orders))
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Restoran</th>
+                    <th>Kullanıcı</th>
+                    <th>Tarih</th>
+                    <th>Tip</th>
+                    <th>Toplam</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($accepted_orders as $order)
+                    <tr>
+                        <td>#{{$order->id}}</td>
+                        <td>{{$order->restaurant->name}}</td>
+                        <td>{{ ucwords($order->user->name) ?? '' }}</td>
+                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{$order->getOrderType}}</td>
+                        <td>{{currencyFormat($order->total)}}</td>
+                        <td>{{ trans('order_status.' . $order->status) }}</td>
+                        <td>
+                            <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
+                                {{__('order.details')}}
+                            </a>
+                            <button class="btn btn-indigo order-status-btn"
+                                    data-id="{{ $order->id }}"
+                                    data-url="/admin/order/change-status/"
+                                    data-status="{{ App\Enums\OrderStatus::PROCESS }}">
+                                {{ __('order.process') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-center fw-bold">Kabul Edilen Sipariş Bulunmuyor</p>
+        @endif
+    </div>
+
+    {{-- Process Orders --}}
+    <div class="tab-content py-5" id="tab-process">
+        @if($process_orders && count($process_orders))
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Restoran</th>
+                    <th>Kullanıcı</th>
+                    <th>Tarih</th>
+                    <th>Tip</th>
+                    <th>Toplam</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($process_orders as $order)
+                    <tr>
+                        <td>#{{$order->id}}</td>
+                        <td>{{$order->restaurant->name}}</td>
+                        <td>{{ ucwords($order->user->name) ?? '' }}</td>
+                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{$order->getOrderType}}</td>
+                        <td>{{currencyFormat($order->total)}}</td>
+                        <td>{{ trans('order_status.' . $order->status) }}</td>
+                        <td>
+                            <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
+                                {{__('order.details')}}
+                            </a>
+                            <button class="btn btn-indigo order-status-btn"
+                                    data-id="{{ $order->id }}"
+                                    data-url="/admin/order/change-status/"
+                                    data-status="{{ App\Enums\OrderStatus::ON_THE_WAY }}">
+                                {{ __('order.on_the_way') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-center fw-bold">Hazırlanan Sipariş Bulunmuyor</p>
+        @endif
+    </div>
+
+    {{-- Courier Orders --}}
+    <div class="tab-content py-5" id="tab-courier">
+        @if($courier_orders && count($courier_orders))
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Restoran</th>
+                    <th>Kullanıcı</th>
+                    <th>Tarih</th>
+                    <th>Tip</th>
+                    <th>Toplam</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($courier_orders as $order)
+                    <tr>
+                        <td>#{{$order->id}}</td>
+                        <td>{{$order->restaurant->name}}</td>
+                        <td>{{ ucwords($order->user->name) ?? '' }}</td>
+                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{$order->getOrderType}}</td>
+                        <td>{{currencyFormat($order->total)}}</td>
+                        <td>{{ trans('order_status.' . $order->status) }}</td>
+                        <td>
+                            <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
+                                {{__('order.details')}}
+                            </a>
+                            <button class="btn btn-indigo order-status-btn"
+                                    data-id="{{ $order->id }}"
+                                    data-url="/admin/order/change-status/"
+                                    data-status="{{ App\Enums\OrderStatus::COMPLETED }}">
+                                {{ __('order.completed') }}
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-center fw-bold">Kuryede Sipariş Bulunmuyor</p>
+        @endif
+    </div>
+
+    {{-- Done Orders --}}
+    <div class="tab-content py-5" id="tab-done">
+        @if($done_orders && count($done_orders))
+            <table class="custom-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Restoran</th>
+                    <th>Kullanıcı</th>
+                    <th>Tarih</th>
+                    <th>Tip</th>
+                    <th>Toplam</th>
+                    <th>Durum</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($done_orders as $order)
+                    <tr>
+                        <td>#{{$order->id}}</td>
+                        <td>{{$order->restaurant->name}}</td>
+                        <td>{{ ucwords($order->user->name) ?? '' }}</td>
+                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{$order->getOrderType}}</td>
+                        <td>{{currencyFormat($order->total)}}</td>
+                        <td>{{ trans('order_status.' . $order->status) }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-center fw-bold">Tamamlanan Sipariş Bulunmuyor</p>
+        @endif
+    </div>
+</div>
+
+
 <script>
-    $('#orderStatus').on('change', function () {
+    // Tab switch
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(tc => tc.classList.remove("active"));
+
+            this.classList.add("active");
+            document.querySelector("#tab-" + this.dataset.tab).classList.add("active");
+        });
+    });
+
+    // Ajax status button
+    $(document).on('click', '.order-status-btn', function () {
         let orderId = $(this).data('id');
         let path = $(this).data('url');
-        let status = $(this).val();
+        let status = $(this).data('status');
         let url = "{{$baseUrl}}" + path + orderId + "/" + status;
 
-        if (status) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (response) {
-                    location.reload();
-                }
-            });
-        } else {
-            console.log('Something went wrong!');
-        }
-
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                location.reload();
+            },
+            error: function () {
+                alert('Bir hata oluştu!');
+            }
+        });
     });
 </script>

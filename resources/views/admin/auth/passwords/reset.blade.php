@@ -6,7 +6,7 @@
             <div class="row  justify-content-center">
                 <div class="col-lg-8">
                     <div class="card mx-auto">
-                        <div class="card-header">{{ __('Reset Password') }}</div>
+                        <div class="card-header">{{ __('Şifremi Sıfırla') }}</div>
                         <div class="card-body p-lg-4 p-3">
                             <form method="POST" action="{{ route('password.update') }}">
                                 @csrf
@@ -52,7 +52,7 @@
                                 <div class="form-group row mb-0">
                                     <div class="col-md-6 offset-md-4">
                                         <button type="submit" class="form-btn-inline">
-                                            {{ __('Reset Password') }}
+                                            {{ __('Şifremi Sıfırla') }}
                                         </button>
                                     </div>
                                 </div>

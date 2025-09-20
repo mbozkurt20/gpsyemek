@@ -3699,6 +3699,8 @@ input[type=number] {
 .footer {
     padding: 32px 0px 0px;
     background-color: #FFF9FA;
+
+    bottom: 0;
 }
 
 .footer-logo {

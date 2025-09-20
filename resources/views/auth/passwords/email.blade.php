@@ -7,7 +7,7 @@
                 <div class="col-lg-6">
                     <div class="card mx-auto reset-email-card">
                         <div class="card-body text-center p-lg-4 p-2">
-                            <h4 class="card-title mb-4">{{ __('Reset Password') }}</h4>
+                            <h4 class="card-title mb-4">Şifremi Sıfırla</h4>
                             @if (session('status'))
                                 <div class="alert alert-success" role="alert">
                                     {{ session('status') }}
@@ -18,7 +18,7 @@
 
                                 <div class="form-group">
                                     <input id="email" type="email" class="form-control @if($errors->has('email')) is-invalid @endif"
-                                           name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
+                                           name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email adresinizi giriniz...">
                                     @if($errors->has('email'))
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $errors->first('email') }}</strong>
@@ -28,7 +28,7 @@
 
                                 <div class="form-group">
                                     <button type="submit" class="form-btn-inline">
-                                        {{ __('Send Password Reset Link') }}
+                                        {{ __('Sıfırlama Linki Gönder') }}
                                     </button>
                                 </div>
                             </form>
