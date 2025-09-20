@@ -38,7 +38,7 @@
         </div>
 
         --}}
-        @if(auth()->user()->myrole ==3)
+        @if(auth()->check() && auth()->user()->myrole ==3)
             <div class="flex items-center py-2 px-3 border border-gray-200">
                 <div class="flex items-center space-x-2 pr-12">
                     <span class="pr-2">Restoran</span>
