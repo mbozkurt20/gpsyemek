@@ -102,55 +102,78 @@
 @endphp
 
 <style>
-    .tabs {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
+    .db-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
+    /* Tabs container */
+    .tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid #ddd; /* üstte ince çizgi */
+        margin-bottom: 20px;
+    }
+
+    /* Tab buttons */
     .tab-btn {
-        padding: 8px 16px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+        font-weight: 500;
         cursor: pointer;
-        background: #f5f5f5;
-        transition: all 0.2s;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+        color: #555;
     }
 
     .tab-btn:hover {
-        background: #e9ecef;
+        background: #f8f8f8;
     }
 
     .tab-btn.active {
-        background: #259A38;
-        border-color: #259A38;
-        color: white;
+        border-bottom: 3px solid #259A38; /* active tab alt çizgi */
+        color: #259A38;
+        font-weight: 600;
     }
 
+    /* Tab content */
     .tab-content {
         display: none;
+        animation: fadeIn 0.2s ease-in-out;
     }
 
     .tab-content.active {
         display: block;
     }
 
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Table styles */
     table.custom-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
+        border: 1px solid #eee;
     }
 
     table.custom-table thead {
-        background: #259A38;
-        color: white;
+        background: #f5f5f5;
+        color: #333;
+        font-weight: 600;
     }
 
     table.custom-table th,
     table.custom-table td {
-        border: 1px solid #ddd;
-        padding: 8px 10px;
+        border: 1px solid #eee;
+        padding: 10px;
         text-align: center;
     }
 
@@ -158,12 +181,12 @@
         background: #f9f9f9;
     }
 
+    /* Buttons */
     .btn {
         display: inline-block;
         padding: 6px 12px;
         border-radius: 6px;
         font-size: 13px;
-        text-decoration: none;
         cursor: pointer;
         transition: 0.2s;
         border: none;
@@ -244,7 +267,7 @@
     </div>
 
     {{-- Accepted Orders --}}
-    <div class="tab-content py-5" id="tab-accepted">
+    <div class="tab-content py-py-5" id="tab-accepted">
         @if($accepted_orders && count($accepted_orders))
             <table class="custom-table">
                 <thead>
@@ -290,7 +313,7 @@
     </div>
 
     {{-- Process Orders --}}
-    <div class="tab-content py-5" id="tab-process">
+    <div class="tab-content py-py-5" id="tab-process">
         @if($process_orders && count($process_orders))
             <table class="custom-table">
                 <thead>
@@ -336,7 +359,7 @@
     </div>
 
     {{-- Courier Orders --}}
-    <div class="tab-content py-5" id="tab-courier">
+    <div class="tab-content py-py-5" id="tab-courier">
         @if($courier_orders && count($courier_orders))
             <table class="custom-table">
                 <thead>
@@ -382,7 +405,7 @@
     </div>
 
     {{-- Done Orders --}}
-    <div class="tab-content py-5" id="tab-done">
+    <div class="tab-content py-py-5" id="tab-done">
         @if($done_orders && count($done_orders))
             <table class="custom-table">
                 <thead>
