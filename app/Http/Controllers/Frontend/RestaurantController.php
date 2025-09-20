@@ -30,6 +30,14 @@ class RestaurantController extends FrontendController
         $this->data['site_title'] = env('APP_NAME');
     }
 
+    public function statuse($status,$restoran)
+    {
+        $restoran = Restaurant::find($restoran);
+        $restoran->current_status = $status;
+        $restoran->save();
+
+        return Redirect::back()->withSuccess('Restoran Durumu Güncellendi');
+    }
 
     public function show(Restaurant $restaurant, Filepond $filepond)
     {
