@@ -17,7 +17,7 @@
                             </div>
                             <form method="POST" class="login" action="{{ route('login') }}">
                                 @csrf
-                                <input type="hidden" name="type" value="{{request()->has('type') ? request()->type : 'frontend'}}">
+                                <input type="hidden" name="type" value="{{request()->has('type') ? request()->type : 'restaurant'}}">
 
                                 <div class="form-group">
                                     <label for="email" class="form-label"> {{ __('auth.email') }} </label>
