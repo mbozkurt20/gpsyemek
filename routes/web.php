@@ -67,11 +67,6 @@ use App\Http\Controllers\Admin\RestaurantController as RestaurantsController;
 use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 
-Route::domain('{restoran}.test.gpsyemek.com')->group(function () {
-    Route::get('/', function () {
-        return view('auth.restaurantLogin');
-    });
-});
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Auth::routes(['verify' => false]);
@@ -90,6 +85,7 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
+    Route::get('/',                                         [HomeController::class, 'index'])->name('home');
     Route::get('restaurant/status{status}/{restaurant}',                   [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
     Route::get('restaurant/{restaurant}',                   [RestaurantController::class, 'show'])->name('restaurant.show');
     Route::post('restaurant/ratings',                       [RestaurantController::class, 'Ratings'])->name('restaurant.ratings-update')->middleware('auth');

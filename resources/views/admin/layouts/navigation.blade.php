@@ -38,7 +38,7 @@
         </div>
 
         --}}
-        @if(auth()->check() && auth()->user()->myrole ==3)
+        @if(auth()->user()?->myrole === 3)
             <div class="flex items-center py-2 px-3 border border-gray-200">
                 <div class="flex items-center space-x-2 pr-12">
                     <span class="pr-2">Restoran</span>
@@ -116,9 +116,9 @@
         @endif
         <button class="fa-solid fa-align-left db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5"></button>
         <button data-account="#profileSidebar" class="flex items-center gap-1 sm:gap-2">
-            <img class="flex-shrink w-9 h-9 object-cover rounded-lg" src="{{ auth()->user()->image }}" alt="avatar">
-            <h3 class="whitespace-nowrap overflow-hidden text-ellipsis text-sm capitalize text-left leading-[17px]">{{ auth()->user()->getrole->name }}
-                <b class="block whitespace-nowrap overflow-hidden text-ellipsis font-semibold">{{ __('Hi,') }} {{ auth()->user()->name }}</b>
+            <img class="flex-shrink w-9 h-9 object-cover rounded-lg" src="{{ auth()->user()?->image }}" alt="avatar">
+            <h3 class="whitespace-nowrap overflow-hidden text-ellipsis text-sm capitalize text-left leading-[17px]">{{ auth()->user()?->getrole->name }}
+                <b class="block whitespace-nowrap overflow-hidden text-ellipsis font-semibold">{{ __('Merhaba,') }} {{ auth()->user()?->name }}</b>
             </h3>
             <i class="fa-solid fa-caret-down text-xs"></i>
         </button>
