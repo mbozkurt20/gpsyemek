@@ -53,7 +53,7 @@
                                         stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <span
-                                    class="text-xs">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, h:i A') }}</span>
+                                    class="text-xs">{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i:s') }}</span>
                             </li>
                             <li class="text-xs">{{ __('frontend.restaurant') }} : <span
                                     class="text-heading">{{ @$order->restaurant->name }}</span></li>
@@ -62,7 +62,7 @@
                             <li class="text-xs">{{ __('order.payment_method') }} : <span
                                 class="text-heading">{{ trans('payment_method.' . $order->payment_method) }}</span>
                             </li>
-                            
+
                         </ul>
                     </div>
                     <div class="flex flex-wrap flex-col gap-3">
@@ -97,7 +97,7 @@
                                     <span class="text-sm capitalize text-white">{{ __('order.accept') }}</span>
                                 </a>
                             @elseif (auth()->user()->myRole == App\Enums\UserRole::RESTAURANTOWNER && $order->status == App\Enums\OrderStatus::ACCEPT)
-                                
+
                                 <div class="relative cursor-pointer">
                                     <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
                                         <option value="">{{ trans('order_status.' . $order->status) }}</option>
@@ -105,7 +105,7 @@
                                     </select>
                                     <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
                                 </div>
-                                
+
                             @elseif ( (auth()->user()->myRole == App\Enums\UserRole::DELIVERYBOY && $order->status == App\Enums\OrderStatus::ON_THE_WAY) || ( auth()->user()->myRole == App\Enums\UserRole::RESTAURANTOWNER && $order->order_type == App\Enums\OrderTypeStatus::PICKUP && $order->status == App\Enums\OrderStatus::PROCESS) )
 
                                 <div class="relative cursor-pointer">
@@ -125,11 +125,11 @@
                                         <option value="5">{{ __('order.receive') }}</option>
                                     </select>
                                     <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
-                                </div>    
+                                </div>
                             @endif
 
                             @if (!($order->status == App\Enums\OrderStatus::PENDING || $order->status == App\Enums\OrderStatus::REJECT))
-                                
+
                                 <button onclick="printDiv('invoice-print')" class="flex items-center justify-center gap-2 px-4 h-[38px] rounded shadow-db-card bg-primary">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M4.66699 3.3335C4.66699 2.22683 5.56033 1.3335 6.66699 1.3335H9.33366C10.4403 1.3335 11.3337 2.22683 11.3337 3.3335C11.3337 3.70016 11.0337 4.00016 10.667 4.00016H5.33366C4.96699 4.00016 4.66699 3.70016 4.66699 3.3335Z" fill="white"/>
@@ -245,7 +245,7 @@
                                     {{ $order->user->name ?? null }}
                                 </h4>
                             </div>
-                            
+
                             <ul class="flex flex-col gap-3 py-4 border-t border-[#EFF0F6]">
                                 <li class="flex items-center gap-2.5">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -278,7 +278,7 @@
                                     <span class="text-sm text-[#374151]">{{ $order->mobile ?? null }}</span>
                                 </li>
                             </ul>
-                            
+
                             @if ($order->order_type != 2)
                                 <div class="flex items-start gap-3 pt-4 border-t border-[#EFF0F6]">
                                     <svg class="flex-shrink-0" width="24" height="24" viewBox="0 0 24 24"
@@ -313,12 +313,12 @@
                         padding: 8px;
                         font-family: 'OpenSauceOne', sans-serif;
                     }
-        
+
                     p {
                         margin-top: 4px;
                         margin-bottom: 0px;
                     }
-        
+
                     h2,
                     h3 {
                         font-size: 32px;
@@ -326,54 +326,54 @@
                         margin-top: 4px;
                         margin-bottom: 2px;
                     }
-        
+
                     h3 {
                         font-size: 28px;
                         margin-bottom: 8px;
                     }
-        
+
                     p,
                     td {
                         font-size: 16px;
                     }
-        
+
                     .invoiceFooter p {
                         font-size: 14px;
                         font-weight: 400;
-        
+
                     }
-        
+
                     .invoiceFooter small {
                         font-size: 12px;
                         margin-top: 24px;
                     }
-        
+
                     .border-dashed {
                         border-top: 1px dashed gainsboro;
                         margin: 0 25px 0 25px;
                     }
-        
+
                     .text-center {
                         text-align: center;
                     }
-        
+
                     .text-start {
                         text-align: start;
                     }
-        
+
                     .text-end {
                         text-align: end;
                     }
-        
+
                     .align-top {
                         vertical-align: top;
                     }
-        
+
                     .min-w-80 {
                         min-width: 80px;
                         width: 80px;
                     }
-        
+
                     ul {
                         list-style: none;
                         padding-left: 0px;
@@ -425,8 +425,8 @@
                     @foreach ($items as $itemKey => $item)
                         <tr>
                             <td class="text-start align-top pb-2 min-w-80"> {{ $item->quantity }}</td>
-                            <td class="text-start pb-2"> 
-                                {{ $item->menuItem->name }} {{ $item->variation ? ' ( ' . $item->variation['name'] . ' )' : '' }} 
+                            <td class="text-start pb-2">
+                                {{ $item->menuItem->name }} {{ $item->variation ? ' ( ' . $item->variation['name'] . ' )' : '' }}
                                 @if (!blank($item->options))
                                     @foreach (json_decode($item->options, true) as $option)
                                     <span class="block">
@@ -438,7 +438,7 @@
                             <td class="text-end align-top pb-2 min-w-80"> {{ currencyFormat($item->item_total) }}</td>
                         </tr>
                     @endforeach
-                        
+
                     </tbody>
                 </table>
                 <table class="border-dashed ps-5 pt-3">
@@ -516,7 +516,7 @@
             let path = $(this).data('url');
             let status = $(this).val();
             let url = "{{$baseUrl}}" + path + orderId + "/" + status;
-            
+
             if (status) {
                 $.ajax({
                     url: url,
@@ -528,7 +528,7 @@
             } else {
                 console.log('Something went wrong!');
             }
-            
+
         });
 
     </script>

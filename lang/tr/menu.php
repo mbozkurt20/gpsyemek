@@ -17,7 +17,7 @@ return array (
   'reservations'                  => 'Rezervasyonlar',
   'orders'                        => 'Siparişler',
   'complaints'                    => 'Şikayetler',
-  'live_orders'                   => 'Canlı Siparişler',
+  'live_orders'                   => 'Aktif Siparişler',
   'pending_orders'                => 'Bekleyen Siparişler',
   'finance'                       => 'Finans',
   'transactions'                  => 'Hesap Hareketleri',

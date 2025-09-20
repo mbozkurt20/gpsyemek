@@ -115,14 +115,14 @@ if (!function_exists('settingLogo')) {
 if (!function_exists('food_date_format')) {
     function food_date_format($date)
     {
-        return \Carbon\Carbon::parse($date)->format('d M Y h:i A');
+        return \Carbon\Carbon::parse($date)->format('d-m-Y h:i:s');
     }
 }
 
 if (!function_exists('food_date_format_with_day')) {
     function food_date_format_with_day($date)
     {
-        return \Carbon\Carbon::parse($date)->format('l, d M Y h:i A');
+        return \Carbon\Carbon::parse($date)->format('d-m-Y h:i');
     }
 }
 

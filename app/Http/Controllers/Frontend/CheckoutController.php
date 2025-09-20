@@ -397,7 +397,7 @@ class CheckoutController extends FrontendController
             $order = Order::find($orderService->order_id);
             $this->clearSessionData();
             $this->sendOrderNotifications($order);
-            return redirect(route('account.order.show', $order->id))->withSuccess('You order completed successfully.');
+            return redirect(route('account.order.show', $order->id))->withSuccess('Siparişiniz Başarıyla Alındı.');
         } else {
             return redirect(route('checkout.index'))->withError($orderService->message);
         }
@@ -518,7 +518,7 @@ class CheckoutController extends FrontendController
             $order = Order::find($orderService->order_id);
             $this->clearSessionData();
             $this->sendOrderNotifications($order);
-            return redirect(route('account.order.show', $order->id))->withSuccess('You order completed successfully.');
+            return redirect(route('account.order.show', $order->id))->withSuccess('Siparişiniz Başarıyla Alındı.');
         } else {
             return redirect(route('checkout.index'))->withError($orderService->message);
         }

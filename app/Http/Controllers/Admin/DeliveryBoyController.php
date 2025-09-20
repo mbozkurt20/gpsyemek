@@ -223,7 +223,7 @@ class DeliveryBoyController extends BackendController
                     return (!blank($order->user) ? Str::limit($order->user->name, 20) : '');
                 })
                 ->editColumn('created_at', function ($order) {
-                    return Carbon::parse($order->created_at)->format('d M Y, h:i A');
+                    return Carbon::parse($order->created_at)->format('d-m-Y H:i:s');
                 })
                 ->editColumn('status', function ($order) {
                     return trans('order_status.' . $order->status);

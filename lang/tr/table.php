@@ -13,5 +13,6 @@ return array (
   'sub_total'            => 'Ara Toplam',
   'filter'               => 'Filtrele',
   'add_tables'           => 'Masa Ekle',
+  'table_details'           => 'Masa Detaylar',
   'thanks_for_your_order'=> 'Siparişiniz için teşekkürler',
 );

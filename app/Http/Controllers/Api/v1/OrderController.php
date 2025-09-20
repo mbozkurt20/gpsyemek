@@ -177,7 +177,7 @@ class OrderController extends Controller
 
                 return response()->json([
                     'status'  => 200,
-                    'message' => 'You order completed successfully.',
+                    'message' => 'Siparişiniz Başarıyla Alındı.',
                     'data'    => $this->orderResponse($order),
                 ], 200);
             } else {
@@ -205,8 +205,8 @@ class OrderController extends Controller
         $response = Order::where(['id' => $id, 'user_id' => auth()->user()->id])->latest()->with('items', 'invoice.transactions')->first();
 
         $response->setAttribute('status_name', trans('order_status.' . $response->status));
-        $response->setAttribute('created_at_convert', $response->created_at->format('d M Y, h:i A'));
-        $response->setAttribute('updated_at_convert', $response->updated_at->format('d M Y, h:i A'));
+        $response->setAttribute('created_at_convert', $response->created_at->format('d-m-Y H:i:s'));
+        $response->setAttribute('updated_at_convert', $response->updated_at->format('d-m-Y H:i:s'));
         $response->setAttribute('attachment', $response->image);
 
         if (isset($response['invoice'])) {

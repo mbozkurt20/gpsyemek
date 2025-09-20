@@ -106,7 +106,7 @@ class OrderNotificationController extends BackendController
                     ]);
                 })
                 ->editColumn('created_at', function ($order) {
-                    return Carbon::parse($order->created_at)->format('d M Y, h:i A');
+                    return Carbon::parse($order->created_at)->format('d-m-Y H:i:s');
                 })
                 ->editColumn('status', function ($order) {
                     return $order->statusName;

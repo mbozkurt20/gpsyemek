@@ -49,7 +49,7 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         <span
-                            class="text-xs">{{ \Carbon\Carbon::parse($report->order->created_at)->format('d M Y, h:i A') }}</span>
+                            class="text-xs">{{ \Carbon\Carbon::parse($report->order->created_at)->format('d-m-Y H:i:s') }}</span>
                     </li>
                     <li class="text-xs">{{ __('levels.restaurant_name') }}: <span class="text-heading">{{ $report->order->restaurant->name }}</span></li>
                     <li class="text-xs">{{ __('order.order_amount') }}: <span class="text-heading">{{ currencyFormat($report->order->total)}}</span></li>
@@ -144,7 +144,7 @@
         let path = $(this).data('url');
         let status = $(this).val();
         let url = "{{$baseUrl}}" + path + orderId + "/" + status;
-        
+
         if (status) {
             $.ajax({
                 url: url,
@@ -156,7 +156,7 @@
         } else {
             console.log('Something went wrong!');
         }
-        
+
     });
 
 </script>

@@ -232,7 +232,7 @@ body{
 .colorinput-input:checked~.colorinput-color:before {
     opacity: 1;
 }
-.card-statistic-1, .card-statistic-2, .card-statistic-3, .card-statistic-4 {
+.card-statistic-1, .card-statistic-2, .card-statistic-3, .card-statistic-4, .card-statistic-5 {
     display: flex;
     align-items: center;
     gap: 16px;
@@ -268,14 +268,18 @@ body{
 .card-statistic-1{
     background-color: #259A38;
 }
+
 .card-statistic-2{
     background-color: #3abaf4;
 }
 .card-statistic-3{
-    background-color: #ffa426;
+    background-color: #dc8b06;
 }
 .card-statistic-4{
     background-color: #47c363;
+}
+.card-statistic-5{
+    background-color: #1fde74;
 }
 .custome-breadcrumb nav{
     margin: 0px !important;

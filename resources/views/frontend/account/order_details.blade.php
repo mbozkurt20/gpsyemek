@@ -74,7 +74,7 @@
                         <ul class="order-meta ps-3 pe-3">
                             <li><span>{{ __('frontend.order') }}:</span><a>#{{ $order->order_code }}</a></li>
                             <li><span> {{ __('frontend.order_date') }}
-                                    :</span><span>{{ $order->created_at->format('d M Y, h:i A') }}</span></li>
+                                    :</span><span>{{ $order->created_at->format('d-m-Y H:i:s') }}</span></li>
                         </ul>
                         <div class="order-group">
                             <div class="order-box address">

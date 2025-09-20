@@ -120,7 +120,7 @@ class RestaurantOrderController extends Controller
 
                 return response()->json([
                     'status'  => 200,
-                    'message' => 'The order successfully updated',
+                    'message' => 'Sipariş Başarıyla Güncellendi',
                     'data'    => $orderService,
                 ], 200);
             }

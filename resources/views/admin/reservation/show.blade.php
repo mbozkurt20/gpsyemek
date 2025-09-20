@@ -33,7 +33,7 @@
                         <li class="db-list-item">
                             <span class="db-list-item-title">{{ __('levels.date&time') }}</span>
                             <span
-                                class="db-list-item-text">{{ \Carbon\Carbon::parse($reservation->created_at)->format('d M Y, h:i A') }}</span>
+                                class="db-list-item-text">{{ \Carbon\Carbon::parse($reservation->created_at)->format('d-m-Y H:i:s') }}</span>
                         </li>
                         <li class="db-list-item">
                             <span class="db-list-item-title">{{ __('levels.timeSlot') }}</span>
@@ -78,7 +78,7 @@
         $('#status').on('change', function() {
             let reservationId = $(this).data('reservation-id');
             let status = $(this).val();
-            
+
             $.ajax({
                 url: "status/update/"+ reservationId + "/" + status,
                 type: 'GET',
@@ -86,8 +86,8 @@
                     location.reload();
                 }
             });
-            
+
         });
-        
+
     </script>
 @endpush

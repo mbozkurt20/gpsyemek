@@ -271,11 +271,11 @@ $(document).on('click', '#address-btn', function (event) {
 
     if (apartmentValue == "" || label == "" ) {
         event.preventDefault();
-        jsalertDiv.innerText = "Please fill out all required fields.";
+        jsalertDiv.innerText = "Lütfen tüm gerekli alanları doldurun.";
         return false;
     } else if ($('#label').val() == 15 && labelNameValue == "") {
         event.preventDefault();
-        jsalertDiv.innerText = "Please fill out all required fields.";
+        jsalertDiv.innerText = "Lütfen tüm gerekli alanları doldurun.";
         return false;
     } else {
         $("#address-btn").attr('data-bs-dismiss', 'modal');

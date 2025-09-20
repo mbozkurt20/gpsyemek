@@ -192,7 +192,7 @@ class NotificationOrderController extends Controller
             if ( $orderService->status ) {
                 return response()->json([
                     'status'  => 200,
-                    'message' => 'The order successfully updated',
+                    'message' => 'Sipariş Başarıyla Güncellendi',
                     'data'    => new OrderApiResource($order),
                 ], 200);
             }

@@ -24,7 +24,7 @@ class RatingResource extends JsonResource
             'userImage'         =>$this->user->image,
             'image'             =>$this->image,
             'review'            =>$this->review,
-            'created_at'        =>$this->created_at->format('d M Y, h:i A'),
+            'created_at'        =>$this->created_at->format('d-m-Y H:i:s'),
         ];
     }
 

@@ -396,7 +396,7 @@
 
                                             <div class="star-rating" data-rating="{{ $rating->rating }}"> </div>
 
-                                            <dd> {{ $rating->updated_at->format('d M Y, h:i A') }}</dd>
+                                            <dd> {{ $rating->updated_at->format('d-m-Y H:i:s') }}</dd>
                                         </dl>
                                         <p>{{ $rating->review }} </p>
                                     </li>

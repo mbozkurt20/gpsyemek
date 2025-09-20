@@ -49,7 +49,7 @@
                 </svg>
                 <span>{{ __('frontend.my_orders') }} </span>
             </a>
-            <a href="{{ route('account.reservations') }}"
+            <!--a href="{{ route('account.reservations') }}"
                 class="{{ $route == 'account.reservations' ? 'active' : '' }}">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
                         stroke-linejoin="round" />
                 </svg>
                 <span>{{ __('frontend.my_reservations') }}</span>
-            </a>
+            </a-->
             <a href="{{ route('account.transaction') }}"
                 class="{{ $route == 'account.transaction' ? 'active' : '' }}">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"

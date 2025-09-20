@@ -308,7 +308,7 @@ class AccountController extends FrontendController
                 return '<a href="' . route('account.order.show', $order->id) . '" class="btn btn-sm btn-icon float-left btn-primary" data-toggle="tooltip" data-placement="top" title="View"><i class="far fa-eye"></i></a>';
             })
             ->editColumn('created_at', function ($order) {
-                return Carbon::parse($order->created_at)->format('d M Y, h:i A');
+                return Carbon::parse($order->created_at)->format('d-m-Y H:i:s');
             })
             ->editColumn('order_code', function ($order) {
                 return $order->order_code;

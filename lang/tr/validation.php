@@ -165,7 +165,7 @@ return array (
     'unit_price'  => 'Birim Fiyat',
     'quantity'    => 'Miktar',
     'order'       => 'Sipariş',
-    'live_orders' => 'Canlı Siparişler',
+    'live_orders' => 'Aktif Siparişler',
     'orders'      => 'Siparişler',
     'dineInOrders'=> 'Masa İçi Siparişler',
     'products'    => 'Ürünler',

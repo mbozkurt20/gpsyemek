@@ -31,7 +31,7 @@
                                                     href="{{ route('account.order.show', $order->id) }}">{{ $order->order_code }}</a>
                                             </td>
                                             <td data-title="date">
-                                                {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, h:i A') }}
+                                                {{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i:s') }}
                                             </td>
 
                                             @if ($order->status == \App\Enums\OrderStatus::PENDING)

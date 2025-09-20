@@ -131,7 +131,7 @@
                                     name="start_date" value="{{ \Carbon\Carbon::now()->format('d-m-Y') }}">
                             </div>
                             <div class="col-12 sm:col-6 xl:col-4">
-                                <label class="db-field-title">to date</label>
+                                <label class="db-field-title"> tarihte</label>
                                 <input autocomplete="off" class="db-field-control" id="end_date" type="date"
                                     name="end_date" value="{{ \Carbon\Carbon::now()->format('d-m-Y') }}">
                             </div>

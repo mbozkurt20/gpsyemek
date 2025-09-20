@@ -39,6 +39,26 @@
         </div>
     </div>
     <div class="xl:col-3 md:col-6 sm:col-6 col-12">
+        <div class="card card-statistic-5">
+            <div class="card-icon ">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#3abaf4" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.6005 5.31003L11.9505 2.27003C11.3505 1.95003 10.6405 1.95003 10.0405 2.27003L4.40047 5.31003C3.99047 5.54003 3.73047 5.98003 3.73047 6.46003C3.73047 6.95003 3.98047 7.39003 4.40047 7.61003L10.0505 10.65C10.3505 10.81 10.6805 10.89 11.0005 10.89C11.3205 10.89 11.6605 10.81 11.9505 10.65L17.6005 7.61003C18.0105 7.39003 18.2705 6.95003 18.2705 6.46003C18.2705 5.98003 18.0105 5.54003 17.6005 5.31003Z"></path>
+                    <path d="M9.12 11.71L3.87 9.09003C3.46 8.88003 3 8.91003 2.61 9.14003C2.23 9.38003 2 9.79003 2 10.24V15.2C2 16.06 2.48 16.83 3.25 17.22L8.5 19.84C8.68 19.93 8.88 19.98 9.08 19.98C9.31 19.98 9.55 19.91 9.76 19.79C10.14 19.55 10.37 19.14 10.37 18.69V13.73C10.36 12.87 9.88 12.1 9.12 11.71Z"></path>
+                    <path d="M19.9996 10.24V12.7C19.5196 12.56 19.0096 12.5 18.4996 12.5C17.1396 12.5 15.8096 12.97 14.7596 13.81C13.3196 14.94 12.4996 16.65 12.4996 18.5C12.4996 18.99 12.5596 19.48 12.6896 19.95C12.5396 19.93 12.3896 19.87 12.2496 19.78C11.8696 19.55 11.6396 19.14 11.6396 18.69V13.73C11.6396 12.87 12.1196 12.1 12.8796 11.71L18.1296 9.09003C18.5396 8.88003 18.9996 8.91003 19.3896 9.14003C19.7696 9.38003 19.9996 9.79003 19.9996 10.24Z"></path>
+                    <path d="M21.98 15.65C21.16 14.64 19.91 14 18.5 14C17.44 14 16.46 14.37 15.69 14.99C14.65 15.81 14 17.08 14 18.5C14 19.91 14.64 21.16 15.65 21.98C16.42 22.62 17.42 23 18.5 23C19.64 23 20.67 22.57 21.47 21.88C22.4 21.05 23 19.85 23 18.5C23 17.42 22.62 16.42 21.98 15.65ZM19.53 18.78C19.53 19.04 19.39 19.29 19.17 19.42L17.76 20.26C17.64 20.33 17.51 20.37 17.37 20.37C17.12 20.37 16.87 20.24 16.73 20.01C16.52 19.65 16.63 19.19 16.99 18.98L18.03 18.36V17.1C18.03 16.69 18.37 16.35 18.78 16.35C19.19 16.35 19.53 16.69 19.53 17.1V18.78Z"></path>
+                </svg>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>Sipariş Kuryede</h4>
+                </div>
+                <div class="card-body">
+                    {{ $courier_order }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="xl:col-3 md:col-6 sm:col-6 col-12">
         <div class="card card-statistic-3">
             <div class="card-icon ">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffa426" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +98,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12 md:col-4">
+    <div class="col-12 md:col-3">
         <div class="db-card">
             <h3 class="db-card-header">{{__('order.new_order')}}</h3>
             <div class="db-card-body">
@@ -93,16 +113,31 @@
                         <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
                         <p class="mb-3">{{currencyFormat($order->total)}}</p>
                     </div>
-                    <div class="col-4">
-                        <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+
+                    <div class="flex flex-wrap gap-4">
+                        <div class="col-4">
+                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                        </div>
+                        <div class="relative cursor-pointer">
+                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
+                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
+                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::ON_THE_WAY }}">{{ __('order.on_the_way') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
+                        </div>
                     </div>
                 </div>
                 @endforeach
+                @else
+                    <p class="fw-bold text-center mx-auto">Yeni Sipariş Bulunmuyor</p>
                 @endif
             </div>
         </div>
     </div>
-    <div class="col-12 md:col-4">
+    <div class="col-12 md:col-3">
         <div class="db-card">
             <h3 class="text-success db-card-header">{{__('order.accepted')}}</h3>
             <div class="db-card-body">
@@ -117,16 +152,102 @@
                         <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
                         <p class="mb-3">{{currencyFormat($order->total)}}</p>
                     </div>
-                    <div class="col-4">
-                        <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="col-4">
+                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                        </div>
+                        <div class="relative cursor-pointer">
+                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
+                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
+                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::ON_THE_WAY }}">{{ __('order.on_the_way') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
+                        </div>
                     </div>
                 </div>
                 @endforeach
+                @else
+                    <p class="fw-bold text-center mx-auto">Kabul Edilen Sipariş Bulunmuyor</p>
                 @endif
             </div>
         </div>
     </div>
-    <div class="col-12 md:col-4">
+    <div class="col-12 md:col-3">
+        <div class="db-card">
+            <h3 class="text-yellow-600 db-card-header">{{__('order.process')}}</h3>
+            <div class="db-card-body">
+                @if($courier_orders)
+                @foreach($process_orders as $order)
+                <div class="p-3 ticket border-b last:border-none">
+                    <div class="list-info col-8">
+                        <p class="mb-1"><b>{{__('order.accepted_by')}}&nbsp;</b>{{$order->restaurant->user->name}}</p>
+                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
+                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
+                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
+                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
+                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="col-4">
+                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                        </div>
+                        <div class="relative cursor-pointer">
+                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
+                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
+                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @else
+                    <p class="fw-bold text-center mx-auto">Kuryede Sipariş Bulunmuyor</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="db-card">
+            <h3 class="text-green-500 db-card-header">{{__('order.on_the_way')}}</h3>
+            <div class="db-card-body">
+                @if($courier_orders)
+                @foreach($courier_orders as $order)
+                <div class="p-3 ticket border-b last:border-none">
+                    <div class="list-info col-8">
+                        <p class="mb-1"><b>{{__('order.accepted_by')}}&nbsp;</b>{{$order->restaurant->user->name}}</p>
+                        <p class="mb-1">{{food_date_format($order->created_at)}}</p>
+                        <h5 class="mb-1">#{{$order->id}} {{$order->restaurant->name}}</h5>
+                        <p class="mb-1">{{__('levels.order_type')}}: {{ $order->getOrderType }}</p>
+                        <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
+                        <p class="mb-3">{{currencyFormat($order->total)}}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="col-4">
+                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                        </div>
+                        <div class="relative cursor-pointer">
+                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
+                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
+                                <option value="{{ App\Enums\OrderStatus::ACCEPT }}">{{ __('order.accept') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::PROCESS }}">{{ __('order.process') }}</option>
+                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @else
+                    <p class="fw-bold text-center mx-auto">Kuryede Sipariş Bulunmuyor</p>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
         <div class="db-card">
             <h3 class="text-primary db-card-header">{{__('order.completed')}}</h3>
             <div class="db-card-body">
@@ -141,14 +262,49 @@
                         <p class="mb-1">{{ ucwords($order->user->name) ?? null }}</p>
                         <p class="mb-3">{{currencyFormat($order->total)}}</p>
                     </div>
-                    <div class="col-4">
-                        <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="col-4">
+                            <a href="{{route('admin.orders.show',$order)}}" class="px-4 py-1 mb-2 text-white rounded-md bg-primary">{{__('order.details')}}</a>
+                        </div>
+                        <div class="relative cursor-pointer">
+                            <select id="orderStatus" data-id="{{ $order->id }}" data-url="/admin/order/change-status/" class="text-sm cursor-pointer capitalize appearance-none pl-4 pr-10 h-[38px] rounded border border-primary bg-white text-primary">
+                                <option value="">{{ trans('order_status.' . $order->status) }}</option>
+                                <option value="{{ App\Enums\OrderStatus::REJECT }}">{{ __('order.reject') }}</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down cursor-pointer absolute top-1/2 right-3.5 -translate-y-1/2 text-xs text-primary"></i>
+                        </div>
                     </div>
                 </div>
                 @endforeach
+                @else
+                    <p class="fw-bold text-center mx-auto">Tamamlanan Sipariş Bulunmuyor</p>
                 @endif
             </div>
         </div>
     </div>
 </div>
+@php
+    $baseUrl = env('APP_URL');
+@endphp
 
+<script>
+    $('#orderStatus').on('change', function () {
+        let orderId = $(this).data('id');
+        let path = $(this).data('url');
+        let status = $(this).val();
+        let url = "{{$baseUrl}}" + path + orderId + "/" + status;
+
+        if (status) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    location.reload();
+                }
+            });
+        } else {
+            console.log('Something went wrong!');
+        }
+
+    });
+</script>

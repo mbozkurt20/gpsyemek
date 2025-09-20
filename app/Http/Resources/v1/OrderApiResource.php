@@ -43,8 +43,8 @@ class OrderApiResource extends JsonResource
             'lat'              => $this->lat,
             'long'             => $this->long,
             'misc'             => $this->misc,
-            'created_at'       => $this->created_at->format('d M Y, h:i A'),
-            'updated_at'       => $this->updated_at->format('d M Y, h:i A'),
+            'created_at'       => $this->created_at->format('d-m-Y H:i:s'),
+            'updated_at'       => $this->updated_at->format('d-m-Y H:i:s'),
             'time_format'           => $this->created_at->diffForHumans(),
             'date'                  => Carbon::parse($this->created_at)->format('d M Y'),
             'items'            => OrderItemsResource::collection(

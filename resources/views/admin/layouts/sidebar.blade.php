@@ -11,12 +11,14 @@
                     <h5 class="db-sidebar-nav-title">{{ trans('menu.' . $menu['name']) }}</h5>
                     <ul class="db-sidebar-nav-list">
                         @foreach ($menu['child'] as $child)
-                            <li class="db-sidebar-nav-item {{ Request::is('admin/' . $child['link']) || Request::is('admin/' . $child['link'] . '/*') ? 'active' : '' }}">
-                                <a href="{{ url('admin/' . $child['link']) }}" class="db-sidebar-nav-menu">
-                                    <i class="{{ $child['icon'] }} text-sm"></i>
-                                    <span class="">{{ trans('menu.' . $child['name']) }}</span>
-                                </a>
-                            </li>
+                            @if(!(auth()->user()->myrole == 3 && in_array($child['name'], ['cuisines', 'categories', 'qr_builder','tables','reservations'])))
+                                <li class="db-sidebar-nav-item {{ Request::is('admin/' . $child['link']) || Request::is('admin/' . $child['link'] . '/*') ? 'active' : '' }}">
+                                    <a href="{{ url('admin/' . $child['link']) }}" class="db-sidebar-nav-menu">
+                                        <i class="{{ $child['icon'] }} text-sm"></i>
+                                        <span class="">{{ trans('menu.' . $child['name']) }} </span>
+                                    </a>
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 @endif

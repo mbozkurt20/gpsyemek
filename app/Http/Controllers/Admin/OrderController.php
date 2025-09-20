@@ -135,7 +135,7 @@ class OrderController extends BackendController
                 app(PushNotificationService::class)->sendNotificationOrderUpdate($order, $order->user,'customer');
             } catch (\Exception $e) {
             }
-            return redirect(route('admin.orders.index'))->withSuccess('Order successfully updated');
+            return redirect(route('admin.orders.index'))->withSuccess('OSipariş Başarıyla Güncellendi');
         } else {
             return redirect(route('admin.orders.index'))->withError($orderService->message);
         }
@@ -270,7 +270,7 @@ class OrderController extends BackendController
                     ) : '');
                 })
                 ->editColumn('created_at', function ($order) {
-                    return Carbon::parse($order->created_at)->format('d M Y, h:i A');
+                    return Carbon::parse($order->created_at)->format('d-m-Y H:i:s');
                 })
                 ->editColumn('order_type', function ($order) {
                     return trans($order->getOrderTypeName);
@@ -399,7 +399,7 @@ class OrderController extends BackendController
                 }
                 app(PushNotificationService::class)->sendNotificationOrderUpdate($order, $order->user,'customer');
             } catch (\Exception $e) {}
-            return redirect()->back()->withSuccess('Order successfully updated');
+            return redirect()->back()->withSuccess('Sipariş Başarıyla Güncellendi');
         } else {
             return redirect()->back()->withError($orderService->message);
         }
@@ -428,11 +428,13 @@ class OrderController extends BackendController
         $this->data['pending_order']   = $orderCount->where('status', OrderStatus::PENDING)->count();
         $this->data['process_order']   = $orderCount->where('status', OrderStatus::PROCESS)->count();
         $this->data['completed_order'] = $orderCount->where('status', OrderStatus::COMPLETED)->count();
-
+        $this->data['courier_order']    = $orderCount->where('status', OrderStatus::ON_THE_WAY)->count();
 
         $this->data['new_orders'] = [];
         $this->data['accepted_orders']  = [];
         $this->data['done_orders']      = [];
+        $this->data['courier_orders']      = [];
+        $this->data['process_orders']      = [];
 
         $orders = Order::with('restaurant', 'user')->whereDate('created_at', Carbon::today())->orderowner()->orderBy('id', 'desc')->get();
         foreach ($orders as $order) {
@@ -440,7 +442,12 @@ class OrderController extends BackendController
                 $this->data['new_orders'][] = $order;
             } elseif ($order->status == OrderStatus::ACCEPT) {
                 $this->data['accepted_orders'][]  = $order;
-            } else {
+            } elseif ($order->status == OrderStatus::ON_THE_WAY) {
+                $this->data['courier_orders'][]  = $order;
+            }
+            elseif ($order->status == OrderStatus::PROCESS) {
+                $this->data['process_orders'][]  = $order;
+            }else {
                 $this->data['done_orders'][] = $order;
             }
         }

@@ -180,6 +180,33 @@ class OrderService
         return ResponseService::response();
     }
 
+    public function courier(int $orderId) // done
+
+    {
+        $order = Order::where([
+            'status' => OrderStatus::ACCEPT,
+            'id'     => $orderId,
+        ])->first();
+        if (!blank($order)) {
+            $order->status = OrderStatus::ON_THE_WAY;
+            $order->save();
+            $orderHistory = $this->status($orderId, OrderStatus::ON_THE_WAY);
+            if ($orderHistory->status) {
+                ResponseService::set(['order_history_id' => $orderHistory->order_history_id]);
+            }
+            ResponseService::set([
+                'status'   => true,
+                'order_id' => $orderId,
+            ]);
+        } else {
+            ResponseService::set([
+                'status'  => false,
+                'message' => 'Order not found',
+            ]);
+        }
+        return ResponseService::response();
+    }
+
     public function completed(int $orderId) //done
     {
         $order = Order::orderowner()->findOrFail($orderId);
@@ -209,7 +236,7 @@ class OrderService
                     } else {
                         ResponseService::set([
                             'status'   => false,
-                            'message'  => 'Delivery boy account does not found',
+                            'message'  => 'Teslimat elemanı hesabı bulunamadı',
                             'order_id' => $orderId,
                         ]);
                     }
@@ -474,7 +501,7 @@ class OrderService
             'previous_status' => null,
             'current_status'  => OrderStatus::PENDING,
         ]);
- 
+
         if (!blank($data['coupon_id'])) {
             Discount::create([
                 'order_id'  => $orderId,
@@ -556,6 +583,8 @@ class OrderService
             $orderStatus = $this->process($orderId);
         } elseif ($status == OrderStatus::COMPLETED) {
             $orderStatus = $this->completed($orderId);
+        } elseif ($status == OrderStatus::ON_THE_WAY) {
+            $orderStatus = $this->courier($orderId);
         }
 
         if ($orderStatus->status) {
