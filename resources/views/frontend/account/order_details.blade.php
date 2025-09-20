@@ -11,9 +11,9 @@
                         <a href="{{ route('account.order') }}">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.57 5.92969L3.5 11.9997L9.57 18.0697" stroke="#EE1D48" stroke-width="1.5"
+                                <path d="M9.57 5.92969L3.5 11.9997L9.57 18.0697" stroke="#259A38" stroke-width="1.5"
                                     stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M20.4999 12H3.66992" stroke="#EE1D48" stroke-width="1.5" stroke-miterlimit="10"
+                                <path d="M20.4999 12H3.66992" stroke="#259A38" stroke-width="1.5" stroke-miterlimit="10"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>

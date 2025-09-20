@@ -21,7 +21,7 @@ body{
 }
 .custome-breadcrumb ol li a:hover{
     text-decoration: none;
-    color: #EE1D48;
+    color: #259A38;
 }
 .custome-breadcrumb ol li a{
     color: #475569;
@@ -40,11 +40,11 @@ body{
     width: 100% !important;
     min-height: 40px !important;
     height: 100%;
-    
+
 }
 .select2-selection, .select2-dropdown{
     border: 1px solid #e5e7eb !important;
-   
+
 
 }
 .custom-select2{
@@ -91,7 +91,7 @@ body{
 }
 
 .imagecheck-input:focus~.imagecheck-figure {
-    border-color: #EE1D48;
+    border-color: #259A38;
 }
 
 .imagecheck-input:checked~.imagecheck-figure {
@@ -111,7 +111,7 @@ body{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background: #EE1D48 url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E") no-repeat center center/50% 50%;
+    background: #259A38 url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E") no-repeat center center/50% 50%;
     color: #fff;
     z-index: 1;
     border-radius: 3px;
@@ -238,7 +238,7 @@ body{
     gap: 16px;
     padding: 16px;
     border-radius: 8px;
-    
+
 }
 
 .card-icon{
@@ -266,7 +266,7 @@ body{
     justify-content: space-between;
 }
 .card-statistic-1{
-    background-color: #EE1D48;
+    background-color: #259A38;
 }
 .card-statistic-2{
     background-color: #3abaf4;
@@ -345,7 +345,7 @@ button#refresh:hover {
 }
 
 .bg-maroon-light {
-    background-color: #EE1D48 !important;
+    background-color: #259A38 !important;
     color: #fff !important;
 }
 
@@ -496,7 +496,7 @@ button#refresh:hover {
 
 .paymentheader {
     font-size: 16px;
-    color: #EE1D48
+    color: #259A38
 }
 
 .report-print-button {
@@ -530,7 +530,7 @@ button#refresh:hover {
     font-weight: bold !important;
     text-align: left !important;
     width: auto;
-    color: #EE1D48;
+    color: #259A38;
     padding: 5px 15px;
     border: 1px solid #DBDEE0 !important;
     margin: 0px;
@@ -837,7 +837,7 @@ width: 78% !important;
 }
 
 @media (min-width: 1024px){
-     
+
     .form-col-3{
       width: 25% !important;
       padding: 1rem !important;

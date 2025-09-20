@@ -1,7 +1,7 @@
 <?php
 return array (
-  'time_slot'        => 'Zaman Dilimleri',
+  'time_slot'        => 'Çalışma Saatleri',
   'time_slot_detail' => 'Zaman Dilimi Detayı',
-  'add_time_slot'    => 'Zaman Dilimi Ekle',
-  'time_slots'       => 'Zaman Dilimleri',
+  'add_time_slot'    => 'Çalışma Saati Ekle',
+  'time_slots'       => 'Çalışma Saatleri',
 );

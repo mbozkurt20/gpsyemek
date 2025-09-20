@@ -5568,7 +5568,7 @@ input:checked + div svg {
   background-color: rgb(169 83 255 / var(--tw-bg-opacity));
 }
 
-.bg-\[\#ee1d480d\] {
+.bg-\[\#259A380d\] {
   --tw-bg-opacity: 1;
   background-color: rgb(255 230 240 / var(--tw-bg-opacity));
 }
@@ -8105,6 +8105,6 @@ input[type="search"]::-webkit-search-results-decoration {
     padding: 1rem;
   }
 
-  
- 
+
+
 }

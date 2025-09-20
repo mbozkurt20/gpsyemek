@@ -246,7 +246,7 @@ return array (
     'tables'       => 'Masalar',
     'complaints'   => 'Şikayetler',
     'capacity'     => 'Kapasite',
-    'time-slots'   => 'Zaman Dilimleri',
+    'time-slots'   => 'Çalışma Saatleri',
     'start_time'   => 'Başlangıç Saati',
     'end_time'     => 'Bitiş Saati',
     'restaurant_id'=> 'Restoran',

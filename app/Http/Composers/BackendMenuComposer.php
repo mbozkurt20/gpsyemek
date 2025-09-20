@@ -21,7 +21,7 @@ class BackendMenuComposer
         return $nodes;
     }
 
-    static function backendLanguage() 
+    static function backendLanguage()
     {
         return Language::where('status', Status::ACTIVE)->get();
     }

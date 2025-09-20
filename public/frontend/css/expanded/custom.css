@@ -326,7 +326,7 @@
     bottom: 6px;
     position: absolute;
     right: 10px;
-    color: #EE1D48;
+    color: #259A38;
 }
 
 .cDrop {
@@ -451,7 +451,7 @@ button.panel-apply {
     content: '';
     -webkit-appearance: none;
     background-color: transparent;
-    border: 2px solid #EE1D48;
+    border: 2px solid #259A38;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
     padding: 8px;
     display: inline-block;
@@ -469,7 +469,7 @@ button.panel-apply {
     left: 7px;
     width: 6px;
     height: 14px;
-    border: solid #EE1D48;
+    border: solid #259A38;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
@@ -477,7 +477,7 @@ button.panel-apply {
 
 .cart-switch-input:checked+label {
     color: var(--white);
-    background-color: #EE1D48;
+    background-color: #259A38;
 }
 
 
@@ -552,7 +552,7 @@ button.panel-apply {
 }
 
 .rest-name .dot.off {
-    background: #EE1D48;
+    background: #259A38;
 }
 
 /* laravel Painate css */
@@ -593,8 +593,8 @@ button.panel-apply {
 }
 
 .custormpaginate .pagination .page-item.active .page-link {
-    border-color: #EE1D48;
-    background-color: #EE1D48;
+    border-color: #259A38;
+    background-color: #259A38;
     color: #fff;
 }
 
@@ -604,8 +604,8 @@ button.panel-apply {
 }
 
 .custormpaginate .pagination .page-link:hover {
-    border-color: #EE1D48;
-    color: #EE1D48;
+    border-color: #259A38;
+    color: #259A38;
 }
 
 .custormpaginate .page-item.disabled {
@@ -681,7 +681,7 @@ button.panel-apply {
 }
 
 .address-modal-label-group select:focus {
-    border: 1px solid #EE1D48;
+    border: 1px solid #259A38;
 }
 
 .address-modal-details input:focus-within {

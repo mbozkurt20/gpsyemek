@@ -9,7 +9,7 @@ return array (
   'menu_items'                    => 'Menü Öğeleri',
   'cuisines'                      => 'Mutfaklar',
   'coupons'                       => 'Kuponlar',
-  'time_slots'                    => 'Zaman Dilimleri',
+  'time_slots'                    => 'Çalışma Saatleri',
   'tables'                        => 'Masalar',
   'rating'                        => 'Değerlendirme',
   'qr_builder'                    => 'QR Oluşturucu',

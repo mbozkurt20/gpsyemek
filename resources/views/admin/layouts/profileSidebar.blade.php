@@ -11,7 +11,7 @@
         <p class="text-xs">{{ auth()->user()?->phone ?? "" }}</p>
     </div>
     <nav class="px-4 h-[calc(100vh_-_225px)] overflow-y-auto thin-scrolling">
-        <a href="{{ route('admin.profile') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
+        <!--a href="{{ route('admin.profile') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 10.9V4.1C22 2.6 21.36 2 19.77 2H15.73C14.14 2 13.5 2.6 13.5 4.1V10.9C13.5 12.4 14.14 13 15.73 13H19.77C21.36 13 22 12.4 22 10.9Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M22 19.9V18.1C22 16.6 21.36 16 19.77 16H15.73C14.14 16 13.5 16.6 13.5 18.1V19.9C13.5 21.4 14.14 22 15.73 22H19.77C21.36 22 22 21.4 22 19.9Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -19,16 +19,16 @@
                 <path d="M10.5 4.1V5.9C10.5 7.4 9.86 8 8.27 8H4.23C2.64 8 2 7.4 2 5.9V4.1C2 2.6 2.64 2 4.23 2H8.27C9.86 2 10.5 2.6 10.5 4.1Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="text-sm leading-6 capitalize">{{ __('Profile') }}</span>
-        </a>
+        </a-->
 
-        <a href="{{ route('admin.profile.edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
+        <!--a href="{{ route('admin.profile.edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.33333 1.33301H5.99999C2.66666 1.33301 1.33333 2.66634 1.33333 5.99967V9.99967C1.33333 13.333 2.66666 14.6663 5.99999 14.6663H9.99999C13.3333 14.6663 14.6667 13.333 14.6667 9.99967V8.66634" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M10.6933 2.0135L5.44 7.26684C5.24 7.46684 5.04 7.86017 5 8.14684L4.71333 10.1535C4.60666 10.8802 5.12 11.3868 5.84666 11.2868L7.85333 11.0002C8.13333 10.9602 8.52666 10.7602 8.73333 10.5602L13.9867 5.30684C14.8933 4.40017 15.32 3.34684 13.9867 2.0135C12.6533 0.680168 11.6 1.10684 10.6933 2.0135Z" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M9.94 2.7666C10.3867 4.35993 11.6333 5.6066 13.2333 6.05993" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="text-sm leading-6 capitalize">{{ __('levels.edit_profile') }}</span>
-        </a>
+        </a-->
 
         @if (!blank(auth()->user()->bank))
         <a href="{{ route('admin.profile.bank-edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
@@ -69,7 +69,7 @@
         </a>
         @endif
 
-        <a href="{{ route('admin.profile.address-index') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
+        <!--a href="{{ route('admin.profile.address-index') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.6667 5.99968V9.99968C14.6667 11.6664 14.3333 12.833 13.5867 13.5864L9.33333 9.33302L14.4867 4.17969C14.6067 4.70635 14.6667 5.30635 14.6667 5.99968Z" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M14.4867 4.17968L4.17999 14.4863C2.17332 14.0263 1.33333 12.6397 1.33333 9.99967V5.99967C1.33333 2.66634 2.66666 1.33301 5.99999 1.33301H9.99999C12.64 1.33301 14.0267 2.17301 14.4867 4.17968Z" stroke-linecap="round" stroke-linejoin="round"/>
@@ -78,7 +78,7 @@
                 <path d="M6.06307 5.80013H6.06906" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="text-sm leading-6 capitalize">{{ __('levels.address') }}</span>
-        </a>
+        </a-->
         <a href="{{ route('admin.profile.password-edit') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13.1933 9.95289C11.82 11.3196 9.85333 11.7396 8.12666 11.1996L4.98666 14.3329C4.76 14.5662 4.31333 14.7062 3.99333 14.6596L2.54 14.4596C2.06 14.3929 1.61333 13.9396 1.54 13.4596L1.34 12.0062C1.29333 11.6862 1.44666 11.2396 1.66666 11.0129L4.8 7.87956C4.26666 6.14622 4.68 4.17956 6.05333 2.81289C8.02 0.846224 11.2133 0.846224 13.1867 2.81289C15.16 4.77956 15.16 7.98622 13.1933 9.95289Z" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
