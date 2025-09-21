@@ -40,7 +40,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label" for="password">{{ __('auth.password') }}</label>
-                                    <input placeholder="Password" id="demopassword" type="password"
+                                    <input placeholder="Şifreniz" id="demopassword" type="password"
                                         class="form-control @if ($errors->has('password')) is-invalid @endif"
                                         name="password" autocomplete="current-password">
                                     @if ($errors->has('password'))

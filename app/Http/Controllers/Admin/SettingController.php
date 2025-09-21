@@ -544,7 +544,7 @@ class SettingController extends BackendController
                 return back()->withError('The google map setting is disable for the demo');
             } else {
                 $this->googleMapSettingStore($request);
-                return back()->withSuccess('The google map setting updated successfully.');
+                return back()->withSuccess('Google harita ayarları güncellendi.');
             }
         }
         return view('admin.setting.google-map', $this->data);

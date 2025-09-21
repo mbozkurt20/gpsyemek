@@ -119,7 +119,7 @@
                                             <input id="address" name="address" value="{{ old('address') }}"
                                                 type="text"
                                                 class="form-control @if ($errors->has('address')) is-invalid @endif"
-                                                placeholder="House#10, Section#1, Dhaka 1216, Bangladesh">
+                                                placeholder="Ali Yılmaz mah. 2401.sokak  Muğla Türkiye">
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
@@ -128,7 +128,7 @@
                                                 class="form-label required">{{ __('register.password') }}</label>
                                             <input name="password" id="password"
                                                 class="form-control @if ($errors->has('password')) is-invalid @endif"
-                                                type="password" placeholder="Create password">
+                                                type="password" placeholder="Şifre oluştur">
                                             @error('password')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -142,7 +142,7 @@
                                                 class="form-label required">{{ __('register.repeat_password') }}</label>
                                             <input name="password_confirmation"
                                                 class="form-control @if ($errors->has('password_confirmation')) is-invalid @endif"
-                                                type="password" placeholder="Repeat password">
+                                                type="password" placeholder="Şifre Tekrarı">
                                             @if ($errors->has('password_confirmation'))
                                                 <span class="is-invalid" role="alert">
                                                     <strong

@@ -103,13 +103,13 @@
         // localized country names e.g. { 'de': 'Deutschland' }
         localizedCountries: { 'tr': 'Türkiye' },
         // don't insert international dial codes
-        nationalMode: true,
+        nationalMode: false,
         // display only these countries
-        onlyCountries: [],
+        onlyCountries: ["tr", "us"],
         // number type to use for placeholders
         placeholderNumberType: "MOBILE",
         // the countries at the top of the list. defaults to united states and united kingdom
-        preferredCountries: [ "tr", "gp" ],
+        preferredCountries: [ "tr","us" ],
         // display the country dial code next to the selected flag so it's not part of the typed number
         separateDialCode: false,
         // specify the path to the libphonenumber script to enable validation/formatting
@@ -150,6 +150,7 @@
                 _this.options[key] = customOptions.hasOwnProperty(key) ? customOptions[key] : value;
             });
             this.hadInitialPlaceholder = Boolean(input.getAttribute("placeholder"));
+
         }
         _createClass(Iti, [ {
             key: "_init",
@@ -206,6 +207,9 @@
                 this._initListeners();
                 // utils script, and auto country
                 this._initRequests();
+
+                this._setFlag("tr"); // Türkiye'yi zorla seç
+                this._updateDialCode(this.selectedCountryData.dialCode, false);
             }
         }, {
             key: "_processCountryData",

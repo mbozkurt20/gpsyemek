@@ -128,7 +128,7 @@
                                                 class="form-label required">{{ __('register.password') }}</label>
                                             <input name="password" id="password"
                                                 class="form-control @if ($errors->has('password')) is-invalid @endif"
-                                                type="password" placeholder="Create password">
+                                                type="password" placeholder="Şifre oluştur">
                                             @error('password')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}

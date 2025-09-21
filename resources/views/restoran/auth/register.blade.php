@@ -128,7 +128,7 @@
                                                 class="form-label required">{{ __('register.password') }}</label>
                                             <input name="password" id="password"
                                                 class="form-control @if ($errors->has('password')) is-invalid @endif"
-                                                type="password" placeholder="Create password">
+                                                type="password" placeholder="Şifre oluştur">
                                             @error('password')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
@@ -142,7 +142,7 @@
                                                 class="form-label required">{{ __('register.repeat_password') }}</label>
                                             <input name="password_confirmation"
                                                 class="form-control @if ($errors->has('password_confirmation')) is-invalid @endif"
-                                                type="password" placeholder="Repeat password">
+                                                type="password" placeholder="Şİfre Tekrarı">
                                             @if ($errors->has('password_confirmation'))
                                                 <span class="is-invalid" role="alert">
                                                     <strong
