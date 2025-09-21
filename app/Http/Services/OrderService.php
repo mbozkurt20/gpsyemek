@@ -484,6 +484,7 @@ class OrderService
             'order_type'      => $data['order_type'],
             'address'         => $address,
             'mobile'          => $data['mobile'],
+            'payment_id'      => $data['payment_id'],
             'lat'             => $latitude,
             'long'            => $longitude,
             'misc'            => json_encode(["remarks" => '']),

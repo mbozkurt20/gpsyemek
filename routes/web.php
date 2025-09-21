@@ -100,6 +100,9 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::post('checkout',                                 [CheckoutController::class, 'store'])->name('checkout.store')->middleware('auth');
     Route::get('/payment/callback',                         [CheckoutController::class, 'PaystackCallback'])->name('paystack.callback')->middleware('auth');
 
+    Route::post('/iyzi/initialize', [CheckoutController::class, 'iyzicoPayment'])->name('iyzico.payment');
+    Route::post('/iyzi/callback', [CheckoutController::class, 'iyzicoCallback'])->name('iyzico.callback');
+
     Route::post('paytm/status', [CheckoutController::class, 'paytmCallback']);
 
     Route::post('phonepe/status', [CheckoutController::class, 'phonepeCallback']);

@@ -54,28 +54,32 @@ class PaymentService
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-        } elseif ($request['payment_type'] == PaymentMethod::PAYTM) {
+        } elseif ($request['payment_type'] == PaymentMethod::IYZICO) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-
+            $this->data['payment_id'] = session()->get('paymentId');
+        } elseif ($request['payment_type'] == PaymentMethod::TAMI) {
+            $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
+            $this->data['payment_method'] = $request['payment_type'];
+            $this->data['payment_status'] = PaymentStatus::PAID;
+        }elseif ($request['payment_type'] == PaymentMethod::PAYTM) {
+            $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
+            $this->data['payment_method'] = $request['payment_type'];
+            $this->data['payment_status'] = PaymentStatus::PAID;
         } elseif ($request['payment_type'] == PaymentMethod::PHONEPE) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-
         } elseif ($request['payment_type'] == PaymentMethod::WALLET) {
-
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
         } elseif ($request['payment_type'] == PaymentMethod::PAYSTACK && $paymetSuccess) {
-
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
         } elseif ($request['payment_type'] == PaymentMethod::PAYPAL && $paymetSuccess) {
-
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
@@ -87,7 +91,11 @@ class PaymentService
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-        } else {
+        } elseif ($request['payment_type'] == PaymentMethod::CREDIT_CARD_ON_DELIVERY) {
+            $this->data['paid_amount'] = 0;
+            $this->data['payment_method'] = PaymentMethod::CREDIT_CARD_ON_DELIVERY;
+            $this->data['payment_status'] = PaymentStatus::UNPAID;
+        }else {
             $this->data['paid_amount'] = 0;
             $this->data['payment_method'] = PaymentMethod::CASH_ON_DELIVERY;
             $this->data['payment_status'] = PaymentStatus::UNPAID;
@@ -106,6 +114,7 @@ class PaymentService
         $this->data['delivery_charge'] = $delivery_charge;
         $this->data['address'] = isset($request['address']) ? $request['address'] : '';
         $this->data['mobile'] = $request['countrycode'] . $request['mobile'];
+
         $orderService = app(OrderService::class)->order($this->data);
 
         return $orderService;

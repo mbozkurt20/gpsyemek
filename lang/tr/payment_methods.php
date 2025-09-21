@@ -5,4 +5,5 @@ return array (
   15 => 'Stripe Yükleme',
   16 => 'Razorpay Yükleme',
   17 => 'Paystack Yükleme',
+  35 => 'Iyzıco Yükleme',
 );

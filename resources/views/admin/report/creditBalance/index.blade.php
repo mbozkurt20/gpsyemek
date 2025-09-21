@@ -80,10 +80,10 @@
                     <table class="db-table table stripe" id="maintable" data-url="{{ route('admin.credit-balance-report.index') }}">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
-                                <th class="db-table-head-th">{{ __('Name') }}</th>
-                                <th class="db-table-head-th">{{ __('User Role') }}</th>
-                                <th class="db-table-head-th">{{ __('Phone') }}</th>
-                                <th class="db-table-head-th">{{ __('Credit') }}</th>
+                                <th class="db-table-head-th">{{ __('İsim') }}</th>
+                                <th class="db-table-head-th">{{ __('Kullanı Rolü') }}</th>
+                                <th class="db-table-head-th">{{ __('Telefon') }}</th>
+                                <th class="db-table-head-th">{{ __('Bakiye') }}</th>
                             </tr>
                         </thead>
                     </table>

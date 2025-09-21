@@ -24,6 +24,7 @@ class Order extends Model implements HasMedia
         'user_id',
         'total',
         'sub_total',
+        'payment_id',
         'delivery_charge',
         'status',
         'payment_status',

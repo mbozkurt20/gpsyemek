@@ -20,11 +20,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Iyzipay\Model\CheckoutForm;
 use Iyzipay\Model\CheckoutFormInitialize;
+use Iyzipay\Options;
 use Iyzipay\Request\CreateCheckoutFormInitializeRequest;
+use Iyzipay\Request\CreatePaymentRequest;
 use Iyzipay\Request\RetrieveCheckoutFormRequest;
 use Paystack;
 use Razorpay\Api\Api;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Iyzipay\Model\Payment;
 
 class CheckoutController extends FrontendController
 {
@@ -64,7 +67,7 @@ class CheckoutController extends FrontendController
     {
         $sessionRestaurantId = session('session_cart_restaurant_id');
         if (blank($sessionRestaurantId)) {
-            return redirect(route('checkout.index'))->withError('The Restaurant not found');
+            return redirect(route('checkout.index'))->withError('Restaurant Bulunmuyor');
         }
 
         $this->setDeliveryCharge($request);
@@ -86,13 +89,13 @@ class CheckoutController extends FrontendController
         }
 
         $messages = [
-            'mobile.required' => 'The phone number field is required.',
+            'mobile.required' => 'Telefon numarası alanı zorunludur.',
         ];
 
         $validator = Validator::make($request->all(), $validation, $messages);
         $validator->after(function ($validator) use ($request, $restaurant) {
             if ($request->payment_type == PaymentMethod::WALLET) {
-                if ((float) auth()->user()->balance->balance < (float) (session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))) {
+                if ((float)auth()->user()->balance->balance < (float)(session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))) {
                     $validator->errors()->add('payment_type', 'The Credit balance does not enough for this payment.');
                 }
             }
@@ -119,6 +122,10 @@ class CheckoutController extends FrontendController
                 return $this->sslcommerzPayment($request);
             } elseif ($paymentType == PaymentMethod::RAZORPAY) {
                 return $this->processRazorpayPayment($request);
+            } elseif ($paymentType == PaymentMethod::IYZICO) {
+                return $this->iyzicoPayment($request);
+            } elseif ($paymentType == PaymentMethod::TAMI) {
+                return $this->tamiPayment($request);
             } else {
                 return $this->processDefaultPayment();
             }
@@ -127,84 +134,103 @@ class CheckoutController extends FrontendController
         }
     }
 
-    public function iyzico(Request $request, \App\Models\Order $order)
+    public function iyzicoPayment(Request $r)
     {
-        $options = IyzicoService::options();
 
-        $req = new CreateCheckoutFormInitializeRequest();
-        $req->setLocale(\Iyzipay\Model\Locale::TR);
-        $req->setConversationId((string)$order->id); // kendi conversationId'niz
-        $req->setPrice(number_format($order->total, 2, '.', ''));
-        $req->setPaidPrice(number_format($order->total, 2, '.', ''));
-        $req->setCurrency(\Iyzipay\Model\Currency::TL);
-        $req->setBasketId('B'.$order->id);
-        $req->setPaymentGroup(\Iyzipay\Model\PaymentGroup::PRODUCT);
-        $req->setCallbackUrl(route('payment.callback', [], true)); // MUTLAK URL
+        $options = new Options();
+        $options->setApiKey(setting('iyzico_api_key'));
+        $options->setSecretKey(setting('iyzico_secret_key'));
+        $options->setBaseUrl(config('iyzico.base_url'));
 
-        // Buyer (zorunlu alanların örneği)
+        $amount = 1;
+
+        $paymentRequest = new \Iyzipay\Request\CreateCheckoutFormInitializeRequest();
+        $paymentRequest->setLocale(\Iyzipay\Model\Locale::TR);
+        $paymentRequest->setConversationId(uniqid());
+        $paymentRequest->setPrice("{$amount}");
+        $paymentRequest->setPaidPrice("{$amount}");
+        $paymentRequest->setCurrency(\Iyzipay\Model\Currency::TL);
+        $paymentRequest->setBasketId("B" . uniqid());
+        $paymentRequest->setPaymentGroup(\Iyzipay\Model\PaymentGroup::PRODUCT);
+        $paymentRequest->setCallbackUrl(route('iyzico.callback')); // Ödeme sonrası yönlendirilecek route
+
+        $address = Address::find($r->address);
+        $shippingAddress = new \Iyzipay\Model\Address();
+        $shippingAddress->setContactName($address->label_name);
+        $shippingAddress->setCity("Istanbul");
+        $shippingAddress->setCountry("Turkey");
+        $shippingAddress->setAddress($address->address);
+        $shippingAddress->setZipCode("34732");
+
+        $paymentRequest->setShippingAddress($shippingAddress);
+        $paymentRequest->setBillingAddress($shippingAddress);
+
+        // buyer, addresses, basket items minimal doldurun (README örneğine bakın)
         $buyer = new \Iyzipay\Model\Buyer();
-        $buyer->setId((string)$order->user_id);
-        $buyer->setName($order->user->name ?? 'Müşteri');
-        $buyer->setSurname($order->user->surname ?? '');
-        $buyer->setGsmNumber($order->user->phone ?? '+90500...');
-        $buyer->setEmail($order->user->email ?? 'customer@example.com');
-        $buyer->setIdentityNumber($order->user->identity_number ?? '00000000000');
-        $buyer->setRegistrationAddress($order->user->address ?? 'Adres');
-        $buyer->setIp($request->ip());
-        $buyer->setCity($order->user->city ?? 'Istanbul');
-        $buyer->setCountry('Turkey');
-        $buyer->setZipCode($order->user->zip ?? '34732');
-        $req->setBuyer($buyer);
+        $buyer->setId("BY".uniqid());
+        $buyer->setName(auth()->user()->first_name);
+        $buyer->setSurname(auth()->user()->last_name);
+        $buyer->setGsmNumber($r->countrycode . $r->mobile);
+        $buyer->setEmail(auth()->user()->email);
+        $buyer->setIdentityNumber("11111111110");
+        $buyer->setLastLoginDate(date('Y-m-d H:i:s'));
+        $buyer->setRegistrationDate(date('Y-m-d H:i:s'));
+        $buyer->setRegistrationAddress($address->address);
+        $buyer->setIp($r->ip());
+        $buyer->setCity("Istanbul");
+        $buyer->setCountry("Turkey");
+        $buyer->setZipCode("34732");
 
-        // Basket items (örnek)
-        $basketItems = [];
-        foreach ($order->items as $i => $item) {
-            $bi = new \Iyzipay\Model\BasketItem();
-            $bi->setId('BI'.($i+1));
-            $bi->setName($item->name);
-            $bi->setCategory1($item->category ?? 'Genel');
-            $bi->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
-            $bi->setPrice(number_format($item->price, 2, '.', ''));
-            $basketItems[] = $bi;
-        }
-        $req->setBasketItems($basketItems);
+        $paymentRequest->setBuyer($buyer);
 
-        $checkoutInitialize = CheckoutFormInitialize::create($req, $options);
+        // basit basket item
+        $item = new \Iyzipay\Model\BasketItem();
+        $item->setId("BI1");
+        $item->setName("Test Ürün");
+        $item->setCategory1("Kategori");
+        $item->setItemType(\Iyzipay\Model\BasketItemType::PHYSICAL);
+        $item->setPrice("1");
 
-        if ($checkoutInitialize->getStatus() === 'success') {
-            // Seçenek A: sayfaya embed etmek
-            $checkoutHtml = $checkoutInitialize->getCheckoutFormContent();
-            return view('payment.iyzico', compact('checkoutHtml'));
+        $paymentRequest->setBasketItems([$item]);
 
-            // Seçenek B: kullanıcıyı ortak ödeme sayfasına yönlendirme:
-            // return redirect()->away($checkoutInitialize->getPaymentPageUrl());
-        }
+        $checkoutFormInitialize = CheckoutFormInitialize::create($paymentRequest, $options);
 
-        // hata durumunda
-        return back()->with('error', $checkoutInitialize->getErrorMessage());
+        return view('frontend.payment.iyzico', [
+            'checkoutFormContent' => $checkoutFormInitialize->getCheckoutFormContent()
+        ]);
+
     }
 
-    public function iyzicoCallback(Request $request)
+    public function iyzicoCallback(Request $r)
     {
-        $token = $request->input('token'); // iyzico POST'unda token gelir
-        $options = IyzicoService::options();
+        $token = $r->input('token');
 
-        $r = new RetrieveCheckoutFormRequest();
-        $r->setLocale(\Iyzipay\Model\Locale::TR);
-        $r->setConversationId($request->input('conversationId') ?? '');
-        $r->setToken($token);
+        $options = new Options();
+        $options->setApiKey(setting('iyzico_api_key'));
+        $options->setSecretKey(setting('iyzico_secret_key'));
+        $options->setBaseUrl(config('iyzico.base_url'));
 
-        $checkoutForm = CheckoutForm::retrieve($r, $options);
+        $request = new RetrieveCheckoutFormRequest();
+        $request->setLocale(\Iyzipay\Model\Locale::TR);
+        $request->setConversationId($r->conversationId);
+        $request->setToken($token);
 
-        // checkoutForm içindeki alanlara bakın (status, paymentStatus, paymentId vb.)
-        if ($checkoutForm->getStatus() === 'success') {
-            // Ödeme başarılı -> siparişi güncelle, e-posta gönder, vb.
-            // $checkoutForm->getPaymentId(), $checkoutForm->getPaymentStatus() gibi metodları kullanabilirsiniz.
-            return redirect()->route('orders.show', ['order' => $checkoutForm->getConversationId()])
-                ->with('success', 'Ödeme başarılı');
+        $checkoutForm = CheckoutForm::retrieve($request, $options);
+        $paymentId = $checkoutForm->getPaymentId();
+
+        if ($checkoutForm->getPaymentStatus() === 'SUCCESS') {
+            session()->put('paymentId', $paymentId);
+            $orderService = app(PaymentService::class)->payment(true);
         } else {
-            return redirect('/')->with('error', 'Ödeme başarısız: ' . $checkoutForm->getErrorMessage());
+            $orderService = app(PaymentService::class)->payment(false);
         }
+
+        return $this->handleOrderServiceResponse($orderService);
+    }
+
+    public function tamiPayment(Request $request)
+    {
+        return false;
     }
 
     public function sslcommerzPayment($request)
@@ -282,6 +308,7 @@ class CheckoutController extends FrontendController
     {
         return redirect(route('checkout.index'))->withError('Bir şeyler ters gitti!');
     }
+
     public function sslcommerzCancle()
     {
         return redirect(route('checkout.index'))->withError('Bir şeyler ters gitti!');
@@ -371,7 +398,7 @@ class CheckoutController extends FrontendController
         $validator->after(function ($validator) use ($request, $restaurant) {
             if (
                 $request->payment_type == PaymentMethod::WALLET &&
-                (float) auth()->user()->balance->balance < (float) (session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))
+                (float)auth()->user()->balance->balance < (float)(session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))
             ) {
                 $validator->errors()->add('payment_type', 'The Credit balance does not enough for this payment.');
             }

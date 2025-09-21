@@ -18,6 +18,10 @@
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.stripe') }}</span>
             </button>
+            <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'iyzico' ? 'active' : '' }}" data-tab="#iyzico">
+                <i class="fa-solid fa-credit-card text-sm"></i>
+                <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.iyzico') }}</span>
+            </button>
             <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'tami' ? 'active' : '' }}" data-tab="#tami">
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.tami') }}</span>
@@ -150,6 +154,47 @@
                                 <button class="db-btn text-white bg-primary">
                                     <i class="fa-solid fa-circle-check"></i>
                                     <span>{{ __('setting.update_tami_setting') }}</span>
+                                </button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+        <div id="iyzico" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'iyzico' ? 'active' : '' }}">
+            <div class="db-card-header">
+                <h3 class="db-card-title">{{ __('setting.iyzico_setting') }}</h3>
+            </div>
+            <div class="db-card-body">
+                <form role="form" method="POST"
+                action="{{ route('admin.setting.payment-update') }}">
+                    @csrf
+                        <input type="hidden" name="settingtypepayment" value="iyzico">
+                        <div class="form-row">
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="tami_merchant_id">IYZICO API KEY
+                                </label>
+                                <input name="iyzico_api_key" id="iyzico_api_key" type="text"
+                                    class="db-field-control @error('iyzico_api_key')invalid @enderror"
+                                    value="{{ old('iyzico_api_key', setting('iyzico_api_key') ?? '') }}">
+                                @error('iyzico_api_key')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="iyzico_secret_key">IYZICO SECRET KEY
+                                </label>
+                                <input name="iyzico_secret_key" id="iyzico_secret_key" type="text"
+                                       class="db-field-control @error('iyzico_secret_key')invalid @enderror"
+                                       value="{{ old('tami_merchant_id', setting('iyzico_secret_key') ?? '') }}">
+                                @error('iyzico_secret_key')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-col-12">
+                                <button class="db-btn text-white bg-primary">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>{{ __('setting.update_iyzico_setting') }}</span>
                                 </button>
                             </div>
                         </div>

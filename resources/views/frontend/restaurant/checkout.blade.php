@@ -178,7 +178,7 @@
                             <div class="form-group">
                                 <label class="form-label required">{{ __('frontend.phone_number') }}</label>
                                 <input class="form-control mobilenumber @error('mobile') is-invalid @enderror phone"
-                                    type="tel" id="number" name="mobile" onkeypress='validate(event)'>
+                                    type="tel" id="number" value="{{auth()->user()?->phone}}" name="mobile" onkeypress='validate(event)'>
                                 <input type="hidden" id="code" name="countrycode" value="90">
                                 <input type="hidden" id="code_name" name="countrycodename" value="tr">
 
@@ -204,9 +204,15 @@
                                         {{ __('frontend.cash_on_delivery') }}
                                     </option>
 
-                                    @if (setting('stripe_key') && setting('stripe_secret'))
-                                        <option value="{{ App\Enums\PaymentMethod::CARD }}"
-                                                @if (old('payment_type') == App\Enums\PaymentMethod::CARD) selected="selected" @endif>
+                                    <option value="{{ App\Enums\PaymentMethod::CREDIT_CARD_ON_DELIVERY }}"
+                                            @if (old('payment_type') == App\Enums\PaymentMethod::CREDIT_CARD_ON_DELIVERY) selected="selected" @endif>
+
+                                        {{ __('frontend.CREDIT_CARD_ON_DELIVERY') }}
+                                    </option>
+
+                                    @if (setting('iyzico_secret_key') && setting('iyzico_api_key'))
+                                        <option value="{{ App\Enums\PaymentMethod::IYZICO }}"
+                                                @if (old('payment_type') == App\Enums\PaymentMethod::IYZICO) selected="selected" @endif>
 
                                             {{ __('frontend.CARD') }}
                                         </option>
@@ -216,14 +222,6 @@
                                         <option value="{{ App\Enums\PaymentMethod::WALLET }}"
                                             @if (old('payment_type') == App\Enums\PaymentMethod::WALLET) selected="selected" @endif>
                                             {{ __('frontend.pay_with_credit_balance') . currencyFormatWithName(auth()->user()->balance->balance) }}
-                                        </option>
-                                    @endif
-
-                                    @if (setting('stripe_key') && setting('stripe_secret'))
-                                        <option value="{{ App\Enums\PaymentMethod::CREDIT_CARD_ON_DELIVERY }}"
-                                                @if (old('payment_type') == App\Enums\PaymentMethod::CREDIT_CARD_ON_DELIVERY) selected="selected" @endif>
-
-                                            {{ __('frontend.CREDIT_CARD_ON_DELIVERY') }}
                                         </option>
                                     @endif
 

@@ -22,5 +22,7 @@ interface PaymentMethod
     const PAYTM            = 32;
     const PHONEPE          = 33;
     const SSLCOMMERZ       = 34;
+    const IYZICO       = 35;
+    const TAMI       = 36;
 
 }

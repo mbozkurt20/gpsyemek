@@ -22,7 +22,6 @@ class SettingController extends BackendController
         $this->data['siteTitle'] = 'Ayarlar';
         $this->middleware(['permission:setting']);
         $this->middleware('license-activate');
-
     }
 
     // Site Setting
@@ -696,9 +695,6 @@ class SettingController extends BackendController
         return [
             'iyzico_api_key'       => 'required|string|max:255',
             'iyzico_secret_key'    => 'required|string|max:255',
-            'tami_secret_id'    => 'required|string|max:255',
-            'tami_fixed_kid'    => 'required|string|max:255',
-            'tami_fixed_k'    => 'required|string|max:255',
             'settingtypepayment' => 'required|string',
         ];
     }

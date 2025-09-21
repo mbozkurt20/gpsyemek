@@ -27,6 +27,7 @@
                 <table class="db-table table stripe" id="maintable" data-url="{{ route('admin.menu-items.index') }}" data-status="{{ \App\Enums\MenuItemStatus::ACTIVE }}" data-hidecolumn="{{ auth()->user()->can('menu-items_show') || auth()->user()->can('menu-items_edit') || auth()->user()->can('menu-items_delete') }}">
                     <thead class="db-table-head">
                         <tr class="db-table-head-tr">
+                            <th class="db-table-head-th">#</th>
                             <th class="db-table-head-th">{{ __('levels.name') }}</th>
                             <th class="db-table-head-th">{{ __('levels.categories') }}</th>
                             <th class="db-table-head-th">{{ __('levels.status') }}</th>

@@ -76,7 +76,7 @@ return array (
   'radious_around_destination'      => 'Seçilen konum etrafındaki yarıçap',
   'payment_type'                    => 'Ödeme Türü',
   'paystack'                        => 'Paystack',
-  'cash_on_delivery'                => 'Kapıda Ödeme',
+  'cash_on_delivery'                => 'Kapıda Nakit Ödeme',
   'pay_with_credit_balance'         => 'Kredi bakiyesi ile öde',
   'stripe'                          => 'Stripe',
   'paypal'                          => 'PayPal',
