@@ -61,12 +61,12 @@
 
         {{-- need to edit it by login as restaurant owner --}}
         @if(auth()->user()?->myrole == 3 && auth()->user()?->restaurant)
-        <a href="{{ route('admin.restaurant.restaurant-edit',auth()->user()?->restaurant) }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
+        <!--a href="{{ route('admin.restaurant.restaurant-edit',auth()->user()?->restaurant) }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">
             <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="#1e1f27" d="M288.5 366.847h133a15.517 15.517 0 0 0 15.5-15.5V270.5a15.517 15.517 0 0 0-15.5-15.5h-133a15.517 15.517 0 0 0-15.5 15.5v80.847a15.517 15.517 0 0 0 15.5 15.5Zm74-96.847h59a.5.5 0 0 1 .5.5v32.923h-59.5Zm0 48.423H422v32.924a.5.5 0 0 1-.5.5h-59ZM288 270.5a.5.5 0 0 1 .5-.5h59v33.423H288Zm0 47.923h59.5v33.424h-59a.5.5 0 0 1-.5-.5ZM499.5 216a12.514 12.514 0 0 0 12.5-12.5v-20a12.514 12.514 0 0 0-12.5-12.5h-116v-30h12a17.52 17.52 0 0 0 17.5-17.5v-106A17.52 17.52 0 0 0 395.5 0h-279A17.52 17.52 0 0 0 99 17.5v106a17.52 17.52 0 0 0 17.5 17.5h12v30h-116A12.514 12.514 0 0 0 0 183.5v20A12.514 12.514 0 0 0 12.5 216H30v251H12.5A12.514 12.514 0 0 0 0 479.5v20A12.514 12.514 0 0 0 12.5 512h487a12.514 12.514 0 0 0 12.5-12.5v-20a12.514 12.514 0 0 0-12.5-12.5H482V216Zm-383-90a2.503 2.503 0 0 1-2.5-2.5v-106a2.503 2.503 0 0 1 2.5-2.5h279a2.503 2.503 0 0 1 2.5 2.5v106a2.503 2.503 0 0 1-2.5 2.5Zm252 15v30h-225v-30ZM497 482v15H15v-15ZM225.5 255h-119A17.52 17.52 0 0 0 89 272.5V467H45V216h422v251H243V272.5a17.52 17.52 0 0 0-17.5-17.5Zm-35 60v17h-49v-17h3.83l.036.002.028-.002Zm-33.44-15 9.313-20.316L176.776 300Zm-16.5 0H134a7.5 7.5 0 0 0-7.5 7.5v32a7.5 7.5 0 0 0 7.5 7.5h64a7.5 7.5 0 0 0 7.5-7.5v-32a7.5 7.5 0 0 0-7.5-7.5h-4.371l-15.362-30H225.5a2.503 2.503 0 0 1 2.5 2.5V467H104V272.5a2.503 2.503 0 0 1 2.5-2.5h47.812ZM15 201v-15h482v15ZM320.937 96h-7.5v-5.43a49.556 49.556 0 0 0-49.5-49.5h-.437V37.5a7.5 7.5 0 0 0-15 0v3.57h-.437a49.556 49.556 0 0 0-49.5 49.5V96h-7.5a7.5 7.5 0 0 0 0 15h129.873a7.5 7.5 0 0 0 0-15Zm-22.5 0h-84.873v-5.43a34.539 34.539 0 0 1 34.5-34.5h15.873a34.539 34.539 0 0 1 34.5 34.5Z"></path>
               </svg>
             <span class="text-sm leading-6 capitalize">{{ __('validation.attributes.restaurant_id') }}</span>
-        </a>
+        </a-->
         @endif
 
         <!--a href="{{ route('admin.profile.address-index') }}" class="paper-link transition w-full flex items-center gap-3.5 py-2.5 border-b last:border-none border-[#EFF0F6]">

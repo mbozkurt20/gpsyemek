@@ -15,6 +15,7 @@ return array(
   'accept'                           => 'Kabul Et',
   'order'                            => 'Sipariş ID',
   'item'                             => 'Ürün',
+  'last_order'                       => 'Geçmiş Siparişler',
   'items'                            => 'Ürünler',
   'total_order'                      => 'Toplam Sipariş',
   'order_pending'                    => 'Sipariş Beklemede',

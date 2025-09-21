@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="col-12 sm:col-6 xl:col-4">
-                                <label class="db-field-title">status</label>
+                                <label class="db-field-title">Durum</label>
                                 <div class="db-field-down-arrow">
                                     <select class="db-field-control appearance-none" id="status" name="status">
                                         <option value="">--</option>
@@ -126,12 +126,12 @@
                                 </div>
                             </div>
                             <div class="col-12 sm:col-6 xl:col-4">
-                                <label class="db-field-title">from date</label>
+                                <label class="db-field-title">Başlangıç Tarihi</label>
                                 <input autocomplete="off" class="db-field-control" id="start_date" type="date"
                                     name="start_date" value="{{ \Carbon\Carbon::now()->format('d-m-Y') }}">
                             </div>
                             <div class="col-12 sm:col-6 xl:col-4">
-                                <label class="db-field-title"> tarihte</label>
+                                <label class="db-field-title"> Bitiş Tarihi</label>
                                 <input autocomplete="off" class="db-field-control" id="end_date" type="date"
                                     name="end_date" value="{{ \Carbon\Carbon::now()->format('d-m-Y') }}">
                             </div>

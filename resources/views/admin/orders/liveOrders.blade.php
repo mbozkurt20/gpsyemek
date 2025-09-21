@@ -15,6 +15,9 @@
 
 @endsection
 
+@push('css')
+    <link  rel="stylesheet" href="{{asset('css/live-orders.css')}}">
+@endpush
 @push('js')
     <script>
         const liveOrderRoute = "{{ route('admin.orders.get-live-Order') }}";

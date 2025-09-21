@@ -53,6 +53,7 @@ class OrderController extends BackendController
 
         $this->data['total_order']     = $orders->count();
         $this->data['pending_order']   = $orders->where('status', OrderStatus::PENDING)->count();
+        $this->data['accepted_order']   = $orders->where('status', OrderStatus::ACCEPT)->count();
         $this->data['process_order']   = $orders->where('status', OrderStatus::PROCESS)->count();
         $this->data['completed_order'] = $orders->where('status', OrderStatus::COMPLETED)->count();
 
@@ -427,7 +428,9 @@ class OrderController extends BackendController
         $this->data['total_order']     = $orderCount->count();
         $this->data['pending_order']   = $orderCount->where('status', OrderStatus::PENDING)->count();
         $this->data['process_order']   = $orderCount->where('status', OrderStatus::PROCESS)->count();
+        $this->data['accepted_order']   = $orderCount->where('status', OrderStatus::ACCEPT)->count();
         $this->data['completed_order'] = $orderCount->where('status', OrderStatus::COMPLETED)->count();
+        $this->data['last_order']   = Order::with('restaurant', 'user')->orderowner()->orderBy('id', 'desc')->count();
         $this->data['courier_order']    = $orderCount->where('status', OrderStatus::ON_THE_WAY)->count();
 
         $this->data['new_orders'] = [];
