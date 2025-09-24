@@ -28,6 +28,9 @@ return new class extends Migration
             $table->longText('address')->nullable();
             $table->integer('balance_id');
             $table->longtext('device_token')->nullable();
+            $table->boolean('is_membership_conditions')->default(true);
+            $table->boolean('is_illumination_text')->default(true);
+            $table->boolean('is_electronic_message')->default(false);
             $table->unsignedTinyInteger('status')->default(UserStatus::ACTIVE);
             $table->unsignedTinyInteger('applied')->default(UserApplied::ADMIN);
             $table->timestamp('last_login_at')->nullable();

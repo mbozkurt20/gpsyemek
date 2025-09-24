@@ -96,6 +96,7 @@
             </div>
         @endforeach
     @endif
+
     @if (!blank($other_products))
         <div wire:ignore="" id="listing_product_other">
             <div class="product-category" id="popular-items">

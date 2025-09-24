@@ -97,7 +97,7 @@
                             <span> {{ setting('site_phone_number') }} </span>
                         </li>
                         <img src="https://i.hizliresim.com/fbvt5ht.png"
-                             alt="Gpsyemek Logo"
+                             alt="payment"
                              style="max-width:250px; height:auto;">
                     </ul>
                 </div>

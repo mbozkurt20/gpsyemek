@@ -20,4 +20,8 @@ return [
     'delivery_boy' => 'Kurye',
 	 'failed'   => 'Bu kimlik bilgileri kayıtlarımızla eşleşmiyor.',
   'throttle' => 'Çok fazla giriş denemesi yapıldı. Lütfen :seconds saniye sonra tekrar deneyin.',
+    'elektronik_ileti_kabul' => 'Tarafıma elektronik ileti gönderilmesini kabul ediyorum.',
+    'tab1_baslik' => 'Üyelik Sözleşmesi',
+    'tab2_baslik' => 'Aydınlatma Metni',
+    'tab3_baslik' => 'Açık Rıza Metni',
 ];

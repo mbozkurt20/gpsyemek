@@ -196,6 +196,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
         Route::post('social-login',                         [SettingController::class, 'socialLoginSettingUpdate'])->name('social-login-update');
         Route::get('otp',                                   [SettingController::class, 'otpSetting'])->name('otp');
         Route::post('otp',                                  [SettingController::class, 'otpSettingUpdate'])->name('otp-update');
+        Route::get('recaptcha',                             [SettingController::class, 'recaptchaSetting'])->name('recaptcha');
+        Route::post('recaptcha',                            [SettingController::class, 'recaptchaSettingUpdate'])->name('recaptcha-update');
         Route::get('homepage',                              [SettingController::class, 'homepageSetting'])->name('homepage');
         Route::post('homepage',                             [SettingController::class, 'homepageSettingUpdate'])->name('homepage-update');
         Route::get('theme',                                 [ThemeController::class,   'index'])->name('theme');

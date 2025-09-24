@@ -63,6 +63,7 @@ class RestaurantController extends FrontendController
         $categories_products = [];
 
         $products            = MenuItem::with('categories')->with('media')->with('variations')->with('options')->where(['restaurant_id' => $this->restaurant->id])->where('status', MenuItemStatus::ACTIVE)->get();
+
         foreach ($products as $product) {
             $product_categories = $product->categories;
             if (!blank($product_categories)) {

@@ -7,6 +7,8 @@ return array(
   'taxable'                           => 'Vergilendirilebilir',
   'location'                          => 'Konum',
   'api_token'                         => 'Api Token',
+  'recaptcha_site_key'                => 'reCAPTCHA Site Anahtar',
+  'recaptcha_secret_key'              => 'reCAPTCHA Anahtar',
   'description'                       => 'Açıklama',
   'site_short_description'            => 'Site Kısa Açıklama',
   'mrp'                               => 'Tavsiye Fiyatı',

@@ -13,6 +13,7 @@ return array (
   'app_setting'                 => 'Uygulama',
   'iyzico'                      => 'Iyzico',
   'iyzico_setting'              => 'Iyzico Ayarlar',
+  'recaptcha_setting'           => 'Recaptcha Ayarlar',
   'update_iyzico_setting'       => 'Iyzico Ayarları Güncelle',
   'support_setting'             => 'Destek',
   'setting'                     => 'Ayarlar',

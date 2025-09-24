@@ -487,6 +487,21 @@ class SettingController extends BackendController
         Setting::save();
     }
 
+    public function recaptchaSetting()
+    {
+        return view('admin.setting.recaptcha', $this->data);
+    }
+
+    public function recaptchaSettingUpdate(Request $request)
+    {
+        $niceNames    = [];
+        $settingArray = $this->validate($request, $this->recaptchaValidateArray(), [], $niceNames);
+
+        Setting::set($settingArray);
+        Setting::save();
+        return redirect(route('admin.setting.recaptcha'))->withSuccess('Google reCAPTCHA ayarları güncellendi');
+    }
+
     // otp Setting
     public function otpSetting()
     {
@@ -500,7 +515,7 @@ class SettingController extends BackendController
 
         Setting::set($settingArray);
         Setting::save();
-        return redirect(route('admin.setting.otp'))->withSuccess('The OTP setting updated successfully');
+        return redirect(route('admin.setting.otp'))->withSuccess('OTP ayarı başarıyla güncellendi');
     }
 
     // Homepage Setting
@@ -517,7 +532,7 @@ class SettingController extends BackendController
         Setting::set($settingArray);
         Setting::save();
 
-        return redirect(route('admin.setting.homepage'))->withSuccess('The Home page setting updated successfully');
+        return redirect(route('admin.setting.homepage'))->withSuccess('Ana sayfa ayarı başarıyla güncellendi');
     }
 
     // SMS Setting
@@ -533,14 +548,14 @@ class SettingController extends BackendController
 
         Setting::set($settingArray);
         Setting::save();
-        return redirect(route('admin.setting.social'))->withSuccess('The Social setting updated successfully.');
+        return redirect(route('admin.setting.social'))->withSuccess('Sosyal ayar başarıyla güncellendi.');
     }
 
     public function googleMapSetting(Request $request)
     {
         if ($request->isMethod('PUT')) {
             if (env('DEMO_MODE')) {
-                return back()->withError('The google map setting is disable for the demo');
+                return back()->withError('Google harita ayarı demo için devre dışı bırakıldı');
             } else {
                 $this->googleMapSettingStore($request);
                 return back()->withSuccess('Google harita ayarları güncellendi.');
@@ -583,7 +598,7 @@ class SettingController extends BackendController
         Setting::save();
 
 
-        return redirect(route('admin.setting.purchasekey'))->withSuccess('The Purchase key setting updated successfully');
+        return redirect(route('admin.setting.purchasekey'))->withSuccess('Satınalma anahtarı ayarı başarıyla güncellendi');
     }
 
     // Site Setting validation
@@ -776,6 +791,15 @@ class SettingController extends BackendController
             'settingtypesocial' => 'required|string',
         ];
     }
+
+    private function recaptchaValidateArray()
+    {
+        return [
+            'recaptcha_site_key' => 'required|string',
+            'recaptcha_secret_key' => 'required|string',
+        ];
+    }
+
 
     // OTP Setting validation
     private function otpValidateArray()

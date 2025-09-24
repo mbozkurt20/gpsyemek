@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\MenuItemStatus;
 use App\Models\MenuItem;
 use Livewire\Component;
 
@@ -26,7 +27,7 @@ class ShowPage extends Component
 
     public function mount()
     {
-        $products = MenuItem::with('categories')->with('media')->with('variations')->with('options')->where(['restaurant_id' => $this->restaurant->id])->get();
+        $products = MenuItem::with('categories')->with('media')->with('variations')->with('options')->where('status', MenuItemStatus::ACTIVE)->where(['restaurant_id' => $this->restaurant->id])->get();
         foreach($products as $key=>$product) {
             $product_categories = $product->categories;
             if(!blank($product_categories)) {
