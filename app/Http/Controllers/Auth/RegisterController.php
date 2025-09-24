@@ -59,7 +59,7 @@ class RegisterController extends Controller
     protected function verifyRecaptcha(Request $request)
     {
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret'   => setting('recaptcha_site_key'),
+            'secret'   => setting('recaptcha_secret_key'),
             'response' => $request->input('g-recaptcha-response'),
             'remoteip' => $request->ip(),
         ]);
@@ -108,7 +108,7 @@ class RegisterController extends Controller
             'country_code'             => $data['countrycode'],
             'country_code_name'        => $data['countrycodename'],
             'is_illumination_text'     => $data['is_illumination_text'],
-            'is_electronic_message'    => $data['is_electronic_message'],
+            'is_electronic_message'    => $data['is_electronic_message'] ?? 0,
             'is_membership_conditions' => $data['is_membership_conditions'],
         ]);
 
