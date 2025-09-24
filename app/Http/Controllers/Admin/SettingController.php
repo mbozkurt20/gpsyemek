@@ -775,9 +775,9 @@ class SettingController extends BackendController
     private function facebookValidateArray()
     {
         return [
-            'facebook_key'      => 'required|string|max:255',
-            'facebook_secret'   => 'required|string|max:255',
-            'facebook_url'      => 'required|string|max:255',
+            'facebook_key'      => 'nullable|string|max:255',
+            'facebook_secret'   => 'nullable|string|max:255',
+            'facebook_url'      => 'nullable|string|max:255',
             'settingtypesocial' => 'required|string',
         ];
     }
