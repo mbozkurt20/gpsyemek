@@ -26,6 +26,7 @@ class RestaurantOwnerSalesReportController extends BackendController
     public function getRestaurantOwnerSalesReport(Request $request)
     {
         $restaurants = Restaurant::restaurantowner()->latest()->get();
+        $restaurantIds = $restaurants->pluck('id');
 
         if (request()->ajax()) {
             $queryArray = [];
@@ -40,9 +41,9 @@ class RestaurantOwnerSalesReportController extends BackendController
             }
 
             if (!blank($dateBetween)) {
-                $orders = Order::with('restaurant')->where($queryArray)->whereBetween('created_at', [$dateBetween['from_date'], $dateBetween['to_date']])->get();
+                $orders = Order::whereIn('restaurant_id',$restaurantIds)->with('restaurant')->where($queryArray)->whereBetween('created_at', [$dateBetween['from_date'], $dateBetween['to_date']])->get();
             } else {
-                $orders = Order::with('restaurant')->where($queryArray)->get();
+                $orders = Order::whereIn('restaurant_id',$restaurantIds)->with('restaurant')->where($queryArray)->get();
             }
 
             return DataTables::of($orders)

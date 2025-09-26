@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class SocialController extends Controller
-{ 
+{
     public $valid_provider = [
         'google',
         'facebook'
@@ -24,6 +24,7 @@ class SocialController extends Controller
             return Socialite::driver($provider)->redirect();
         }
     }
+
     public function loginWithSocial($provider)
     {
         try {
@@ -34,34 +35,35 @@ class SocialController extends Controller
                     ->first();
 
 
-
                 if ($isUser) {
                     Auth::login($isUser);
                     return redirect()->route('home');
                 } else {
 
                     $first_name = '';
-                    $last_name  = '';
-                    $parts      = $this->split_name($user_social->getName());
+                    $last_name = '';
+                    $parts = $this->split_name($user_social->getName());
                     $first_name = $parts[0];
-                    $last_name  = $parts[1];
+                    $last_name = $parts[1];
 
 
                     $username = '';
                     $username = $this->username($user_social->getEmail());
 
 
-                    $user     = User::create([
-                        'first_name'              => $first_name,
-                        'last_name'              => $last_name,
-                        'email'             => $user_social->getEmail(),
+                    $user = User::create([
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'email' => $user_social->getEmail(),
                         'email_verified_at' => now(),
-                        'username'          => $username,
-                        'password'          => Hash::make('123456'),
-                        'provider_id'       => $user_social->id,
-                        'provider'          => $provider,
+                        'username' => $username,
+                        'is_membership_conditions' => true,
+                        'is_illumination_text' => true,
+                        'password' => Hash::make('123456'),
+                        'provider_id' => $user_social->id,
+                        'provider' => $provider,
                     ]);
-                    $role     = Role::find(2);
+                    $role = Role::find(2);
                     $user->assignRole($role->name);
 
                     Auth::login($user);
@@ -75,8 +77,8 @@ class SocialController extends Controller
 
     private function split_name($name)
     {
-        $name       = trim($name);
-        $last_name  = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        $name = trim($name);
+        $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
         $first_name = trim(preg_replace('#' . $last_name . '#', '', $name));
         return [$first_name, $last_name];
     }
