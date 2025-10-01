@@ -27,6 +27,8 @@ class WebhookController extends Controller
                 return $this->getOrders($restaurant);
             case 'order_updated':
                 return $this->updateOrder($restaurant->id, $data['order']);
+            case 'restaurant_status_changed':
+                return $this->restaurantOrderChange($restaurant->id);
             default:
                 return response()->json(['error' => 'Unknown event'], 400);
         }
@@ -60,5 +62,19 @@ class WebhookController extends Controller
         } else {
             return response()->json(['error' => 'Order not found'], 404);
         }
+    }
+
+    private function restaurantOrderChange($restaurant_id){
+
+        $restaurant = Restaurant::where('id',$restaurant_id)->first();
+
+        if (!$restaurant){
+            return response()->json(['error' => 'Restaurant not found'], 404);
+        }
+
+        $restaurant->current_status = $restaurant->current_status == 5 ? 0 : 5;
+        $restaurant->update();
+
+        return response()->json(['success' => true,'restaurant' => $restaurant]);
     }
 }
