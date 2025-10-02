@@ -18,6 +18,10 @@
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.stripe') }}</span>
             </button>
+            <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'paytr' ? 'active' : '' }}" data-tab="#paytr">
+                <i class="fa-solid fa-credit-card text-sm"></i>
+                <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.paytr') }}</span>
+            </button>
             <button class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5 {{ old('settingtypepayment', setting('settingtypepayment')) == 'iyzico' ? 'active' : '' }}" data-tab="#iyzico">
                 <i class="fa-solid fa-credit-card text-sm"></i>
                 <span class="capitalize whitespace-nowrap text-[15px]">{{ __('setting.iyzico') }}</span>
@@ -171,7 +175,7 @@
                         <input type="hidden" name="settingtypepayment" value="iyzico">
                         <div class="form-row">
                             <div class="form-col-12 sm:form-col-6">
-                                <label class="db-field-title required" for="tami_merchant_id">IYZICO API KEY
+                                <label class="db-field-title required" for="iyzico_api_key">IYZICO API KEY
                                 </label>
                                 <input name="iyzico_api_key" id="iyzico_api_key" type="text"
                                     class="db-field-control @error('iyzico_api_key')invalid @enderror"
@@ -195,6 +199,74 @@
                                 <button class="db-btn text-white bg-primary">
                                     <i class="fa-solid fa-circle-check"></i>
                                     <span>{{ __('setting.update_iyzico_setting') }}</span>
+                                </button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+        <div id="paytr" class="db-card db-tab-sub-div {{ old('settingtypepayment', setting('settingtypepayment')) == 'paytr' ? 'active' : '' }}">
+            <div class="db-card-header">
+                <h3 class="db-card-title">{{ __('setting.paytr_setting') }}</h3>
+            </div>
+            <div class="db-card-body">
+                <form role="form" method="POST"
+                action="{{ route('admin.setting.payment-update') }}">
+                    @csrf
+                        <input type="hidden" name="settingtypepayment" value="paytr">
+                        <div class="form-row">
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="paytr_merchant_id">MERCHANT ID
+                                </label>
+                                <input name="paytr_merchant_id" id="paytr_merchant_id" type="text"
+                                    class="db-field-control @error('paytr_merchant_id')invalid @enderror"
+                                    value="{{ old('paytr_merchant_id', setting('paytr_merchant_id') ?? '') }}">
+                                @error('paytr_merchant_id')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="paytr_merchant_key">MERCHANT KEY
+                                </label>
+                                <input name="paytr_merchant_key" id="paytr_merchant_key" type="text"
+                                       class="db-field-control @error('paytr_merchant_key')invalid @enderror"
+                                       value="{{ old('tami_merchant_id', setting('paytr_merchant_key') ?? '') }}">
+                                @error('paytr_merchant_key')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="paytr_merchant_salt">MERCHANT SALT
+                                </label>
+                                <input name="paytr_merchant_salt" id="paytr_merchant_salt" type="text"
+                                       class="db-field-control @error('paytr_merchant_salt')invalid @enderror"
+                                       value="{{ old('paytr_merchant_salt', setting('paytr_merchant_salt') ?? '') }}">
+                                @error('paytr_merchant_salt')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-col-12 sm:form-col-6">
+                                <label class="db-field-title required" for="paytr_sandbox">SANDBOX</label>
+
+                                <label class="switch">
+                                    <input type="checkbox"
+                                           name="paytr_sandbox"
+                                           id="paytr_sandbox"
+                                           value="1"
+                                        {{ old('paytr_sandbox', setting('paytr_sandbox')) ? 'checked' : '' }}>
+                                    <span class="slider round"></span>
+                                </label>
+
+                                @error('paytr_sandbox')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-col-12">
+                                <button class="db-btn text-white bg-primary">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>{{ __('setting.update_paytr_setting') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -574,4 +646,57 @@
         </div>
         --}}
     </div>
+    <style>
+        /* Switch container */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        /* Gizli checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Slider kısmı */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+
+        /* Topuz (circle) */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        /* Checked olunca */
+        .switch input:checked + .slider {
+            background-color: #4ade80; /* yeşil */
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Round style */
+        .slider.round {
+            border-radius: 26px;
+        }
+    </style>
 @endsection

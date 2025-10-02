@@ -246,7 +246,10 @@ class SettingController extends BackendController
             $this->razorpaySetting($request);
         }else if ($request->settingtypepayment == 'iyzico') {
             $this->iyzicoSetting($request);
-        }  else if ($request->settingtypepayment == 'paystack') {
+        }else if ($request->settingtypepayment == 'paytr') {
+            $this->paytrSetting($request);
+        }
+        else if ($request->settingtypepayment == 'paystack') {
             $this->paystackSetting($request);
         } else if ($request->settingtypepayment == 'paypal') {
             $this->paypalSetting($request);
@@ -309,7 +312,14 @@ class SettingController extends BackendController
         Setting::set($settingArray);
         Setting::save();
     }
+    private function paytrSetting($request)
+    {
+        $niceNames    = [];
+        $settingArray = $this->validate($request, $this->paytrValidateArray(), [], $niceNames);
 
+        Setting::set($settingArray);
+        Setting::save();
+    }
     private function iyzicoSetting($request)
     {
         $niceNames    = [];
@@ -705,12 +715,21 @@ class SettingController extends BackendController
             'settingtypepayment' => 'required|string',
         ];
     }
+    public function paytrvalidateArray()
+    {
+        return [
+            'paytr_merchant_id'       => 'required|string|max:255',
+            'paytr_merchant_key'      => 'required|string|max:255',
+            'paytr_merchant_salt'     => 'required|string',
+            'paytr_sandbox'           => 'nullable|string',
+        ];
+    }
     public function iyzicovalidateArray()
     {
         return [
             'iyzico_api_key'       => 'required|string|max:255',
             'iyzico_secret_key'    => 'required|string|max:255',
-            'settingtypepayment' => 'required|string',
+            'settingtypepayment'   => 'required|string',
         ];
     }
     public function razorpayValidateArray()

@@ -210,9 +210,19 @@
                                         {{ __('frontend.CREDIT_CARD_ON_DELIVERY') }}
                                     </option>
 
-                                    @if (setting('iyzico_secret_key') && setting('iyzico_api_key'))
+                                    {{--
+                                       @if (setting('iyzico_secret_key') && setting('iyzico_api_key'))
                                         <option value="{{ App\Enums\PaymentMethod::IYZICO }}"
                                                 @if (old('payment_type') == App\Enums\PaymentMethod::IYZICO) selected="selected" @endif>
+
+                                            {{ __('frontend.CARD') }}
+                                        </option>
+                                    @endif
+                                     --}}
+
+                                    @if (setting('paytr_merchant_key') && setting('paytr_merchant_id') && setting('paytr_merchant_salt'))
+                                        <option value="{{ App\Enums\PaymentMethod::PAYTR }}"
+                                                @if (old('payment_type') == App\Enums\PaymentMethod::PAYTR) selected="selected" @endif>
 
                                             {{ __('frontend.CARD') }}
                                         </option>

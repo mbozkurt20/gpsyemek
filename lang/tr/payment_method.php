@@ -13,4 +13,5 @@ return array (
   33 => 'PhonePe',
   34 => 'Sslcommerz',
   35 => 'Kredi Kartı ile Ödeme',
+  37 => 'Kredi Kartı ile Ödeme',
 );

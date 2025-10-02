@@ -24,5 +24,6 @@ interface PaymentMethod
     const SSLCOMMERZ       = 34;
     const IYZICO       = 35;
     const TAMI       = 36;
+    const PAYTR       = 37;
 
 }

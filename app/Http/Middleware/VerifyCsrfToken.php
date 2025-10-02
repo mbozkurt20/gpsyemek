@@ -14,6 +14,9 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'sslcommerz',
         '/iyzi/callback',
+        '/paytr/callback',
+        '/paytr/success',
+        '/paytr/fail',
         'phonepe/status',
         'paytm/status',
         '/paytm/status/*',

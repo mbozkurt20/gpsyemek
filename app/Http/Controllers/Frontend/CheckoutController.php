@@ -11,7 +11,7 @@ use App\Http\Services\StripeService;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\Restaurant;
-use App\Services\IyzicoService;
+use App\Services\PayTrService;
 use Dipesh79\LaravelPhonePe\LaravelPhonePe;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,8 +21,6 @@ use Illuminate\Support\Facades\Validator;
 use Iyzipay\Model\CheckoutForm;
 use Iyzipay\Model\CheckoutFormInitialize;
 use Iyzipay\Options;
-use Iyzipay\Request\CreateCheckoutFormInitializeRequest;
-use Iyzipay\Request\CreatePaymentRequest;
 use Iyzipay\Request\RetrieveCheckoutFormRequest;
 use Paystack;
 use Razorpay\Api\Api;
@@ -124,6 +122,8 @@ class CheckoutController extends FrontendController
                 return $this->processRazorpayPayment($request);
             } elseif ($paymentType == PaymentMethod::IYZICO) {
                 return $this->iyzicoPayment($request);
+            } elseif ($paymentType == PaymentMethod::PAYTR) {
+                return $this->payTrPayment($request);
             } elseif ($paymentType == PaymentMethod::TAMI) {
                 return $this->tamiPayment($request);
             } else {
@@ -133,10 +133,60 @@ class CheckoutController extends FrontendController
             return redirect()->route('login');
         }
     }
+    public function payTrPayment(Request $r)
+    {
+        $basket = [];
+
+        $address = Address::find($r->address);
+        $phone = $r->countrycode . $r->mobile;
+        $name = auth()->user()->first_name. ' '.auth()->user()->last_name;
+        $email = auth()->user()->email;
+
+        $amount = (session()->get('cart')['totalAmount'] + session()->get('delivery_charge')) * 100;
+
+        $paytr = new PaytrService();
+        $result = $paytr->getToken($name,$address,$phone, $email, $amount, $basket); // 50.00 TL
+
+        if ($result['status'] === 'success') {
+            return view('frontend.payment.paytr', ['token' => $result['token']]);
+        } else {
+            return back()->withErrors($result['reason']);
+        }
+    }
+    public function paytrCallback(Request $request)
+    {
+        dd($request->all(),1);
+        $hash = base64_encode(hash_hmac('sha256', $request->merchant_oid .
+            $request->status . $request->total_amount .
+            setting('paytr_merchant_salt'), setting('paytr_merchant_key'), true));
+
+        if ($hash != $request->hash) {
+            return response('PAYTR notification failed: bad hash', 400);
+        }
+
+        if ($request->status == 'success') {
+            $orderService = app(PaymentService::class)->payment(true);
+        } else {
+            $orderService = app(PaymentService::class)->payment(false);
+        }
+
+        return $this->handleOrderServiceResponse($orderService);
+    }
+    public function payTrSuccess(Request $request)
+    {
+        $orderService = app(PaymentService::class)->payment(true);
+
+        return $this->handleOrderServiceResponse($orderService);
+    }
+
+    public function payTrFail(Request $request)
+    {
+        $orderService = app(PaymentService::class)->payment(false);
+        return $this->handleOrderServiceResponse($orderService);
+    }
 
     public function iyzicoPayment(Request $r)
     {
-
         $options = new Options();
         $options->setApiKey(setting('iyzico_api_key'));
         $options->setSecretKey(setting('iyzico_secret_key'));

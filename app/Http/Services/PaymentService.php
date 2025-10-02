@@ -11,9 +11,8 @@ class PaymentService
 {
     public $data = array();
 
-    public function payment($paymetSuccess)
+    public function payment($paymentSuccess)
     {
-
         $restaurant = Restaurant::find(session('session_cart_restaurant_id'));
         $request = session()->get('checkoutRequest');
 
@@ -50,11 +49,16 @@ class PaymentService
             ];
         }
 
-        if ($request['payment_type'] == PaymentMethod::STRIPE && $paymetSuccess) {
+        if ($request['payment_type'] == PaymentMethod::STRIPE && $paymentSuccess) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
         } elseif ($request['payment_type'] == PaymentMethod::IYZICO) {
+            $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
+            $this->data['payment_method'] = $request['payment_type'];
+            $this->data['payment_status'] = PaymentStatus::PAID;
+            $this->data['payment_id'] = session()->get('paymentId');
+        } elseif ($request['payment_type'] == PaymentMethod::PAYTR) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
@@ -75,15 +79,15 @@ class PaymentService
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-        } elseif ($request['payment_type'] == PaymentMethod::PAYSTACK && $paymetSuccess) {
+        } elseif ($request['payment_type'] == PaymentMethod::PAYSTACK && $paymentSuccess) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-        } elseif ($request['payment_type'] == PaymentMethod::PAYPAL && $paymetSuccess) {
+        } elseif ($request['payment_type'] == PaymentMethod::PAYPAL && $paymentSuccess) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
-        } elseif ($request['payment_type'] == PaymentMethod::RAZORPAY && $paymetSuccess) {
+        } elseif ($request['payment_type'] == PaymentMethod::RAZORPAY && $paymentSuccess) {
             $this->data['paid_amount'] = session()->get('cart')['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];
             $this->data['payment_status'] = PaymentStatus::PAID;
