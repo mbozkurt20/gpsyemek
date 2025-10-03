@@ -260,7 +260,7 @@ class OrderController extends Controller
                         }
                         return response()->json([
                             'status'  => 200,
-                            'message' => 'You order update successfully completed.',
+                            'message' => 'Siparişiniz başarıyla güncellendi.',
                             'data'    => $orderService
                         ], 200);
                     } else {
@@ -272,19 +272,19 @@ class OrderController extends Controller
                 } else {
                     return response()->json([
                         'status'  => 422,
-                        'message' => 'The status not found',
+                        'message' => 'Durum bulunamadı',
                     ], 422);
                 }
             } else {
                 return response()->json([
                     'status'  => 422,
-                    'message' => 'The order not found',
+                    'message' => 'Sipariş bulunamadı',
                 ], 422);
             }
         } else {
             return response()->json([
                 'status'  => 422,
-                'message' => 'The order id not found',
+                'message' => 'Sipariş ID bulunamadı',
             ], 422);
         }
     }
@@ -308,24 +308,24 @@ class OrderController extends Controller
                     $order->save();
                     return response()->json([
                         'status'  => 200,
-                        'message' => 'Payment successfully complete',
+                        'message' => 'Ödeme başarıyla tamamlandı',
                     ], 200);
                 } else {
                     return response()->json([
                         'status'  => 422,
-                        'message' => 'Select your correct payment method',
+                        'message' => 'Lütfen doğru ödeme yöntemini seçin',
                     ], 422);
                 }
             } else {
                 return response()->json([
                     'status'  => 422,
-                    'message' => 'The order not found',
+                    'message' => 'Sipariş bulunamadı',
                 ], 422);
             }
         } else {
             return response()->json([
                 'status'  => 422,
-                'message' => 'The order id not found',
+                'message' => 'Sipariş ID bulunamadı',
             ], 422);
         }
     }

@@ -155,7 +155,6 @@ class CheckoutController extends FrontendController
     }
     public function paytrCallback(Request $request)
     {
-        dd($request->all(),1);
         $hash = base64_encode(hash_hmac('sha256', $request->merchant_oid .
             $request->status . $request->total_amount .
             setting('paytr_merchant_salt'), setting('paytr_merchant_key'), true));
