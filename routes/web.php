@@ -67,8 +67,6 @@ use App\Http\Controllers\Admin\RestaurantController as RestaurantsController;
 use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 
-Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
-
 Route::view('/restoran','restoran.auth.login');
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
@@ -106,7 +104,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::post('/iyzi/callback', [CheckoutController::class, 'iyzicoCallback'])->name('iyzico.callback');
 
     Route::post('/paytr/callback', [CheckoutController::class, 'paytrCallback'])->name('paytr.callback');
-
+    Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
     Route::post('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
 
     Route::post('paytm/status', [CheckoutController::class, 'paytmCallback']);
