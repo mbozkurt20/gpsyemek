@@ -173,6 +173,7 @@ class CheckoutController extends FrontendController
     }
     public function payTrSuccess(Request $request)
     {
+        dd($request->all());
         $orderService = app(PaymentService::class)->payment(true);
 
         return $this->handleOrderServiceResponse($orderService);
