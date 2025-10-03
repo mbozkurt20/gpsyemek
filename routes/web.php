@@ -84,6 +84,8 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
     Route::get('final',                                     [FinalController::class, 'finish'])->name('final');
 });
 
+Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
+
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
@@ -104,7 +106,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::post('/iyzi/callback', [CheckoutController::class, 'iyzicoCallback'])->name('iyzico.callback');
 
     Route::post('/paytr/callback', [CheckoutController::class, 'paytrCallback'])->name('paytr.callback');
-    Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
+
     Route::post('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
 
     Route::post('paytm/status', [CheckoutController::class, 'paytmCallback']);
