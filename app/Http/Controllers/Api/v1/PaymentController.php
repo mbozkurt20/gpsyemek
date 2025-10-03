@@ -23,12 +23,15 @@ class PaymentController extends Controller
         }
 
         $basket = $request->input('basket');
-        $amount = $request->input('totalAmount');
+        $amount = $request->input('totalAmount')*100;
         $userEmail = $request->input('email');
+        $userAddress = $request->input('address');
+        $userName = $request->input('userName');
+        $userPhone = $request->input('userPhone');
 
         $payTrService = new PaytrService();
-        $token = $payTrService->getApiToken($userEmail,$amount,$basket);
+        $token = $payTrService->getToken($userName,$userAddress,$userPhone,$userEmail,$amount,$basket);
 
-        return response()->json(['token' => $token]);
+        return response()->json($token);
     }
 }

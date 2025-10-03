@@ -122,7 +122,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('reservation/check',                            [ReservationController::class, 'check']); //done
     Route::put('reservation/status/{id}',                       [ReservationController::class, 'update']); //done
 
-    Route::get('paytr-token',                                  [PaymentController::class, 'payTrToken']); //done
+    Route::get('paytr-token',                                   [PaymentController::class, 'payTrToken']); //done
 
     Route::get('orders',                                        [OrderController::class, 'index']); //done
     Route::post('orders',                                       [OrderController::class, 'store']); //done
