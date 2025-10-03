@@ -12,6 +12,9 @@ class PaymentController extends Controller
     public function payTrToken(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
+            'address' => 'required|string',
+            'userName' => 'required|string',
+            'userPhone' => 'required|string',
             'basket' => 'required|array',
             'totalAmount'  => 'required|numeric',
         ]);
