@@ -60,4 +60,30 @@ class PayTrService
 
         return json_decode($result, true);
     }
+
+    public function getApiToken($email,$paymentAmount,$basket){
+        $merchantId      = setting('paytr_merchant_id');
+        $merchantKey     = setting('paytr_merchant_key');
+        $merchantSalt    = setting('paytr_merchant_salt');
+        $merchantSandbox = setting('paytr_sandbox');
+
+        $merchant_id      = $merchantId;
+        $merchant_key     = $merchantKey;
+        $merchant_salt    = $merchantSalt;
+        $merchant_sandbox = $merchantSandbox;
+
+        $user_ip = request()->ip();
+        $no_installment = 0;
+        $max_installment = 0;
+        $currency = "TL";
+        $test_mode = $merchant_sandbox; // 1=test, 0=live
+        $merchant_oid = uniqid();
+
+        $basket = base64_encode(json_encode($basket));
+
+        $token_str = $merchant_id.$user_ip.$merchant_oid.$email.$paymentAmount.$basket.$no_installment.$max_installment.$currency.$test_mode.$merchant_salt;
+        $paytr_token  = base64_encode(hash_hmac('sha256', $token_str, $merchant_key, true));
+
+        return $paytr_token;
+    }
 }
