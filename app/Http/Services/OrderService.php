@@ -474,6 +474,7 @@ class OrderService
                 ]);
             }
         }
+
         $order = [
             'user_id'         => $data['user_id'],
             'restaurant_id'   => $data['restaurant_id'],

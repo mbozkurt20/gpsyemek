@@ -43,7 +43,6 @@ class OrderController extends Controller
 
     public function index()
     {
-
         $response = Order::where(['user_id' => auth()->user()->id])->orderBy('id', 'desc')->with('items')->get();
         $response->map(function ($post) {
             $post['status_name']         = trans('order_status.' . $post->status);
@@ -93,7 +92,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = new OrderStoreRequest();
         $validator = Validator::make($request->all(), $validator->rules());
 

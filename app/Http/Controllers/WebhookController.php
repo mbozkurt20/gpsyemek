@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatus;
 use App\Http\Resources\v1\OrderResource;
 use App\Http\Resources\v1\RestaurantOrderResource;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class WebhookController extends Controller
     private function getOrders($restaurant)
     {
         $orders = Order::with('items', 'user')
+            ->where(['payment_status' => PaymentStatus::PAID])
             ->where('restaurant_id', $restaurant->id)
             ->orderBy('created_at', 'desc')
             ->whereDate('created_at', date('Y-m-d'))
