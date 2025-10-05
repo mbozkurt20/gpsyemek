@@ -50,7 +50,7 @@ class RestaurantOrderResource extends JsonResource
                 $this->whenLoaded('items')
             ),
             'deliveryBoy' => $this->delivery_boy_id == null?null:new UserResource($this->delivery),
-            'customer' => new UserResource($this->user_id),
+            'customer' => new UserResource($this->user),
 
         ];
 
