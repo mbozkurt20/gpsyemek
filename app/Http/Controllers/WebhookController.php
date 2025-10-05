@@ -38,7 +38,6 @@ class WebhookController extends Controller
     private function getOrders($restaurant)
     {
         $orders = Order::with('items', 'user')
-            ->where(['payment_status' => PaymentStatus::PAID])
             ->where('restaurant_id', $restaurant->id)
             ->orderBy('created_at', 'desc')
             ->whereDate('created_at', date('Y-m-d'))
