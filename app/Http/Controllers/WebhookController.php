@@ -46,7 +46,7 @@ class WebhookController extends Controller
 
         return response()->json([
             'success' => true,
-            'orders' =>RestaurantOrderResource::collection($orders),
+            'orders' => RestaurantOrderResource::collection($orders),
         ]);
     }
 
