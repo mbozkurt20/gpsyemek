@@ -1,6 +1,6 @@
 <?php
 return array (
-  5  => 'Kapıda Nakit Ödeme',
+  5  => 'Kapıda Nakit ile Ödeme',
   6  => 'Kapıda Kredi Kartı ile Ödeme',
   10 => 'Paypal',
   15 => 'Stripe',

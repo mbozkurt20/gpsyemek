@@ -29,7 +29,7 @@
                             <small class="db-field-alert">{{ $message }}</small>
                             @enderror
                         </div>
-                        
+
                         @if(auth()->user()->myrole == 1)
                         <div class="form-col-12 sm:form-col-6 md:form-col-4">
                             <label class="db-field-title required">{{ __('levels.status') }}</label>
@@ -52,7 +52,7 @@
                             <label class="db-field-title" for="customFile">{{ __('levels.image') }}</label>
 
                             <input type="file" name="image" id="customFile" class="db-field-control @error('image') invalid @enderror">
-
+                            <small class="py-1">Görsel formatları (jpeg,png,jpg,webp) ve görseliniz en fazla 2mb olmalıdır</small>
                             @if ($errors->has('image'))
                             <small class="db-field-alert">{{ $errors->first('image') }}</small>
                             @endif
@@ -74,7 +74,7 @@
                                 <span>{{ __('levels.save') }}</span>
                             </button>
                         </div>
-                        
+
                     </div>
                 </form>
             </div>

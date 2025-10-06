@@ -72,25 +72,19 @@ class CuisineController extends BackendController
         return redirect(route('admin.cuisine.index'))->withSuccess('The data inserted successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id)
+    {
+        $this->data['cuisine'] = Cuisine::owner()->findOrFail($id);
+        return view('admin.cuisine.show', $this->data);
+    }
+
     public function edit($id)
     {
         $this->data['cuisine'] = Cuisine::owner()->findOrFail($id);
         return view('admin.cuisine.edit', $this->data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(CuisineRequest $request, $id)
     {
         $cuisine              = Cuisine::owner()->findOrFail($id);
