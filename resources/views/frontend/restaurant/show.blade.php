@@ -71,7 +71,8 @@
                                 </div>
                             </div>
                             <div class="rest-btns">
-                                @if ($restaurant->table_status == \App\Enums\TableStatus::ENABLE)
+                                {{--
+                                        @if ($restaurant->table_status == \App\Enums\TableStatus::ENABLE)
                                     <button type="button" class="rest-book-btn" data-bs-toggle="modal"
                                         data-bs-target="#booking-modal">
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -102,6 +103,8 @@
                                         <span>{{ __('frontend.table') }} </span>
                                     </button>
                                 @endif
+
+                                --}}
                                 <button type="button" class="rest-info-btn" data-bs-toggle="modal"
                                     data-bs-target="#shop-modal">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -264,7 +267,7 @@
 
 
     <!--======= Resturent Infromation MODAL START =========-->
-    <div class="modal fade shop-modal" id="shop-modal" data-bs-backdrop="static">
+    <div class="modal fade shop-modal" id="shop-modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="shop-modal-header">

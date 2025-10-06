@@ -199,17 +199,17 @@ class OrderCart extends Component
             }
 
             if (blank($coupon)) {
-                $this->msg = 'This Coupon is Invalid';
+                $this->msg = 'Bu Kupon Geçersiz';
             } elseif ($coupon->coupon_type == CouponType::VOUCHER && $coupon->restaurant_id != $restaurant_id) {
-                $this->msg = 'This Coupon is Invalid';
+                $this->msg = 'Bu Kupon Geçersiz';
             } elseif ($total_used >= $coupon->limit) {
-                $this->msg = 'This Coupon is Expired';
+                $this->msg = 'Bu Kuponun Süresi Doldu';
             } elseif (!(($coupon->to_date >= $today) && ($coupon->from_date <= $today))) {
-                $this->msg = 'This Coupon is Expired';
+                $this->msg = 'Bu Kuponun Süresi Doldu';
             } elseif ($user_limit >= $coupon->user_limit) {
-                $this->msg = 'This Coupon is Expired';
+                $this->msg = 'Bu Kuponun Süresi Doldu';
             } elseif ($total_amount < $coupon->minimum_order_amount) {
-                $this->msg = 'Minimum Order Amount for This Coupon is ' . currencyFormat($coupon->minimum_order_amount);
+                $this->msg = 'Bu Kupon için Minimum Sipariş Tutarı ' . currencyFormat($coupon->minimum_order_amount);
             } else {
                 $this->msg = '';
             }

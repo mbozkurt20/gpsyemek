@@ -45,11 +45,11 @@ class CouponController extends BackendController
         }
 
         if (blank($coupon)) {
-            $msg = 'This Coupon is Invalid';
+            $msg = 'Bu Kupon Geçersiz';
         } elseif ($coupon->coupon_type == CouponType::VOUCHER && $coupon->restaurant_id != $request->restaurantID) {
-            $msg = 'This Coupon is Invalid';
+            $msg = 'Bu Kupon Geçersiz';
         } elseif ($total_used >= $coupon->limit) {
-            $msg = 'This Coupon is Expired.';
+            $msg = 'Bu Kuponun Süresi Doldu';
         } else {
             $msg = '';
         }

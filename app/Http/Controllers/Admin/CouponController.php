@@ -69,7 +69,7 @@ class CouponController extends BackendController
                 }
             }
             if (!blank($data)) {
-                return redirect()->back()->withError('This Restaurant already has an active coupon.');
+                return redirect()->back()->withError('Bu Restoranın zaten aktif bir kuponu var.');
             }
         }
         $this->data['restaurants'] = Restaurant::select('id', 'name')->get();
@@ -81,7 +81,7 @@ class CouponController extends BackendController
     {
 
         $coupon = $this->couponService->store($request);
-        return redirect(route('admin.coupon.index'))->withSuccess('The data inserted successfully.');
+        return redirect(route('admin.coupon.index'))->withSuccess('Kupon Başarıyla Eklendi.');
     }
 
 
@@ -125,7 +125,7 @@ class CouponController extends BackendController
     public function destroy($id)
     {
         Coupon::findOrFail($id)->delete();
-        return redirect(route('admin.coupon.index'))->withSuccess('The data deleted successfully.');
+        return redirect(route('admin.coupon.index'))->withSuccess('Kupon Başarışla Silindi');
     }
 
     private function getCoupon($request)

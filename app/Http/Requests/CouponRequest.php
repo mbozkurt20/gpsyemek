@@ -37,7 +37,6 @@ class CouponRequest extends FormRequest
             'from_date'            => ['required', 'date'],
             'to_date'              => ['required', 'date', 'after:from_date'],
             'restaurant_id'        => ['nullable', 'numeric'],
-            'limit'                => ['required', 'numeric'],
             'user_limit'           => ['required', 'numeric'],
             'amount'               => ['required', 'numeric'],
             'minimum_order_amount' => ['nullable', 'numeric'],
@@ -46,7 +45,7 @@ class CouponRequest extends FormRequest
 
         if ($this->route('coupon') == null) {
             $rules['from_date'][] = 'after_or_equal:today';
-        } 
+        }
 
         return $rules;
     }
@@ -63,9 +62,9 @@ class CouponRequest extends FormRequest
                 if (request('restaurant_id') != 0) {
                     if ($this->activeCoupon()) {
                         if (auth()->user()->restaurant_id != 0) {
-                            $validator->errors()->add('name', 'This restaurant already has an active coupon.');
+                            $validator->errors()->add('name', 'Bu restoranın zaten aktif bir kuponu var.');
                         }
-                        $validator->errors()->add('restaurant_id', 'This restaurant already has an active coupon.');
+                        $validator->errors()->add('restaurant_id', 'Bu restoranın halihazırda aktif bir kuponu var.');
                     }
                 }
             };
@@ -81,7 +80,6 @@ class CouponRequest extends FormRequest
     {
 
         $today = date('Y/m/d h:i');
-
 
         $coupons = Coupon::where('restaurant_id', request('restaurant_id'))
             ->whereDate('to_date', '>=', $today)

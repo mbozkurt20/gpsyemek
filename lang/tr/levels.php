@@ -204,7 +204,7 @@ return array(
   'discount'                          => 'İndirim',
   'created_at'                        => 'Oluşturulma',
   'unit_price'                        => 'Birim Fiyat',
-  'discount_price'                    => 'İndirimli Miktar',
+  'discount_price'                    => 'İndirim Fiyatı',
   'label'                             => 'Etiket',
   'rate'                              => 'Oran',
   'add_tax'                           => 'Vergi Ekle',
