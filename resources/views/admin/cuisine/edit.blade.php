@@ -52,7 +52,7 @@
                             <label class="db-field-title" for="customFile">{{ __('levels.image') }}</label>
 
                             <input type="file" name="image" id="customFile" class="db-field-control @error('image') invalid @enderror">
-                            <small class="py-1">Görsel formatları (jpeg,png,jpg,webp) ve görseliniz en fazla 2mb olmalıdır</small>
+                            <small class="py-1">Görsel formatlarınız <strong>(jpeg,png,jpg,webp)</strong> ve görseliniz en fazla <strong>2mb</strong> olmalıdır</small>
                             @if ($errors->has('image'))
                             <small class="db-field-alert">{{ $errors->first('image') }}</small>
                             @endif
