@@ -33,7 +33,6 @@ class CategoryController extends BackendController
         return $this->getCategory($request);
     }
 
-
     public function create()
     {
         return view('admin.category.create');
@@ -57,16 +56,14 @@ class CategoryController extends BackendController
             $category->addMediaFromRequest('image')->toMediaCollection('categories');
         }
 
-        return redirect(route('admin.category.index'))->withSuccess('The data inserted successfully.');
+        return redirect(route('admin.category.index'))->withSuccess('Kategori Başarıyla Eklendi');
     }
-
 
     public function edit($id)
     {
         $this->data['category'] = Category::owner()->findOrFail($id);
         return view('admin.category.edit', $this->data);
     }
-
 
     public function update(CategoryRequest $request, $id)
     {
@@ -84,14 +81,13 @@ class CategoryController extends BackendController
             $category->addMediaFromRequest('image')->toMediaCollection('categories');
         }
 
-        return redirect(route('admin.category.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
+        return redirect(route('admin.category.index'))->withSuccess('KAtegori Başarıyla Güncellendi');
     }
-
 
     public function destroy($id)
     {
         Category::owner()->findOrFail($id)->delete();
-        return redirect(route('admin.category.index'))->withSuccess('The data deleted successfully.');
+        return redirect(route('admin.category.index'))->withSuccess('Kategori Başarıyla Silindi');
     }
 
     private function getCategory($request)

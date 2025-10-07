@@ -32,7 +32,7 @@
                                         @endif
 									</select>
 								</div>
-	
+
 								@error('restaurant_id')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
@@ -44,7 +44,7 @@
 							<div class="col-12 sm:col-6 md:col-4 xl:col-3">
 								<label class="db-field-title required" for="name">{{ __('levels.name') }}</label>
 								<input type="text" name="name" id="name" class="db-field-control @error('name') invalid @enderror" value="{{ old('name', $menuItem->name) }}">
-	
+
 								@error('name')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
@@ -65,7 +65,7 @@
                                         @endif
 									</select>
 								</div>
-	
+
 								@error('categories')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
@@ -74,21 +74,21 @@
                             <div class="col-12 sm:col-6 md:col-4 xl:col-3">
 								<label class="db-field-title required" for="unit_price">{{ __('levels.unit_price') }}</label>
 								<input type="text" name="unit_price" id="unit_price" class="db-field-control @error('unit_price') invalid @enderror" value="{{ old('unit_price', $menuItem->unit_price) }}">
-	
+
 								@error('unit_price')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
 
                             <div class="col-12 sm:col-6 md:col-4 xl:col-3">
-								<label class="db-field-title" for="discount_price">{{ __('levels.discount_price') }}</label>
+								<label class="db-field-title" for="discount_price">{{ __('levels.discount_price') }} <small class="text-red-500">(Birim fiyatından düşecek tutardır.)</small></label>
 								<input type="text" name="discount_price" id="discount_price" class="db-field-control @error('discount_price') invalid @enderror" value="{{ old('discount_price', $menuItem->discount_price) }}">
-	
+
 								@error('discount_price')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
-							
+
 							<div class="col-12 sm:col-6 md:col-4 xl:col-3">
 								<label class="db-field-title required">{{ __('levels.status') }}</label>
 								<div class="db-field-down-arrow">
@@ -99,7 +99,7 @@
 										@endforeach
 									</select>
 								</div>
-	
+
 								@error('status')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
@@ -107,9 +107,9 @@
 
 							<div class="col-12 sm:col-6 md:col-4 xl:col-3">
 								<label class="db-field-title" for="customFile">{{ __('levels.image') }}</label>
-	
+
 								<input type="file" name="image" id="customFile" class="db-field-control @error('image') invalid @enderror">
-	
+
 								@if ($errors->has('image'))
 								<small class="db-field-alert">{{ $errors->first('image') }}</small>
 								@endif
@@ -124,14 +124,14 @@
 									<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
-	
+
 							<div class="col-12">
 								<button type="submit" class="db-btn text-white bg-primary">
 									<i class="fa-solid fa-circle-check"></i>
 									<span>{{ __('levels.save') }}</span>
 								</button>
 							</div>
-							
+
 						</div>
 					</form>
 				</div>

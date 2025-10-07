@@ -1,11 +1,43 @@
 <div class="">
+    <div class="rest-menu-wrapper" id="scrollspy-menu">
+        <div class="rest-menu-group">
+            <nav class="rest-tabs">
+                <a href="#listing_product_all"
+                   wire:key="all"
+                   wire:click.prevent="setActiveCategory('all')"
+                   class="{{ $activeCategory == 'all' ? 'active' : '' }}">
+                    Tümü
+                </a>
+
+                @foreach ($categories as $category)
+                    <a href="#listing_product_{{ $category->id }}"
+                       wire:key="{{ $category->id }}"
+                       wire:click.prevent="setActiveCategory({{ $category->id }})"
+                       class="{{ $activeCategory == $category->id ? 'active' : '' }}">
+                        {{ $category->name }}
+                    </a>
+                @endforeach
+
+                @if (!blank($other_products))
+                    <a href="#listing_product_other"
+                       wire:key="other"
+                       wire:click.prevent="setActiveCategory('other')"
+                       class="{{ $activeCategory === 'other' ? 'active' : '' }}">
+                        {{ __('frontend.other') }}
+                    </a>
+                @endif
+            </nav>
+        </div>
+    </div>
+
 
     @php
         $currenttime = \Carbon\Carbon::now()->format('H:i:s');
     @endphp
     @if (!blank($categories_products))
         @foreach ($categories_products as $categories_product_key => $categories_product)
-            <div wire:ignore="" wire:key="{{ $categories_product_key }}" id="listing_product{{ $categories_product_key }}">
+            @if ($activeCategory == 'all' || $activeCategory == $categories_product_key)
+            <div wire:ignore="" wire:key="{{ $categories_product_key }}" id="listing_product_{{ $categories_product_key }}">
                 <div class="product-category" id="popular-items{{ $categories_product_key }}">
                     @if (isset($categories[$categories_product_key]->name))
                         <h3 class="product-category-title">{{ $categories[$categories_product_key]->name }} </h3>
@@ -19,7 +51,7 @@
                                             <figure
                                                 class="product-card-media d-flex justify-content-center align-items-center">
 
-                                                <img data-src="{{ $menu_item['image'] }}" class="lazy" alt="product">
+                                                <img src="{{ $menu_item['image'] }}" class="" alt="product">
 
                                                 <div class="loader-container">
                                                     <img src="{{ asset('frontend/images/default/loader.gif') }}"
@@ -94,10 +126,12 @@
                     </div>
                 </div>
             </div>
+            @endif
         @endforeach
     @endif
 
-    @if (!blank($other_products))
+    @if (!blank($other_products) && ($activeCategory == 'all' || $activeCategory == 'other'))
+
         <div wire:ignore="" id="listing_product_other">
             <div class="product-category" id="popular-items">
                 <h3 class="product-category-title">{{ __('levels.other') }} </h3>
@@ -108,7 +142,7 @@
                                 <div class="product-card">
                                     <figure class="product-card-media d-flex justify-content-center align-items-center">
 
-                                        <img data-src="{{ $other_product['image'] }}" class="lazy" alt="product">
+                                        <img src="{{ $other_product['image'] }}" class="" alt="product">
 
                                         <div class="loader-container">
                                             <img src="{{ asset('frontend/images/default/loader.gif') }}" class="loader"

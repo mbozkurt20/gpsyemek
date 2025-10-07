@@ -28,21 +28,11 @@ class RequestProductController extends BackendController
         $this->middleware([ 'permission:request-products_show' ])->only('show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view('admin.request-product.index', $this->data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $this->data['categories'] = Category::where([ 'status' => Status::ACTIVE ])->get();
@@ -70,16 +60,10 @@ class RequestProductController extends BackendController
                 $product->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('products');
             }
         }
-        return redirect()->route('admin.request-products.index')->withSuccess('The data inserted successfully!');
+        return redirect()->route('admin.request-products.index')->withSuccess('Ürün Başarıyla Eklendi');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Product $product
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function show( $id )
     {
         $queryArray['requested']  = ProductRequested::REQUESTED;
@@ -115,7 +99,7 @@ class RequestProductController extends BackendController
      *
      * @return mixed
      */
-    public function update( RequestProductRequest $request, $id )
+    public function update(RequestProductRequest $request, $id )
     {
         $queryArray['status']     = Status::INACTIVE;
         $queryArray['requested']  = ProductRequested::REQUESTED;
@@ -126,7 +110,7 @@ class RequestProductController extends BackendController
         $product->unit_price      = $request->get('unit_price');
         $product->save();
         $product->categories()->sync($request->get('categories'));
-        return redirect()->route('admin.request-products.index')->withSuccess('Bilgiler başarıyla güncellendi.!');
+        return redirect()->route('admin.request-products.index')->withSuccess('Ürün Başarıyla Güncellendi.!');
     }
 
     /**
@@ -142,7 +126,7 @@ class RequestProductController extends BackendController
         $queryArray['requested']  = ProductRequested::REQUESTED;
         $queryArray['creator_id'] = auth()->id();
         Product::where($queryArray)->findOrFail($id)->delete();
-        return redirect()->route('admin.request-products.index')->withSuccess('The data deleted successfully');
+        return redirect()->route('admin.request-products.index')->withSuccess('Ürün Başarıyla Silindi');
     }
 
     public function getRequestProduct( Request $request )

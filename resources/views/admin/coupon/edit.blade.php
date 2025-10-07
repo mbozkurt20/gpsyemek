@@ -98,7 +98,7 @@
 						</div>
 
 						<div class="form-col-12 sm:form-col-6 md:form-col-4">
-							<label class="db-field-title required">{{ __('levels.limit') }}</label>
+							<label class="db-field-title required">{{ __('levels.top_limit') }}</label>
 							<input type="number" name="limit" class="db-field-control @error('limit') invalid @enderror" value="{{ old('limit', $coupon->limit) }}">
 
 							@error('limit')

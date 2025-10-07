@@ -42,3 +42,17 @@ function selected(id) {
         const slot = document.getElementById("slot_" + id);
         slot.classList.add('selected');
 }
+document.addEventListener('livewire:load', function () {
+    let swiper = new Swiper('.rest-swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.rest-swiper-next',
+            prevEl: '.rest-swiper-prev',
+        },
+    });
+
+    Livewire.hook('message.processed', (message, component) => {
+        swiper.update(); // DOM değiştiğinde Swiper’ı güncelle
+    });
+});

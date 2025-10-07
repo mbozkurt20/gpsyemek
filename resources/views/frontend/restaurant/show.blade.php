@@ -7,12 +7,49 @@
     <meta property="og:image" content="{{ $restaurant->image }}">
 @endpush
 
+{{--
 @push('body-data')
     data-bs-spy="scroll" data-bs-target="#scrollspy-menu" data-bs-smooth-scroll="true"
 @endpush
+--}}
 
 @section('main-content')
+    <style>
+        .rest-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            border-bottom: 2px solid #ddd; /* Alt çizgi genel için */
+        }
 
+        .rest-tabs a {
+            position: relative; /* pseudo-element için */
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #8e8b8b;
+            font-weight: bolder;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .rest-tabs a.active {
+            color: #0a0c0d;
+            font-weight: bold;
+        }
+
+        .rest-tabs a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+
+            height: 3px; /* Alt çizgi kalınlığı */
+            background-color: #28a745; /* Yeşil çizgi */
+            border-radius: 2px 2px 0 0; /* Opsiyonel köşe yuvarlama */
+        }
+    </style>
     <!--====== RESTAURANT PART START =========-->
     <section class="restaurant">
         <div class="container">
@@ -137,6 +174,8 @@
                             @endforeach
                         @endif
 
+                       {{--
+
                         <div class="rest-menu-wrapper" id="scrollspy-menu">
                             <div class="rest-menu-group">
                                 <button type="button" class="rest-swiper-prev fa-solid fa-chevron-left"></button>
@@ -159,10 +198,11 @@
                             </div>
                         </div>
 
-                        @livewire('show-page', ['restaurant' => $restaurant])
+                        --}}
 
+                        @livewire('show-page', ['restaurant' => $restaurant])
                     </div>
-                    @include('frontend.partials._footer')
+
                 </div>
 
                 <!--=======  Side bar card ========-->
@@ -264,7 +304,6 @@
         </div>
     </div>
     <!--====== Table BOOKING MODAL PART END ==========-->
-
 
     <!--======= Resturent Infromation MODAL START =========-->
     <div class="modal fade shop-modal" id="shop-modal">
@@ -412,6 +451,8 @@
             </div>
         </div>
     </div>
+
+    @include('frontend.partials._footer')
     <!--======= Resturent Infromation MODAL END ==========-->
 @endsection
 

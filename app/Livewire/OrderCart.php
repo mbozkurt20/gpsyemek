@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\DeliveryStatus;
 use App\Models\Coupon;
 use App\Models\Restaurant;
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Enums\CouponType;
 use App\Enums\DiscountStatus;
@@ -188,7 +189,8 @@ class OrderCart extends Component
     {
         if (!blank($this->coupon)) {
             $this->msg = '';
-            $today = date('Y-m-d h:i:s');
+            $today = date("Y-m-d H:i:s",strtotime(Carbon::now()));
+
             $total_amount = $this->carts['totalAmount'];
             $restaurant_id = session()->get('session_cart_restaurant_id');
             $coupon = Coupon::where('slug', $this->coupon)->first();
@@ -203,11 +205,11 @@ class OrderCart extends Component
             } elseif ($coupon->coupon_type == CouponType::VOUCHER && $coupon->restaurant_id != $restaurant_id) {
                 $this->msg = 'Bu Kupon Geçersiz';
             } elseif ($total_used >= $coupon->limit) {
-                $this->msg = 'Bu Kuponun Süresi Doldu';
+                $this->msg = 'Tutar limitten eşit ve büyük olamaz';
             } elseif (!(($coupon->to_date >= $today) && ($coupon->from_date <= $today))) {
                 $this->msg = 'Bu Kuponun Süresi Doldu';
             } elseif ($user_limit >= $coupon->user_limit) {
-                $this->msg = 'Bu Kuponun Süresi Doldu';
+                $this->msg = 'Limitiniz kupon limitinden büyük olamaz';
             } elseif ($total_amount < $coupon->minimum_order_amount) {
                 $this->msg = 'Bu Kupon için Minimum Sipariş Tutarı ' . currencyFormat($coupon->minimum_order_amount);
             } else {

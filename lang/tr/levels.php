@@ -108,6 +108,7 @@ return array(
   'add_request_withdraw'              => 'Para Çekme Talebi Ekle',
   'request_product'                   => 'Ürün Talebi',
   'add_request_product'               => 'Ürün Talebi Ekle',
+  'top_limit'                         => 'Üst Limit',
   'limit'                             => 'Limit',
   'per_user_limit'                    => 'Kullanıcı Başına Limit',
   'used'                              => 'Kullanıldı',

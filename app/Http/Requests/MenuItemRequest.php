@@ -55,7 +55,7 @@ class MenuItemRequest extends FormRequest
                 $validator->errors()->add('name', 'The menu item name already exists.');
             }
             if ($this->priceValidationCheck()) {
-                $validator->errors()->add('discount_price', 'The discount price is greater than the unit price.');
+                $validator->errors()->add('discount_price', 'İndirimli fiyat birim fiyattan büyük ve eşit olamaz.');
             }
         });
     }
@@ -78,7 +78,7 @@ class MenuItemRequest extends FormRequest
 
     private function priceValidationCheck()
     {
-        if (request('unit_price') < request('discount_price')) {
+        if (request('unit_price') <= request('discount_price')) {
             return true;
         }
         return false;
