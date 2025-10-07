@@ -378,7 +378,7 @@ class RestaurantController extends BackendController
         if ($request->hasFile('restaurant_logo') && $request->file('restaurant_logo')->isValid()) {
             $restaurant->addMediaFromRequest('restaurant_logo')->toMediaCollection('restaurant_logo');
         }
-        return redirect(route('admin.restaurants.index'))->withSuccess('The data inserted successfully.');
+        return redirect(route('admin.restaurants.index'))->withSuccess('Restaurant Başarıyla Oluşturuldu');
     }
 
     public function restaurantEdit($id)

@@ -69,7 +69,7 @@ class CuisineController extends BackendController
             $cuisine->addMediaFromRequest('image')->toMediaCollection('cuisines');
         }
 
-        return redirect(route('admin.cuisine.index'))->withSuccess('The data inserted successfully.');
+        return redirect(route('admin.cuisine.index'))->withSuccess('Mutfak Başarıyla Eklendi');
     }
 
     public function show($id)
@@ -106,7 +106,7 @@ class CuisineController extends BackendController
             $cuisine->addMediaFromRequest('image')->toMediaCollection('cuisines');
         }
 
-        return redirect(route('admin.cuisine.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
+        return redirect(route('admin.cuisine.index'))->withSuccess('Mutfak Başarıyla Güncellendi');
     }
 
     /**
@@ -118,7 +118,7 @@ class CuisineController extends BackendController
     public function destroy($id)
     {
         Cuisine::owner()->findOrFail($id)->delete();
-        return redirect(route('admin.cuisine.index'))->withSuccess('The data deleted successfully.');
+        return redirect(route('admin.cuisine.index'))->withSuccess('Mutfak Başarıyla Silindi');
     }
 
     private function getCuisine($request)

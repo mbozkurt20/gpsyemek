@@ -80,7 +80,7 @@ class BannerController extends BackendController
         $banner->sort = $banner->id;
         $banner->save();
 
-        return redirect(route('admin.banner.index'))->withSuccess('The data inserted successfully.');
+        return redirect(route('admin.banner.index'))->withSuccess('Banner Başarıyla Oluşturuldu');
     }
 
     /**
