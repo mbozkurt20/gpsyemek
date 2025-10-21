@@ -30,7 +30,7 @@ class RequestProductRequest extends FormRequest
             'categories.*' => 'required',
             'unit_price'   => ['required', new IniAmount],
             'description'  => 'nullable|string|max:1000',
-            'image'        => 'image|mimes:jpeg,png,jpg|max:5098',
+            'image'        => 'image|mimes:jpeg,png,jpg,webp|max:5098',
         ];
     }
 

@@ -28,7 +28,7 @@ class CuisineRequest extends FormRequest
             'name'        => ['required', 'string', Rule::unique("cuisines", "name")->ignore($this->cuisine), 'max:200'],
             'description' => ['nullable', 'string'],
             'status'      => ['required', 'numeric'],
-            'image'       => 'image|mimes:jpeg,png,jpg|max:2048',
+            'image'       => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
         $roleID = auth()->user()->myrole ?? 0;

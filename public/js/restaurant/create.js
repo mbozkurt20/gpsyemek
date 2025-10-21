@@ -51,13 +51,13 @@ if(jQuery().timepicker && $(".timepicker").length) {
 }
 
 async function initMap() {
-    
+
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition( function(position) {
             getLatLongPosition(position);
         },
         function (error) {
-            alert("Location access denied. Using default location.");
+            console.log('Location access denied. Using default location.')
             getLatLongPosition({ coords: { latitude: 23.8103, longitude: 90.4125 } }); // Default: Dhaka
         }
     );

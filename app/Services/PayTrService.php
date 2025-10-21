@@ -20,7 +20,7 @@ class PayTrService
         $no_installment = 0;
         $max_installment = 0;
         $currency = "TL";
-        $test_mode = $merchant_sandbox; // 1=test, 0=live
+        $test_mode = (int) $merchant_sandbox; // 1=test, 0=live
         $merchant_oid = uniqid();
 
         $basket = base64_encode(json_encode($basket));
@@ -40,6 +40,8 @@ class PayTrService
             'max_installment'       => $max_installment,
             'currency'              => $currency,
             'test_mode'             => $test_mode,
+            'iframe_v2'             => 1,
+            'iframe_v2_dark'        => 0,
             'user_name'             => $userName,
             'user_address'          => $userAddress,
             'user_phone'            => $userPhone,

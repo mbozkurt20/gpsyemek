@@ -28,7 +28,7 @@ class CategoryRequest extends FormRequest
             'name'        => ['required', 'string', Rule::unique("categories", "name")->ignore($this->category), 'max:200'],
             'description' => ['nullable', 'string'],
             'status'      => ['required', 'numeric'],
-            'image'       => 'image|mimes:jpeg,png,jpg|max:2048',
+            'image'       => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
         $roleID = auth()->user()->myrole ?? 0;

@@ -135,17 +135,19 @@ class CheckoutController extends FrontendController
     }
     public function payTrPayment(Request $r)
     {
-        $basket = [];
+        $basket = [
+            ['Test Ürünü', '83.00', 1]
+        ];;
 
         $address = Address::find($r->address);
-        $phone = $r->countrycode . $r->mobile;
+        $phone = str_replace('-','',$r->mobile);
         $name = auth()->user()->first_name. ' '.auth()->user()->last_name;
         $email = auth()->user()->email;
 
         $amount = (session()->get('cart')['totalAmount'] + session()->get('delivery_charge')) * 100;
 
         $paytr = new PaytrService();
-        $result = $paytr->getToken($name,$address,$phone, $email, $amount, $basket); // 50.00 TL
+        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket); // 50.00 TL
 
         if ($result['status'] === 'success') {
             return view('frontend.payment.paytr', ['token' => $result['token']]);

@@ -30,7 +30,7 @@ class BannerRequest extends FormRequest
             'description'   => ['nullable', 'string', 'max:255'],
             'url'           => ['nullable', 'string'],
             'status'        => ['required', 'numeric'],
-            'image'         => $this->banner ? 'image|mimes:jpeg,png,jpg|max:3072' : 'required|image|mimes:jpeg,png,jpg|max:3072',
+            'image'         => $this->banner ? 'image|mimes:jpeg,png,jpg,webp|max:3072' : 'required|image|mimes:jpeg,png,jpg|max:3072',
         ];
     }
 

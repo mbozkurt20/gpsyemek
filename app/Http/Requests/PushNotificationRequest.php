@@ -29,10 +29,10 @@ class PushNotificationRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'shop_id'     => ['nullable', 'numeric'],
             'customer_id' => ['nullable', 'numeric'],
-            'image'       => 'image|mimes:jpeg,png,jpg|max:5098'
+            'image'       => 'image|mimes:jpeg,png,jpg,webp|max:5098'
         ];
     }
 
-   
+
 
 }

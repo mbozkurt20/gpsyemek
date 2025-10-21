@@ -29,7 +29,7 @@ class SearchController extends FrontendController
         ];
     }
 
-    public function filter(Request $request){ 
+    public function filter(Request $request){
         $expedition = $request->get('expedition');
 
         $restaurants = Restaurant::query()

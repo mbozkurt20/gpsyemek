@@ -212,7 +212,6 @@ function showGetPosition(lat, long) {
     $('#lat').val(Latitude);
     $('#long').val(Longitude);
 
-
     var latlng = new google.maps.LatLng(Latitude, Longitude);
     geocoder.geocode({
         'latLng': latlng
@@ -223,10 +222,7 @@ function showGetPosition(lat, long) {
             }
         }
     })
-
 }
-
-
 
 //modal
 function editBtn(id) {

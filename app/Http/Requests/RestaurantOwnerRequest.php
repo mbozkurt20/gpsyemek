@@ -40,7 +40,7 @@ class RestaurantOwnerRequest extends FormRequest
             'last_name'  => ['required', 'string'],
             'email'      => $email,
             'password'   => $password,
-            'image'      => 'image|mimes:jpeg,png,jpg|max:4096',
+            'image'      => 'image|mimes:jpeg,png,jpg,webp|max:4096',
             'username'   => request('username') ? $username : ['nullable'],
             'phone'      => ['required', 'max:40'],
             'address'    => ['required', 'max:200'],

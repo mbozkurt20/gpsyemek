@@ -13,7 +13,7 @@ class RestaurantOwnerController extends BackendController
 {
     public function __construct()
     {
-        $this->data['siteTitle'] = 'Restaurant Owner';
+        $this->data['siteTitle'] = 'Restaurant Sahibi';
 
         $this->middleware(['permission:restaurant-owners'])->only('show');
         $this->middleware(['permission:restaurant-owners_show'])->only('show');

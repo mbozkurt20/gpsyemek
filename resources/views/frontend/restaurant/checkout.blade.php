@@ -397,9 +397,9 @@
                                 class="address autocomplete-input @error('new_address') is-invalid @enderror"
                                 name="new_address" type="text" placeholder="{{ __('frontend.search') }}">
                         </div>
-                        <a href="javascript:void(0)">
-                            <button id="locationIcon" onclick="getLocation()" class="lni lni-target iconSearch"></button>
-                        </a>
+
+                            <button id="locationIcon" onclick="getLocation();return false;" class="lni lni-target iconSearch"></button>
+
                     </div>
                     <div class="">
                         <div id="googleMap" class="custom-map">

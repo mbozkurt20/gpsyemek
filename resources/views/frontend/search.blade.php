@@ -108,11 +108,11 @@
                                     <p> {{ __('frontend.radious_around_destination') }} </p>
 
                                     <div class="kilo">
-                                        <output id="relationship-status-output" class="relationship">100</output>
-                                        <span>{{ __('frontend.km') }} </span>
+                                        <output id="relationship-status-output" class="relationship">{{setting('geolocation_distance_radius')}}</output>
+                                        <span> {{ __('frontend.km') }} </span>
                                     </div>
                                     <input type="range" id="relationship-status-slider"
-                                        class="relationship-status-slider" min="1" max="100" step="1" name="distance" value="100">
+                                        class="relationship-status-slider" min="1" max="100" step="1" name="distance" value="{{setting('geolocation_distance_radius')}}">
                                 </div>
 
                                 <!-- Buttons -->

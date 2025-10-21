@@ -37,7 +37,7 @@ class RestaurantStoreRequest extends FormRequest
             'delivery_status' => ['required', 'numeric'],
             'pickup_status'   => ['required', 'numeric'],
             'table_status'    => ['required', 'numeric'],
-            'image'           => 'image|mimes:jpeg,png,jpg|max:5098',
+            'image'           => 'image|mimes:jpeg,png,jpg,webp|max:5098',
         ];
     }
 
