@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>GPS Yemek Hizmetleri Üyelik Sözleşmesi</title>
     <style>
         body {
@@ -48,6 +49,26 @@
             margin-left: 20px;
         }
     </style>
+    <style>
+        :root{--bg:#f7f9fb;--card:#fff;--accent:#0b63d6;--muted:#6b7280;--border:#e6e9ee}
+        body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,'Noto Sans',"Liberation Sans",sans-serif;background:var(--bg);color:#111;margin:0;padding:24px}
+        .container{max-width:980px;margin:0 auto}
+        header{display:flex;align-items:center;gap:16px}
+        .logo{width:56px;height:56px;background:linear-gradient(135deg,var(--accent),#2aa7ff);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+
+        h1{font-size:1.25rem;margin:0}
+        .meta{color:var(--muted);font-size:0.95rem;margin-top:6px}
+        .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:20px;box-shadow:0 6px 18px rgba(11,99,214,0.05)}
+        h2{font-size:1.05rem;margin-top:0}
+        p{line-height:1.55;margin:0 0 12px}
+        table{width:100%;border-collapse:collapse;margin:12px 0}
+        th,td{padding:10px;border:1px solid var(--border);text-align:left;font-size:0.95rem}
+        th{background:#fafbfd}
+        ul{margin:0 0 12px 20px}
+        .small{font-size:0.9rem;color:var(--muted)}
+        footer{margin-top:18px;color:var(--muted);font-size:0.9rem}
+        @media (max-width:700px){.container{padding:0 12px}.logo{width:48px;height:48px}}
+    </style>
 </head>
 <body>
 <header>
@@ -57,8 +78,6 @@
         <div class="meta">Gps Yazılı Teknoloji Danışmanlık Ve Lojistik Hizmetleri Limited Şirketi</div>
     </div>
 </header>
-
-
 
 <div class="card">
     <h2>1) Taraflar</h2>

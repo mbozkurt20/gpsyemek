@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Açık Rızanıza Yönelik Bilgilendirme Metni - GPS Yazılım</title>
     <style>
+        h2::before {
+            content: "GPS";
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 10px;
+            color: #ff5722;
+        }
+        p, li {
+            margin-bottom: 10px;
+        }
+        ul {
+            margin-left: 20px;
+        }
+
         :root{--bg:#f7f9fb;--card:#fff;--accent:#0b63d6;--muted:#6b7280;--border:#e6e9ee}
         body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,'Noto Sans',sans-serif;background:var(--bg);color:#111;margin:0;padding:24px}
         .container{max-width:900px;margin:0 auto}

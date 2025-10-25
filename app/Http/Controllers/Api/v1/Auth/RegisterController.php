@@ -103,4 +103,22 @@ class RegisterController extends Controller
         $emails = explode('@', $email);
         return $emails[0] . mt_rand();
     }
+
+    public function membership()
+    {
+        $html = view('frontend.agreements.uyelik')->render();
+        return response()->json(['html' => $html]);
+    }
+
+    public function explicitConsent()
+    {
+        $html = view('frontend.agreements.acik-riza')->render();
+        return response()->json(['html' => $html]);
+    }
+
+    public function lighting()
+    {
+        $html = view('frontend.agreements.aydinlatma')->render();
+        return response()->json(['html' => $html]);
+    }
 }
