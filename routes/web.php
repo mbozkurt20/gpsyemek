@@ -66,6 +66,13 @@ use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\RestaurantController as RestaurantsController;
 use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
+use App\Http\Controllers\Api\v1\Auth\RegisterController;
+
+Route::prefix('agreements')->group(function () {
+    Route::get('/membership', [RegisterController::class, 'membership']);
+    Route::get('/lighting', [RegisterController::class, 'lighting']);
+    Route::get('/explicit-consent', [RegisterController::class, 'explicitConsent']);
+});
 
 Route::view('/restoran','restoran.auth.login');
 

@@ -106,19 +106,16 @@ class RegisterController extends Controller
 
     public function membership()
     {
-        $html = view('frontend.agreements.uyelik')->render();
-        return response()->json(['html' => $html]);
+        return view('frontend.agreements.uyelik');
     }
 
     public function explicitConsent()
     {
-        $html = view('frontend.agreements.acik-riza')->render();
-        return response()->json(['html' => $html]);
+        return view('frontend.agreements.acik-riza');
     }
 
     public function lighting()
     {
-        $html = view('frontend.agreements.aydinlatma')->render();
-        return response()->json(['html' => $html]);
+        return view('frontend.agreements.aydinlatma');
     }
 }

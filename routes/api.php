@@ -49,12 +49,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::prefix('agreements')->group(function () {
-        Route::get('/membership', [RegisterController::class, 'membership']);
-        Route::get('/lighting', [RegisterController::class, 'lighting']);
-        Route::get('/explicit-consent', [RegisterController::class, 'explicitConsent']);
-    });
-
     Route::post('/webhook/orders', [WebhookController::class, 'handle']);
 
     Route::post('login',                                        [LoginController::class, 'action']);
