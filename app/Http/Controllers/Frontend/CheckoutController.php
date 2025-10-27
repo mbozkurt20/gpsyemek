@@ -15,6 +15,7 @@ use App\Services\PayTrService;
 use Dipesh79\LaravelPhonePe\LaravelPhonePe;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -135,7 +136,10 @@ class CheckoutController extends FrontendController
     }
     public function payTrPayment(Request $r)
     {
-        $basket = [];
+        $basket = [
+            ['total', session()->get('cart')['totalAmount'], 1],
+            ['delivery', session()->get('delivery_charge'), 1],
+        ];
 
         $address = Address::find($r->address);
         $phone = str_replace('-','',$r->mobile);
@@ -143,9 +147,18 @@ class CheckoutController extends FrontendController
         $email = auth()->user()->email;
 
         $amount = (session()->get('cart')['totalAmount'] + session()->get('delivery_charge')) * 100;
+        $merchant_oid = uniqid();
+
+        Cache::put("paytr_payment_{$merchant_oid}", [
+            'payment_type' => PaymentMethod::PAYTR,
+            'user_id' => auth()->id(),
+            'countrycode' => $r->countrycode,
+            'mobile' => $r->phone,
+            'cart' => session()->get('cart'),
+        ], now()->addMinutes(10));
 
         $paytr = new PaytrService();
-        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket); // 50.00 TL
+        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket,$merchant_oid); // 50.00 TL
 
         if ($result['status'] === 'success') {
             return view('frontend.payment.paytr', ['token' => $result['token']]);
@@ -155,6 +168,8 @@ class CheckoutController extends FrontendController
     }
     public function paytrCallback(Request $request)
     {
+        Log::info('PayTR Callback Request', $request->all());
+
         $hash = base64_encode(hash_hmac('sha256', $request->merchant_oid .
             $request->status . $request->total_amount .
             setting('paytr_merchant_salt'), setting('paytr_merchant_key'), true));

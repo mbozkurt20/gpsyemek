@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class PayTrService
 {
-    public function getToken($userName,$userAddress,$userPhone, $email, $payment_amount, $basket)
+    public function getToken($userName,$userAddress,$userPhone, $email, $payment_amount, $basket, $merchant_oid)
     {
         $merchantId      = setting('paytr_merchant_id');
         $merchantKey     = setting('paytr_merchant_key');
@@ -16,15 +18,16 @@ class PayTrService
         $merchant_salt    = $merchantSalt;
         $merchant_sandbox = $merchantSandbox;
 
-        $user_ip = request()->ip();
+        $user_ip = request()->server('HTTP_CF_CONNECTING_IP')
+            ?? request()->server('HTTP_X_FORWARDED_FOR')
+            ?? request()->ip();
         $no_installment = 0;
         $max_installment = 0;
         $currency = "TL";
         $test_mode = (int) $merchant_sandbox; // 1=test, 0=live
-        $merchant_oid = uniqid();
 
-        $basket = base64_encode(json_encode($basket));
 
+        $basket = base64_encode(json_encode($basket, JSON_UNESCAPED_UNICODE));
         $token_str   = $merchant_id.$user_ip.$merchant_oid.$email.$payment_amount.$basket.$no_installment.$max_installment.$currency.$test_mode.$merchant_salt;
         $paytr_token = base64_encode(hash_hmac('sha256', $token_str, $merchant_key, true));
 
@@ -45,8 +48,9 @@ class PayTrService
             'user_name'             => $userName,
             'user_address'          => $userAddress,
             'user_phone'            => $userPhone,
-            'merchant_ok_url'       => route('paytr.callback'),
-            'merchant_fail_url'     => route('paytr.fail'),
+            'merchant_ok_url' => route('paytr.success'),
+            'merchant_fail_url' => route('paytr.fail'),
+            'merchant_notify_url' => route('paytr.callback'),
         ];
 
         session()->put('paymentId', $merchant_oid);
