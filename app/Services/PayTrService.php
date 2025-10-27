@@ -45,9 +45,8 @@ class PayTrService
             'user_name'             => $userName,
             'user_address'          => $userAddress,
             'user_phone'            => $userPhone,
-            'merchant_ok_url'       => route('paytr.success'),
+            'merchant_ok_url'       => route('paytr.callback'),
             'merchant_fail_url'     => route('paytr.fail'),
-            'merchant_notify_url'   => route('paytr.callback'),
         ];
 
         session()->put('paymentId', $merchant_oid);

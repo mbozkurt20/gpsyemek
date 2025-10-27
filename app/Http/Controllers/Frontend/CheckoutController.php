@@ -135,9 +135,7 @@ class CheckoutController extends FrontendController
     }
     public function payTrPayment(Request $r)
     {
-        $basket = [
-            ['Test Ürünü', '83.00', 1]
-        ];;
+        $basket = [];
 
         $address = Address::find($r->address);
         $phone = str_replace('-','',$r->mobile);
