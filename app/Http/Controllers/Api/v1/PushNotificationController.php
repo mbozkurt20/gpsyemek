@@ -14,7 +14,7 @@ class PushNotificationController extends Controller
     {
         $this->pushNotificationService = $pushNotificationService;
     }
-    
+
     public function fcmSubscribe(Request $request)
     {
         $validation = Validator::make($request->all(),  [
@@ -29,12 +29,11 @@ class PushNotificationController extends Controller
         }
 
         return $this->pushNotificationService->fcmSubscribe($request);
-        
+
     }
- 
+
     public function fcmUnsubscribe(Request $request)
     {
         return $this->pushNotificationService->fcmUnsubscribe($request);
     }
-
 }

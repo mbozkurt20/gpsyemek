@@ -54,7 +54,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login',                                        [LoginController::class, 'action']);
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);
     Route::post('logout',                                       [LogoutController::class, 'action']);
-    Route::post('reg',                                          [RegisterController::class, 'action']);
+    Route::post('register',                                          [RegisterController::class, 'action']);
     //push notification
     Route::post('fcm-subscribe',                                [PushNotificationController::class, 'fcmSubscribe']);
     Route::post('fcm-unsubscribe',                              [PushNotificationController::class, 'fcmUnsubscribe']);
