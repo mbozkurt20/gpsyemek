@@ -147,18 +147,9 @@ class CheckoutController extends FrontendController
         $email = auth()->user()->email;
 
         $amount = (session()->get('cart')['totalAmount'] + session()->get('delivery_charge')) * 100;
-        $merchant_oid = uniqid();
-
-        Cache::put("paytr_payment_{$merchant_oid}", [
-            'payment_type' => PaymentMethod::PAYTR,
-            'user_id' => auth()->id(),
-            'countrycode' => $r->countrycode,
-            'mobile' => $r->phone,
-            'cart' => session()->get('cart'),
-        ], now()->addMinutes(10));
 
         $paytr = new PaytrService();
-        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket,$merchant_oid); // 50.00 TL
+        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket); // 50.00 TL
 
         if ($result['status'] === 'success') {
             return view('frontend.payment.paytr', ['token' => $result['token']]);
@@ -168,24 +159,33 @@ class CheckoutController extends FrontendController
     }
     public function paytrCallback(Request $request)
     {
-        Log::info('PayTR Callback Request', $request->all());
+        $merchant_key  = setting('paytr_merchant_key');
+        $merchant_salt = setting('paytr_merchant_salt');
 
-        $hash = base64_encode(hash_hmac('sha256', $request->merchant_oid .
-            $request->status . $request->total_amount .
-            setting('paytr_merchant_salt'), setting('paytr_merchant_key'), true));
+        $hash = base64_encode(hash_hmac('sha256',
+            $request->merchant_oid .
+            $merchant_salt .
+            $request->status .
+            $request->total_amount,
+            $merchant_key,
+            true
+        ));
 
         if ($hash != $request->hash) {
+            Log::error('PayTR Hash mismatch', [
+                'generated_hash' => $hash,
+                'received_hash'  => $request->hash,
+                'merchant_oid'   => $request->merchant_oid,
+                'status'         => $request->status,
+                'total_amount'   => $request->total_amount,
+            ]);
             return response('PAYTR notification failed: bad hash', 400);
         }
 
-        if ($request->status == 'success') {
-            $orderService = app(PaymentService::class)->payment(true);
-        } else {
-            $orderService = app(PaymentService::class)->payment(false);
-        }
-
-        return $this->handleOrderServiceResponse($orderService);
+        return response('OK', 200);
     }
+
+
     public function payTrSuccess(Request $request)
     {
         $orderService = app(PaymentService::class)->payment(true);

@@ -1,6 +1,5 @@
 @extends('frontend.layouts.app')
 @section('main-content')
-    <!--======= LOGIN PART START ========-->
     <section class="auth">
         <div class="container">
             <div class="row">
@@ -17,15 +16,18 @@
                             </div>
                             <form method="POST" class="login" action="{{ route('login') }}">
                                 @csrf
-                                <input type="hidden" name="type" value="{{request()->has('type') ? request()->type : 'frontend'}}">
+                                <input type="hidden" name="type"
+                                       value="{{request()->has('type') ? request()->type : 'frontend'}}">
 
                                 <div class="form-group">
                                     <label for="email" class="form-label"> {{ __('auth.email') }} </label>
-                                    <input id="demoemail" type="email"
-                                        class="form-control  @if ($errors->has('email') || session('block')) is-invalid @endif"
-                                        name="email" value="{{ old('email') }}" autocomplete="email" autofocus
-                                        placeholder="Email">
-                                    <small class="form-alert red">{{ __('auth.email_privacy') }}</small>
+                                    <p class="border border-green-700 py-2 rounded px-2 font-bold">{{ session()->has('verified_value') ? session('verified_value') : old('email') }}</p>
+                                    <input style="display: none" id="demoemail" type="email"
+                                           class="form-control  @if ($errors->has('email') || session('block')) is-invalid @endif"
+                                           name="email" value="{{ session()->has('verified_value') ? session('verified_value') : old('email') }}"
+                                           autocomplete="email" autofocus
+                                           placeholder="Email">
+                                    <small class="form-alert green">{{ __('auth.email_privacy') }}</small>
 
                                     @if ($errors->has('email'))
                                         <span class="is-invalid" role="alert">
@@ -41,8 +43,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="password">{{ __('auth.password') }}</label>
                                     <input placeholder="Şifreniz" id="demopassword" type="password"
-                                        class="form-control @if ($errors->has('password')) is-invalid @endif"
-                                        name="password" autocomplete="current-password">
+                                           class="form-control @if ($errors->has('password')) is-invalid @endif"
+                                           name="password" autocomplete="current-password">
                                     @if ($errors->has('password'))
                                         <span class="is-invalid" role="alert">
                                             <strong class="text-danger">{{ $errors->first('password') }}</strong>
@@ -58,7 +60,8 @@
 
                                     <div class="col-md-6 d-flex justify-content-end">
                                         <label for="forgot password">
-                                            <a class="linkTxt" href="{{ route('password.request') }}" class="text-primary">
+                                            <a class="linkTxt" href="{{ route('password.request') }}"
+                                               class="text-primary">
                                                 {{ __('auth.forgot_password') }}
                                             </a>
                                         </label>
@@ -90,17 +93,21 @@
                         </div>
 
                         @if (env('DEMO_MODE'))
-                        <div class="card demo-login mx-auto text-center mt-2 border-0">
-                            <div class="card-body border-0">
-                                <h5 class="mb-2">{{ __('auth.quick_demo_login') }}</h5>
-                                <div class="buttons">
-                                    <button id="demoadmin" class="btn btn-sm btn-primary">{{ __('auth.admin') }}</button>
-                                    <button id="democustomer" class="btn btn-sm btn-info">{{ __('auth.customer') }}</button>
-                                    <button id="demorestaurantowner" class="btn btn-success btn-sm">{{ __('auth.restaurant_owner') }}</button>
-                                    <button id="demodeliveryboy" class="btn btn-warning btn-sm">{{ __('auth.delivery_boy') }}</button>
+                            <div class="card demo-login mx-auto text-center mt-2 border-0">
+                                <div class="card-body border-0">
+                                    <h5 class="mb-2">{{ __('auth.quick_demo_login') }}</h5>
+                                    <div class="buttons">
+                                        <button id="demoadmin"
+                                                class="btn btn-sm btn-primary">{{ __('auth.admin') }}</button>
+                                        <button id="democustomer"
+                                                class="btn btn-sm btn-info">{{ __('auth.customer') }}</button>
+                                        <button id="demorestaurantowner"
+                                                class="btn btn-success btn-sm">{{ __('auth.restaurant_owner') }}</button>
+                                        <button id="demodeliveryboy"
+                                                class="btn btn-warning btn-sm">{{ __('auth.delivery_boy') }}</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
                     </div>
@@ -109,7 +116,6 @@
         </div>
         <img class="auth-banner" src="{{ asset('frontend/images/auth.jpg') }}" alt="auth">
     </section>
-    <!--======== LOGIN PART END ========-->
 @endsection
 
 @push('js')

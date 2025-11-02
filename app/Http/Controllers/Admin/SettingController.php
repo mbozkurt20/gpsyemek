@@ -643,10 +643,10 @@ class SettingController extends BackendController
     private function smsValidateArray()
     {
         return [
-            'twilio_auth_token'  => 'required|string|max:200',
-            'twilio_account_sid' => 'required|string|max:200',
-            'twilio_from'        => 'required|string|max:20',
-            'twilio_disabled'    => 'numeric',
+            'netgsm_usercode' => 'required|string|max:200',
+            'netgsm_password' => 'required|string|max:200',
+            'netgsm_header'   => 'required|string|max:20',
+            'netgsm_disabled' => 'numeric',
         ];
     }
 

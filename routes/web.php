@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FinalController;
@@ -68,6 +69,15 @@ use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 use App\Http\Controllers\Api\v1\Auth\RegisterController;
 
+Route::get('/test', function (){
+    $d = new \App\Services\NetGsmService();
+    $f = $d->sendSms('5453455125','test');
+})->name('home');
+
+Route::get('/verify', [VerificationController::class, 'showForm'])->name('verify.code');
+Route::post('/verify/send', [VerificationController::class, 'sendOtp'])->name('verify.send');
+Route::post('/verify/check', [VerificationController::class, 'verifyOtp'])->name('verify.check');
+
 Route::prefix('agreements')->group(function () {
     Route::get('/membership', [RegisterController::class, 'membership']);
     Route::get('/lighting', [RegisterController::class, 'lighting']);
@@ -112,7 +122,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
 
     Route::post('/paytr/callback', [CheckoutController::class, 'paytrCallback'])->name('paytr.callback');
     Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
-    Route::post('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
+    Route::get('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
 
     Route::post('paytm/status', [CheckoutController::class, 'paytmCallback']);
 
