@@ -34,6 +34,7 @@
                 <table class="db-table table stripe" id="maintable" data-url="{{ route('admin.restaurant.get-restaurant') }}" data-status="{{ \App\Enums\RestaurantStatus::ACTIVE }}" data-hidecolumn="{{ auth()->user()->can('restaurants_show') ||auth()->user()->can('restaurants_edit') ||auth()->user()->can('restaurants_delete') }}">
                     <thead class="db-table-head">
                         <tr class="db-table-head-tr">
+                            <th class="db-table-head-th">Restaurant ID</th>
                             <th class="db-table-head-th">{{ __('levels.name') }}</th>
                             <th class="db-table-head-th">{{ __('levels.user') }}</th>
                             <th class="db-table-head-th">{{ __('levels.status') }}</th>
@@ -54,7 +55,7 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('backend/lib/datatable/css/dataTables.tailwindcss.css') }}">
 @endpush
-    
+
 @push('js')
     <script src="{{ asset('backend/lib/datatable/js/dataTables.js') }}"></script>
     <script src="{{ asset('backend/lib/datatable/js/dataTables.tailwindcss.js') }}"></script>

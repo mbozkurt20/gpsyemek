@@ -7,6 +7,7 @@ use App\Enums\MenuItemStatus;
 use App\Enums\Status;
 use App\Http\Controllers\BackendController;
 use App\Http\Requests\MenuItemRequest;
+use App\Imports\ProductImport;
 use App\Models\Category;
 use App\Models\MenuItem;
 use App\Models\MenuItemOption;
@@ -16,6 +17,7 @@ use App\Rules\IniAmount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\Datatables\Datatables;
 
 class MenuItemController extends BackendController
@@ -46,6 +48,22 @@ class MenuItemController extends BackendController
         return $this->getMenuItem($request);
     }
 
+    function import(Request $request)
+    {
+        $request->validate([
+            'importFile' => 'required|file|mimes:xlsx,csv',
+            'restaurant_id' => 'required',
+        ]);
+
+        $restaurant_id = $request->restaurant_id;
+
+        try {
+            Excel::import(new ProductImport($restaurant_id), $request->file('importFile'));
+            return back()->with('success', 'Ürünler başarıyla içe aktarıldı! 🎉');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Bir hata oluştu: ' . $e->getMessage());
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

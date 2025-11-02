@@ -37,6 +37,10 @@ function load_data(status = '', applied = '') {
         },
         columns: [
             {
+                data: 'id',
+                name: 'ID'
+            },
+            {
                 data: 'name',
                 name: 'name'
             },

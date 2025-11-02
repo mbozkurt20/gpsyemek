@@ -150,6 +150,49 @@
                         </div>
                     </div>
 
+                    <div class="card card-body bg-white mt-5 py-5">
+                        <h1 class="mb-2">Restaraurant Ürünleri Aktar</h1>
+                        @if (auth()->user()->myrole == 1)
+                            {{-- Ürün İçe Aktarma Formu --}}
+                            <form action="{{ route('admin.menu-items-import') }}" method="POST" enctype="multipart/form-data" class="inline-flex items-center gap-2">
+                                @csrf
+                                <input value="{{ $restaurant->id }}" name="restaurant_id" type="hidden">
+
+                                <label for="importFile" class="db-card-filter-btn pseudo-none cursor-pointer">
+                                    <i class="fa-solid fa-file-import"></i>
+                                    <span>Ürünleri İçe Aktar</span>
+                                </label>
+
+                                <input type="file" name="importFile" id="importFile" class="hidden" accept=".csv,.xlsx">
+                                <button type="submit" class="hidden" id="submitImport"></button>
+                            </form>
+
+                            {{-- Başarılı veya hatalı mesaj gösterimi --}}
+                            @if (session('success'))
+                                <div class="mt-3 p-3 rounded-xl bg-green-100 text-green-700 text-sm font-medium flex items-center gap-2">
+                                    <i class="fa-solid fa-check-circle"></i>
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="mt-3 p-3 rounded-xl bg-red-100 text-red-700 text-sm font-medium flex items-center gap-2">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
+                            <script>
+                                // Dosya seçildiğinde otomatik gönder
+                                document.getElementById('importFile').addEventListener('change', function() {
+                                    if (this.files.length > 0) {
+                                        document.getElementById('submitImport').click();
+                                    }
+                                });
+                            </script>
+                        @endif
+                    </div>
+
                 </div>
 
                 <div class="col-8 md:col-8 sm:col-8 xl:col-8">

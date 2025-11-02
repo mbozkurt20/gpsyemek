@@ -247,6 +247,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::resource('cuisine',                               CuisineController::class);
     Route::resource('menu-items',                            MenuItemController::class);
 
+    Route::post('menu-items-import',                    [MenuItemController::class, 'import'])->name('menu-items-import');
     Route::get('menu-items/{id}/modify',                    [MenuItemController::class, 'modify'])->name('menu-items.modify');
     Route::put('menu-items/{id}/modify',                    [MenuItemController::class, 'modifyUpdate'])->name('menu-items.modify');
     Route::resource('reservation',                          ReservationsController::class);

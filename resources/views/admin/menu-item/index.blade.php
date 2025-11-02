@@ -15,7 +15,6 @@
                 <h3 class="db-card-title">{{ __('restaurant.menu_items_details') }}</h3>
                 <div class="db-card-filter">
                     @can('menu-items_create')
-
                         <a href="{{ route('admin.menu-items.create') }}" class="db-btn h-[38px] text-white bg-primary">
                             <i class="fa-solid fa-circle-plus"></i>
                             <span>{{ __('restaurant.add_menu_item') }}</span>
