@@ -31,9 +31,10 @@ class PaymentController extends Controller
         $userAddress = $request->input('address');
         $userName = $request->input('userName');
         $userPhone = $request->input('userPhone');
+        $merchant_oid = uniqid();
 
         $payTrService = new PaytrService();
-        $token = $payTrService->getToken($userName,$userAddress,$userPhone,$userEmail,$amount,$basket);
+        $token = $payTrService->getToken($userName,$userAddress,$userPhone,$userEmail,$amount,$basket,$merchant_oid);
 
         return response()->json($token);
     }
