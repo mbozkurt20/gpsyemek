@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\GeoController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FinalController;
 use App\Http\Controllers\Admin\BankController;
@@ -74,6 +76,18 @@ Route::prefix('agreements')->group(function () {
     Route::get('/explicit-consent', [RegisterController::class, 'explicitConsent']);
 });
 
+
+Route::get('mail',function(){
+    Mail::raw('tsest', function ($mail)  {
+        $mail->to('mbozkurt020@hotmail.com')
+            ->subject('Laravel Test Mail');
+    });
+
+    return 'Mail gönderildi!';
+});
+
+Route::get('/geocode', [GeoController::class, 'geocode']);
+
 Route::view('/restoran','restoran.auth.login');
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
@@ -94,7 +108,8 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
-    Route::get('restaurant/status{status}/{restaurant}',                   [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
+    Route::post('//restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
+    Route::get('restaurant/status{status}/{restaurant}',    [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
     Route::get('restaurant/{restaurant}',                   [RestaurantController::class, 'show'])->name('restaurant.show');
     Route::post('restaurant/ratings',                       [RestaurantController::class, 'Ratings'])->name('restaurant.ratings-update')->middleware('auth');
 

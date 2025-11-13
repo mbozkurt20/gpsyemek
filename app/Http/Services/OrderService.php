@@ -449,6 +449,11 @@ class OrderService
                 ]);
             } else {
                 $address = Address::where('label_name', $data['addressLabel'])->first();
+
+                if (!$address){
+                    ResponseService::set(['message' => 'Address label not found']);
+                }
+
                 $latitude = $address->latitude;
                 $longitude = $address->longitude;
                 $address = json_encode([

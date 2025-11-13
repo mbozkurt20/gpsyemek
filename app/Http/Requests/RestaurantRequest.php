@@ -62,6 +62,10 @@ class RestaurantRequest extends FormRequest
             'address'           => ['required', 'max:200'],
             'userstatus'        => ['required', 'numeric'],
             'waiter_status'     => ['required', 'numeric'],
+            'mersis_no'        => ['nullable', 'string'],
+            'cap_address'        => ['required', 'string'],
+            'iban_no'         => ['required', 'string'],
+            'iban_name'        => ['required', 'string'],
         ];
     }
 

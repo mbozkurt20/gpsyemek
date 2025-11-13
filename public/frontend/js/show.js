@@ -77,7 +77,7 @@ $(document).ready(function () {
     $(".showClosedNotification").on('click', function () {
         iziToast.error({
             title: 'Uyarı!',
-            message: 'Bu restoran şu anda kapalıdır.',
+            message: 'Bu Restoran Şuan Kapalıdır.',
             position: 'topRight'
         });
     });

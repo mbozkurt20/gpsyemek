@@ -242,14 +242,24 @@
                                         <span>{{ Str::of(strip_tags($restaurant->address)) }}</span>
                                     </div>
 
-                                    @if ($restaurant->opening_time < $current_data && $restaurant->closing_time > $current_data)
-                                        <p class="on"> {{ __('frontend.open_now') }} </p>
-                                    @else
-                                        <p class="off">
-                                            {{ __('frontend.close_now') }}
-                                        </p>
-                                    @endif
+                                    @php
+                                        $closedUntil = $restaurant->temporary_closed_until
+                                            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
+                                            : null;
+                                    @endphp
 
+                                    @if ($restaurant->permanently_closed)
+                                        <p class="off">Süresiz kapalı</p>
+
+                                    @elseif ($closedUntil && $closedUntil->isFuture())
+                                        <p class="off"> {{ __('frontend.close_now') }} ({{ $closedUntil->diffForHumans() }} sonra açılacak)</p>
+
+                                    @elseif ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'))
+                                        <p class="on">{{ __('frontend.open_now') }}</p>
+
+                                    @else
+                                        <p class="off"> {{ __('frontend.close_now') }}</p>
+                                    @endif
                                 </div>
                             </a>
                         </div>

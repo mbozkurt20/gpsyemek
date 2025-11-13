@@ -28,6 +28,7 @@ class Restaurant extends BaseModel implements HasMedia
     protected $table       = 'restaurants';
     protected $guarded     = ['id'];
     protected $auditColumn     = true;
+
     protected $dates = ['deleted_at'];
     protected $fakeColumns = [];
 
@@ -42,6 +43,8 @@ class Restaurant extends BaseModel implements HasMedia
         'applied' => 'int',
         'creator_id' => 'int',
         'editor_id ' => 'int',
+        'temporary_closed_until' => 'datetime',
+        'permanently_closed' => 'boolean',
     ];
 
     public function getRouteKeyName()
@@ -68,6 +71,11 @@ class Restaurant extends BaseModel implements HasMedia
     public function cuisines()
     {
         return $this->belongsToMany(Cuisine::class, 'restaurant_cuisines');
+    }
+
+    public function payInformation()
+    {
+        return $this->hasOne(RestaurantPayInformation::class, 'restaurant_id');
     }
 
     public function coupons()

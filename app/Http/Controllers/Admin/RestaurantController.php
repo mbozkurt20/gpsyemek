@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\MenuItemStatus;
+use App\Models\RestaurantPayInformation;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Enums\Status;
@@ -219,6 +220,26 @@ class RestaurantController extends BackendController
                     $restaurant->addMediaFromRequest('restaurant_logo')->toMediaCollection('restaurant_logo');
                 }
 
+                if ($request->has('iban_no') && $request->has('iban_name') && $request->has('mersis_no')) {
+                    $respay = RestaurantPayInformation::where('restaurant_id', $restaurant->id)->first();
+                    if ($respay) {
+                        $respay->update([
+                            'iban_no' => $request->iban_no,
+                            'iban_name' => $request->iban_name,
+                            'mersis_no' => $request->mersis_no,
+                            'cap_address' => $request->cap_address,
+                        ]);
+                    }else {
+                        RestaurantPayInformation::create([
+                            'restaurant_id' => $restaurant->id,
+                            'iban_no' => $request->iban_no,
+                            'iban_name' => $request->iban_name,
+                            'mersis_no' => $request->mersis_no,
+                            'cap_address' => $request->cap_address,
+                        ]);
+                    }
+                }
+
                 return redirect(route('admin.restaurants.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
             }
             return redirect(route('admin.restaurants.index'))->withError($depositService->message);
@@ -418,6 +439,27 @@ class RestaurantController extends BackendController
             $this->deleteMedia('restaurant_logo', $restaurant->id);
             $restaurant->addMediaFromRequest('restaurant_logo')->toMediaCollection('restaurant_logo');
         }
+
+        if ($request->has('iban_no') && $request->has('iban_name') && $request->has('mersis_no')) {
+            $respay = RestaurantPayInformation::where('restaurant_id', $restaurant->id)->first();
+            if ($respay) {
+                $respay->update([
+                   'iban_no' => $request->iban_no,
+                   'iban_name' => $request->iban_name,
+                   'mersis_no' => $request->mersis_no,
+                   'cap_address' => $request->cap_address,
+                ]);
+            }else {
+                RestaurantPayInformation::create([
+                    'restaurant_id' => $restaurant->id,
+                    'iban_no' => $request->iban_no,
+                    'iban_name' => $request->iban_name,
+                    'mersis_no' => $request->mersis_no,
+                    'cap_address' => $request->cap_address,
+                ]);
+            }
+        }
+
         return redirect(route('admin.restaurants.index'))->withSuccess('Bilgiler başarıyla güncellendi..');
     }
 

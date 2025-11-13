@@ -51,23 +51,63 @@
                         </label>
                     </form>
 
+                    <button id="openModalBtn" class="ml-2 bg-primary text-white px-3 py-1 rounded">Süreli Kapat</button>
+
+                    <!-- Modal -->
+                    <div id="closeModal" class="fixed inset-0  flex items-center justify-center hidden" style="background-color:rgba(0, 0, 0, 0.5);">>
+                        <div class="bg-white p-6 rounded-lg w-80">
+                            <h2 class="text-lg font-semibold mb-4">Restoranı Kapat</h2>
+                            <p class="mb-3">Ne kadar süreyle kapatmak istiyorsunuz?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="15">15 Dk</button>
+                                <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="30">30 Dk</button>
+                                <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="45"> 45 Dk</button>
+                                <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="60">1 Saat</button>
+                                <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="0">Süresiz</button>
+                            </div>
+                            <button id="cancelModal" class="mt-4 text-red-500">İptal</button>
+                        </div>
+                    </div>
+
                     <script>
-                        const switchInput = document.getElementById('statusSwitch');
-                        const form = document.getElementById('statusForm');
+                        const openModalBtn = document.getElementById('openModalBtn');
+                        const modal = document.getElementById('closeModal');
+                        const cancelModal = document.getElementById('cancelModal');
                         const restaurantId = "{{ auth()->user()->restaurant->id }}";
 
-                        switchInput.addEventListener('change', function() {
-                            // Duruma göre status belirle
-                            let status = this.checked ? 5 : 0; // 5 açık, 0 kapalı gibi
-                            // Form action'ı ayarla
-                            form.action = `/restaurant/status${status}/${restaurantId}`;
-                            form.submit();
+                        openModalBtn.addEventListener('click', () => {
+                            modal.classList.remove('hidden');
+                        });
+
+                        cancelModal.addEventListener('click', () => {
+                            modal.classList.add('hidden');
+                        });
+
+                        document.querySelectorAll('.close-btn').forEach(button => {
+                            button.addEventListener('click', () => {
+                                const duration = button.getAttribute('data-duration');
+                                fetch(`/restaurant/close/${restaurantId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ duration: duration })
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        modal.classList.add('hidden');
+                                        location.reload(); // sayfayı yeniler
+                                    })
+                                    .catch(err => console.error(err));
+                            });
                         });
                     </script>
                 </div>
+
                 <span class="ml-3 text-gray-600">
-                    ({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }} - {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})
-                </span>
+        ({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }} - {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})
+    </span>
             </div>
 
             <style>
@@ -111,8 +151,6 @@
                     transform: translateX(32px); /* yeni genişliğe göre ayar */
                 }
             </style>
-
-
         @endif
         <button class="fa-solid fa-align-left db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5"></button>
         <button data-account="#profileSidebar" class="flex items-center gap-1 sm:gap-2">

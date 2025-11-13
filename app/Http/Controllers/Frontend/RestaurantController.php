@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\RestaurantStatus;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Models\Discount;
@@ -12,6 +13,7 @@ use App\Enums\RatingStatus;
 use App\Enums\DiscountStatus;
 use App\Enums\MenuItemStatus;
 use App\Models\RestaurantRating;
+use Illuminate\Http\Request;
 use Sopamo\LaravelFilepond\Filepond;
 use App\Http\Requests\RatingsRequest;
 use App\Http\Services\RatingsService;
@@ -24,13 +26,14 @@ class RestaurantController extends FrontendController
 {
     protected $restaurant;
     protected $filepond;
+
     public function __construct(protected RatingsService $ratingsService, Filepond $filepond)
     {
         parent::__construct();
         $this->data['site_title'] = env('APP_NAME');
     }
 
-    public function statuse($status,$restoran)
+    public function statuse($status, $restoran)
     {
         $restoran = Restaurant::find($restoran);
         $restoran->current_status = $status;
@@ -39,12 +42,41 @@ class RestaurantController extends FrontendController
         return Redirect::back()->withSuccess('Restoran Durumu Güncellendi');
     }
 
+    public function close(Request $request, $id)
+    {
+        $restaurant = Restaurant::findOrFail($id);
+
+        $duration = $request->input('duration'); // "15", "30", "45", "60", "0"
+
+        if ($duration === '0') {
+            // Süresiz kapalı
+            $restaurant->permanently_closed = true;
+            $restaurant->temporary_closed_until = null;
+        } else {
+            // Geçici olarak kapalı
+            $minutes = (int) $duration;
+            $restaurant->temporary_closed_until = now()->addMinutes($minutes);
+            $restaurant->permanently_closed = false;
+        }
+
+        $restaurant->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $duration === '0'
+                ? 'Restoran süresiz olarak kapatıldı.'
+                : "Restoran {$duration} dakika kapalı olacak.",
+            'temporary_closed_until' => $restaurant->temporary_closed_until,
+            'permanently_closed' => $restaurant->permanently_closed,
+        ]);
+    }
+
     public function show(Restaurant $restaurant, Filepond $filepond)
     {
         $this->restaurant = $restaurant;
-        $this->filepond   = $filepond;
+        $this->filepond = $filepond;
 
-        if (session('session_cart_restaurant_id') !=  $this->restaurant->id) {
+        if (session('session_cart_restaurant_id') != $this->restaurant->id) {
             session()->forget('cart');
         }
         $this->loadCategoriesAndProducts();
@@ -58,25 +90,25 @@ class RestaurantController extends FrontendController
 
     private function loadCategoriesAndProducts()
     {
-        $categories          = [];
-        $other_products      = [];
+        $categories = [];
+        $other_products = [];
         $categories_products = [];
 
-        $products            = MenuItem::with('categories')->with('media')->with('variations')->with('options')->where(['restaurant_id' => $this->restaurant->id])->where('status', MenuItemStatus::ACTIVE)->get();
+        $products = MenuItem::with('categories')->with('media')->with('variations')->with('options')->where(['restaurant_id' => $this->restaurant->id])->where('status', MenuItemStatus::ACTIVE)->get();
 
         foreach ($products as $product) {
             $product_categories = $product->categories;
             if (!blank($product_categories)) {
                 foreach ($product_categories as $product_category) {
-                    $categories[$product_category->id]            = $product_category;
+                    $categories[$product_category->id] = $product_category;
                     $categories_products[$product_category->id][] = $product;
                 }
             } else {
                 $other_products[] = $product;
             }
         }
-        $this->data['categories']          = $categories;
-        $this->data['other_products']      = $other_products;
+        $this->data['categories'] = $categories;
+        $this->data['other_products'] = $other_products;
         $this->data['categories_products'] = $categories_products;
     }
 
@@ -89,7 +121,7 @@ class RestaurantController extends FrontendController
 
         $ratingInfo = $this->ratingsService->avgRating($this->restaurant->id);
         $this->data['rating_user_count'] = $ratingInfo['countUser'];
-        $this->data['average_rating']    = $ratingInfo['avgRating'];
+        $this->data['average_rating'] = $ratingInfo['avgRating'];
     }
 
     private function loadVouchers()
@@ -112,7 +144,7 @@ class RestaurantController extends FrontendController
             }
 
             if (!blank($data)) {
-                $this->data['vouchers']         = pluck($data, 'obj', 'restaurant_id');
+                $this->data['vouchers'] = pluck($data, 'obj', 'restaurant_id');
 
             }
         }
@@ -121,8 +153,8 @@ class RestaurantController extends FrontendController
 
     private function loadViewData()
     {
-        $this->data['restaurant']  = $this->restaurant;
-        $this->data['qrCode']      = $this->qrCode();
+        $this->data['restaurant'] = $this->restaurant;
+        $this->data['qrCode'] = $this->qrCode();
         $this->data['currenttime'] = now()->format('H:i:s');
     }
 

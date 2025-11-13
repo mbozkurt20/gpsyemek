@@ -144,6 +144,36 @@
                             </div>
                         </div>
 
+                        <div class="db-card mt-5 p-4">
+                            <div class="mb-5">
+                                <label for="cap_address" class="block text-sm font-medium text-gray-700">CAP Adresi</label>
+                                <input value="{{$restaurant->payInformation?->cap_address}}" required type="text" id="cap_address" name="cap_address"
+                                       class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="Örn: cap@firma.com">
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="iban_no" class="block text-sm font-medium text-gray-700">IBAN Numarası</label>
+                                <input value="{{$restaurant->payInformation?->iban_no}}" required type="text" id="iban_no" name="iban_no"
+                                       class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="TR00 0000 0000 0000 0000 0000 00">
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="iban_name" class="block text-sm font-medium text-gray-700">IBAN Adı</label>
+                                <input value="{{$restaurant->payInformation?->iban_name}}" required type="text" id="iban_name" name="iban_name"
+                                       class="mt-1  db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="Hesap Sahibinin Adı">
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="mersis_no" class="block text-sm font-medium text-gray-700">MERSİS Numarası</label>
+                                <input value="{{$restaurant->payInformation?->mersis_no}}" type="text" id="mersis_no" name="mersis_no"
+                                       class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="Örn: 0123456789012345">
+                            </div>
+                        </div>
+
                         <div class="db-card mt-5">
                             <div class="db-card-header">
                                 <h3 class="db-card-title">{{ __('restaurant.restaurant_status') }}</h3>
@@ -283,13 +313,13 @@
                             </div>
                             <div class="db-card-body">
                                 <div class="row">
+                                    <div class="form-col-12 sm:form-col-12 md:form-col-12">
+                                        <div id="googleMap"></div>
+                                    </div>
 
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
-                                        <label class="db-field-title required"
-                                               for="name">{{ __('levels.latitude') }}</label>
-                                        <input type="text" name="lat" id="lat"
-                                               class="db-field-control @error('lat') invalid @enderror"
-                                               value="{{ old('lat', $restaurant->lat) }}">
+                                        <label class="db-field-title required" for="name">{{ __('levels.latitude') }}</label>
+                                        <input type="text" name="lat" id="lat" class="db-field-control @error('lat') invalid @enderror" value="{{ old('lat', $restaurant->lat) }}">
 
                                         @error('lat')
                                         <small class="db-field-alert">{{ $message }}</small>
@@ -297,11 +327,8 @@
                                     </div>
 
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
-                                        <label class="db-field-title required"
-                                               for="name">{{ __('levels.longitude') }}</label>
-                                        <input type="text" name="long" id="long"
-                                               class="db-field-control @error('long') invalid @enderror"
-                                               value="{{ old('long', $restaurant->long) }}">
+                                        <label class="db-field-title required" for="name">{{ __('levels.longitude') }}</label>
+                                        <input type="text" name="long" id="long" class="db-field-control @error('long') invalid @enderror" value="{{ old('long', $restaurant->long) }}">
 
                                         @error('long')
                                         <small class="db-field-alert">{{ $message }}</small>
@@ -309,10 +336,14 @@
                                     </div>
 
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
-                                        <div id="googleMap"></div>
+                                        <label class="db-field-title required" for="address">Adres</label>
+                                        <textarea name="address" id="address-input" class="db-field-control">{{ old('address', $restaurant->address) }}</textarea>
+                                        @error('address')
+                                        <small class="db-field-alert">{{ $message }}</small>
+                                        @enderror
+
+                                        <button type="button" id="show-on-map" class="db-btn rounded-full text-white mt-2" style="background: #14179e">Haritada Göster</button>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -443,11 +474,121 @@
                         </div>
                     </div>
                 </div>
-
-
             </form>
         </div>
 
+        <div class="db-card p-5 flex items-center py-2 px-3 border border-gray-200">
+            <div class="flex items-center space-x-2 pr-12">
+                <span class="pr-2">Restoran</span>
+                <form id="statusForm" method="GET" action="">
+                    @csrf
+                    <label class="switch">
+                        <input type="checkbox" id="statusSwitch"
+                            {{ $restaurant->current_status == 5 ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                </form>
+
+                <button id="openModalBtn" class="ml-2 bg-primary text-white px-3 py-1 rounded">Süreli Kapat</button>
+
+                <!-- Modal -->
+                <div id="closeModal" class="fixed inset-0  flex items-center justify-center hidden" style="background-color:rgba(0, 0, 0, 0.5);">>
+                    <div class="bg-white p-6 rounded-lg w-80">
+                        <h2 class="text-lg font-semibold mb-4">Restoranı Kapat</h2>
+                        <p class="mb-3">Ne kadar süreyle kapatmak istiyorsunuz?</p>
+                        <div class="flex flex-col space-y-2">
+                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="15">15 Dk</button>
+                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="30">30 Dk</button>
+                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="45"> 45 Dk</button>
+                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="60">1 Saat</button>
+                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="0">Süresiz</button>
+                        </div>
+                        <button id="cancelModal" class="mt-4 text-red-500">İptal</button>
+                    </div>
+                </div>
+
+                <script>
+                    const openModalBtn = document.getElementById('openModalBtn');
+                    const modal = document.getElementById('closeModal');
+                    const cancelModal = document.getElementById('cancelModal');
+                    const restaurantId = "{{ $restaurant->id }}";
+
+                    openModalBtn.addEventListener('click', () => {
+                        modal.classList.remove('hidden');
+                    });
+
+                    cancelModal.addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                    });
+
+                    document.querySelectorAll('.close-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const duration = button.getAttribute('data-duration');
+                            fetch(`/restaurant/close/${restaurantId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ duration: duration })
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    modal.classList.add('hidden');
+                                    location.reload(); // sayfayı yeniler
+                                })
+                                .catch(err => console.error(err));
+                        });
+                    });
+                </script>
+            </div>
+
+            <span class="ml-3 text-gray-600">
+        ({{ date('H:i', strtotime($restaurant->opening_time)) }} - {{ date('H:i', strtotime($restaurant->closing_time)) }})
+    </span>
+        </div>
+
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;   /* Kısalttık */
+                height: 28px;  /* Biraz daha ince */
+            }
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                inset: 0;
+                background: #e5e7eb;
+                border-radius: 999px;
+                border: 1px solid #ccc;
+                transition: 0.3s;
+            }
+            .slider:before {
+                content: "";
+                position: absolute;
+                height: 24px;
+                width: 24px;
+                border-radius: 50%;
+                left: 2px;
+                top: 2px;
+                background: #fff;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+                transition: 0.3s;
+            }
+            input:checked + .slider {
+                background: #1fde74;
+                border-color: transparent;
+            }
+            input:checked + .slider:before {
+                transform: translateX(32px); /* yeni genişliğe göre ayar */
+            }
+        </style>
     </div>
 
 @endsection
@@ -457,7 +598,61 @@
     <script src="{{ asset('backend/lib/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
     <script async
             src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
+    <script>
+        // --- IBAN otomatik formatlama (her 4 karakterde bir boşluk) ---
+        document.getElementById("iban_no").addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\s+/g, '').toUpperCase();
 
+            // Sadece TR ve rakamlar kalsın
+            value = value.replace(/[^A-Z0-9]/g, '');
+
+            // TR ekli değilse ekle
+            if (!value.startsWith("TR")) {
+                value = "TR" + value.replace(/^TR/i, '');
+            }
+
+            // Maksimum 26 karakter (TR + 24 rakam)
+            if (value.length > 26) {
+                value = value.slice(0, 26);
+            }
+
+            // 4 karakterde bir boşluk ekle
+            e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
+        });
+
+        // --- MERSİS sadece sayı kabul etsin ---
+        document.getElementById("mersis_no").addEventListener("input", function (e) {
+            e.target.value = e.target.value.replace(/\D/g, ''); // sadece rakam
+        });
+
+        // --- Form gönderimi ---
+        document.getElementById("companyForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const cap = document.getElementById("cap_address").value.trim();
+            const iban = document.getElementById("iban_no").value.replace(/\s/g, '');
+            const name = document.getElementById("iban_name").value.trim();
+            const mersis = document.getElementById("mersis_no").value.trim();
+
+            // Basit doğrulamalar
+            if (!cap || !iban || !name || !mersis) {
+                alert("Lütfen tüm alanları doldurun!");
+                return;
+            }
+
+            if (iban.length !== 26) {
+                alert("Lütfen geçerli bir IBAN giriniz. (26 karakter olmalı)");
+                return;
+            }
+
+            if (mersis.length !== 16) {
+                alert("MERSİS numarası 16 haneli olmalıdır.");
+                return;
+            }
+
+            alert("Form başarıyla kaydedildi!");
+        });
+    </script>
     <script>
         /**
          *
@@ -590,4 +785,7 @@
             $('.select2').select2();
         });
     </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
+    <script src="{{ asset('js/restaurant/create.js') }}"></script>
 @endpush

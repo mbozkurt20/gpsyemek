@@ -38,6 +38,10 @@ class RestaurantStoreRequest extends FormRequest
             'pickup_status'   => ['required', 'numeric'],
             'table_status'    => ['required', 'numeric'],
             'image'           => 'image|mimes:jpeg,png,jpg,webp|max:5098',
+            'cap_address'     => ['required', 'string'],
+            'iban_no'         => ['required', 'string'],
+            'iban_name'       => ['required', 'string'],
+            'mersis_no'       => ['nullable', 'string'],
         ];
     }
 
