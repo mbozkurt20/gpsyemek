@@ -41,7 +41,7 @@
         @if(auth()->user()?->myrole === 3)
             <div class="flex items-center py-2 px-3 border border-gray-200">
                 <div class="flex items-center space-x-2 pr-12">
-                    <span class="pr-2">Restoran</span>
+                    <span class="pr-2">Restoran Durumu</span>
                     <form id="statusForm" method="GET" action="">
                         @csrf
                         <label class="switch">
@@ -67,6 +67,32 @@
                             </div>
                             <button id="cancelModal" class="mt-4 text-red-500">İptal</button>
                         </div>
+                    </div>
+
+                    @php
+                        $closedUntil = auth()->user()->restaurant->temporary_closed_until
+                            ? \Carbon\Carbon::parse(auth()->user()->restaurant->temporary_closed_until)
+                            : null;
+                    @endphp
+
+                    <div class="ml-2">
+                        @if (auth()->user()->restaurant->permanently_closed)
+                            <p  style="color: red" class="text-red-700 font-semibold">Süresiz kapalı</p>
+
+                        @elseif ($closedUntil && $closedUntil->isFuture())
+                            <p style="color: red" class="text-red-700">
+                                {{ __('frontend.close_now') }} ({{ $closedUntil->diffForHumans() }} sonra açılacak)
+                            </p>
+
+                        @elseif (
+                            auth()->user()->restaurant->opening_time < now()->format('H:i:s') &&
+                            auth()->user()->restaurant->closing_time > now()->format('H:i:s')
+                        )
+                            <p style="color: #116504" class="text-success font-semibold">{{ __('frontend.open_now') }}</p>
+
+                        @else
+                            <p style="color: red" class="text-red-700">{{ __('frontend.close_now') }}</p>
+                        @endif
                     </div>
 
                     <script>
@@ -106,7 +132,7 @@
                 </div>
 
                 <span class="ml-3 text-gray-600">
-        ({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }} - {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})
+        Açılış - Kapanış({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }} - {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})
     </span>
             </div>
 
