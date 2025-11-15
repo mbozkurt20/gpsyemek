@@ -4,6 +4,53 @@
     <link rel="stylesheet" href="{{ asset('backend/lib/bootstrap-social/bootstrap-social.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/lib/summernote/summernote-bs4.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/lib/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px; /* Kısalttık */
+            height: 28px; /* Biraz daha ince */
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #e5e7eb;
+            border-radius: 999px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            left: 2px;
+            top: 2px;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        input:checked + .slider {
+            background: #1fde74;
+            border-color: transparent;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(32px); /* yeni genişliğe göre ayar */
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -11,7 +58,7 @@
     <div class="row">
         <div class="col-12">
             <div class="custome-breadcrumb">
-            {{ Breadcrumbs::render('restaurant/edit') }}
+                {{ Breadcrumbs::render('restaurant/edit') }}
             </div>
         </div>
 
@@ -146,29 +193,36 @@
 
                         <div class="db-card mt-5 p-4">
                             <div class="mb-5">
-                                <label for="cap_address" class="block text-sm font-medium text-gray-700">CAP Adresi</label>
-                                <input value="{{$restaurant->payInformation?->cap_address}}" required type="text" id="cap_address" name="cap_address"
+                                <label for="cap_address" class="block text-sm font-medium text-gray-700">CAP
+                                    Adresi</label>
+                                <input value="{{$restaurant->payInformation?->cap_address}}" required type="text"
+                                       id="cap_address" name="cap_address"
                                        class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                        placeholder="Örn: cap@firma.com">
                             </div>
 
                             <div class="mb-5">
-                                <label for="iban_no" class="block text-sm font-medium text-gray-700">IBAN Numarası</label>
-                                <input value="{{$restaurant->payInformation?->iban_no}}" required type="text" id="iban_no" name="iban_no"
+                                <label for="iban_no" class="block text-sm font-medium text-gray-700">IBAN
+                                    Numarası</label>
+                                <input value="{{$restaurant->payInformation?->iban_no}}" required type="text"
+                                       id="iban_no" name="iban_no"
                                        class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                        placeholder="TR00 0000 0000 0000 0000 0000 00">
                             </div>
 
                             <div class="mb-5">
                                 <label for="iban_name" class="block text-sm font-medium text-gray-700">IBAN Adı</label>
-                                <input value="{{$restaurant->payInformation?->iban_name}}" required type="text" id="iban_name" name="iban_name"
+                                <input value="{{$restaurant->payInformation?->iban_name}}" required type="text"
+                                       id="iban_name" name="iban_name"
                                        class="mt-1  db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                        placeholder="Hesap Sahibinin Adı">
                             </div>
 
                             <div class="mb-5">
-                                <label for="mersis_no" class="block text-sm font-medium text-gray-700">MERSİS Numarası</label>
-                                <input value="{{$restaurant->payInformation?->mersis_no}}" type="text" id="mersis_no" name="mersis_no"
+                                <label for="mersis_no" class="block text-sm font-medium text-gray-700">MERSİS
+                                    Numarası</label>
+                                <input value="{{$restaurant->payInformation?->mersis_no}}" type="text" id="mersis_no"
+                                       name="mersis_no"
                                        class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                        placeholder="Örn: 0123456789012345">
                             </div>
@@ -318,8 +372,11 @@
                                     </div>
 
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
-                                        <label class="db-field-title required" for="name">{{ __('levels.latitude') }}</label>
-                                        <input type="text" name="lat" id="lat" class="db-field-control @error('lat') invalid @enderror" value="{{ old('lat', $restaurant->lat) }}">
+                                        <label class="db-field-title required"
+                                               for="name">{{ __('levels.latitude') }}</label>
+                                        <input type="text" name="lat" id="lat"
+                                               class="db-field-control @error('lat') invalid @enderror"
+                                               value="{{ old('lat', $restaurant->lat) }}">
 
                                         @error('lat')
                                         <small class="db-field-alert">{{ $message }}</small>
@@ -327,8 +384,11 @@
                                     </div>
 
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
-                                        <label class="db-field-title required" for="name">{{ __('levels.longitude') }}</label>
-                                        <input type="text" name="long" id="long" class="db-field-control @error('long') invalid @enderror" value="{{ old('long', $restaurant->long) }}">
+                                        <label class="db-field-title required"
+                                               for="name">{{ __('levels.longitude') }}</label>
+                                        <input type="text" name="long" id="long"
+                                               class="db-field-control @error('long') invalid @enderror"
+                                               value="{{ old('long', $restaurant->long) }}">
 
                                         @error('long')
                                         <small class="db-field-alert">{{ $message }}</small>
@@ -337,12 +397,16 @@
 
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title required" for="address">Adres</label>
-                                        <textarea name="address" id="address-input" class="db-field-control">{{ old('address', $restaurant->address) }}</textarea>
+                                        <textarea name="address" id="address-input"
+                                                  class="db-field-control">{{ old('address', $restaurant->address) }}</textarea>
                                         @error('address')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
 
-                                        <button type="button" id="show-on-map" class="db-btn rounded-full text-white mt-2" style="background: #14179e">Haritada Göster</button>
+                                        <button type="button" id="show-on-map"
+                                                class="db-btn rounded-full text-white mt-2" style="background: #14179e">
+                                            Haritada Göster
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -475,122 +539,89 @@
                     </div>
                 </div>
             </form>
-        </div>
 
-        <div class="db-card p-5 flex items-center py-2 px-3 border border-gray-200">
-            <div class="flex items-center space-x-2 pr-12">
-                <span class="pr-2">Restoran</span>
-                <form id="statusForm" method="GET" action="">
-                    @csrf
-                    <label class="switch">
-                        <input type="checkbox" id="statusSwitch"
-                            {{ $restaurant->current_status == 5 ? 'checked' : '' }}>
-                        <span class="slider"></span>
-                    </label>
-                </form>
-
-                <button id="openModalBtn" class="ml-2 bg-primary text-white px-3 py-1 rounded">Süreli Kapat</button>
-
-                <!-- Modal -->
-                <div id="closeModal" class="fixed inset-0  flex items-center justify-center hidden" style="background-color:rgba(0, 0, 0, 0.5);">>
-                    <div class="bg-white p-6 rounded-lg w-80">
-                        <h2 class="text-lg font-semibold mb-4">Restoranı Kapat</h2>
-                        <p class="mb-3">Ne kadar süreyle kapatmak istiyorsunuz?</p>
-                        <div class="flex flex-col space-y-2">
-                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="15">15 Dk</button>
-                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="30">30 Dk</button>
-                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="45"> 45 Dk</button>
-                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="60">1 Saat</button>
-                            <button class="close-btn bg-gray-200 mb-2 hover:bg-primary hover:text-white py-2 rounded" data-duration="0">Süresiz</button>
-                        </div>
-                        <button id="cancelModal" class="mt-4 text-red-500">İptal</button>
-                    </div>
+            <div class="db-card p-4 w-full md:w-1/2">
+                <div class="db-card-header mb-3">
+                    <h3 class="db-card-title">Restaurant Durumu</h3>
                 </div>
 
-                <script>
-                    const openModalBtn = document.getElementById('openModalBtn');
-                    const modal = document.getElementById('closeModal');
-                    const cancelModal = document.getElementById('cancelModal');
-                    const restaurantId = "{{ $restaurant->id }}";
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
-                    openModalBtn.addEventListener('click', () => {
-                        modal.classList.remove('hidden');
-                    });
+                    <div class="flex items-center gap-3">
+                        <span>Restoran Durumu</span>
 
-                    cancelModal.addEventListener('click', () => {
-                        modal.classList.add('hidden');
-                    });
+                        <form id="statusForm" method="GET" action="">
+                            @csrf
+                            <label class="switch">
+                                <input type="checkbox" id="statusSwitch"
+                                    {{ $restaurant->current_status == 5 ? 'checked' : '' }}>
+                                <span class="slider"></span>
+                            </label>
+                        </form>
 
-                    document.querySelectorAll('.close-btn').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const duration = button.getAttribute('data-duration');
-                            fetch(`/restaurant/close/${restaurantId}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                body: JSON.stringify({ duration: duration })
-                            })
-                                .then(res => res.json())
-                                .then(data => {
-                                    modal.classList.add('hidden');
-                                    location.reload(); // sayfayı yeniler
-                                })
-                                .catch(err => console.error(err));
-                        });
-                    });
-                </script>
+                        <button id="openModalBtn"
+                                class="bg-primary text-white px-3 py-1 rounded">
+                            Resturantı Süreli Kapat
+                        </button>
+                    </div>
+
+                    <span class="text-gray-600 text-sm">
+           Açılış - Kapanış ({{ date('H:i', strtotime($restaurant->opening_time)) }} - {{ date('H:i', strtotime($restaurant->closing_time)) }})
+        </span>
+
+                    @php
+                        $closedUntil = $restaurant->temporary_closed_until
+                            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
+                            : null;
+                    @endphp
+
+                    <div>
+                        @if ($restaurant->permanently_closed)
+                            <p  style="color: red" class="text-red-700 font-semibold">Süresiz kapalı</p>
+
+                        @elseif ($closedUntil && $closedUntil->isFuture())
+                            <p style="color: red" class="text-red-700">
+                                {{ __('frontend.close_now') }} ({{ $closedUntil->diffForHumans() }} sonra açılacak)
+                            </p>
+
+                        @elseif (
+                            $restaurant->opening_time < now()->format('H:i:s') &&
+                            $restaurant->closing_time > now()->format('H:i:s')
+                        )
+                            <p style="color: #116504" class="text-success font-semibold">{{ __('frontend.open_now') }}</p>
+
+                        @else
+                            <p style="color: red" class="text-red-700">{{ __('frontend.close_now') }}</p>
+                        @endif
+                    </div>
+                </div>
             </div>
 
-            <span class="ml-3 text-gray-600">
-        ({{ date('H:i', strtotime($restaurant->opening_time)) }} - {{ date('H:i', strtotime($restaurant->closing_time)) }})
-    </span>
+
+            <!-- Modal -->
+            <div id="closeModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+                <div class="bg-white p-6 rounded-xl w-80 shadow-lg">
+                    <h2 class="text-lg font-semibold mb-4">Restoranı Kapat</h2>
+                    <p class="mb-3 text-sm text-gray-700">Ne kadar süreyle kapatmak istiyorsunuz?</p>
+
+                    <div class="flex flex-col gap-2">
+                        @foreach ([15 => '15 Dk', 30 => '30 Dk', 45 => '45 Dk', 60 => '1 Saat', 0 => 'Süresiz'] as $time => $label)
+                            <button
+                                class="close-btn bg-gray-200 hover:bg-primary hover:text-white py-2 rounded text-sm"
+                                data-duration="{{ $time }}">
+                                {{ $label }}
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <button id="cancelModal"
+                            class="mt-4 text-red-600 text-sm font-medium block mx-auto">
+                        İptal
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <style>
-            .switch {
-                position: relative;
-                display: inline-block;
-                width: 60px;   /* Kısalttık */
-                height: 28px;  /* Biraz daha ince */
-            }
-            .switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                inset: 0;
-                background: #e5e7eb;
-                border-radius: 999px;
-                border: 1px solid #ccc;
-                transition: 0.3s;
-            }
-            .slider:before {
-                content: "";
-                position: absolute;
-                height: 24px;
-                width: 24px;
-                border-radius: 50%;
-                left: 2px;
-                top: 2px;
-                background: #fff;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-                transition: 0.3s;
-            }
-            input:checked + .slider {
-                background: #1fde74;
-                border-color: transparent;
-            }
-            input:checked + .slider:before {
-                transform: translateX(32px); /* yeni genişliğe göre ayar */
-            }
-        </style>
     </div>
-
 @endsection
 
 @push('js')
@@ -598,6 +629,41 @@
     <script src="{{ asset('backend/lib/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
     <script async
             src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
+
+    <script>
+        const openModalBtn = document.getElementById('openModalBtn');
+        const modal = document.getElementById('closeModal');
+        const cancelModal = document.getElementById('cancelModal');
+        const restaurantId = "{{ $restaurant->id }}";
+
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+
+        cancelModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        document.querySelectorAll('.close-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const duration = button.getAttribute('data-duration');
+                fetch(`/restaurant/close/${restaurantId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({duration: duration})
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        modal.classList.add('hidden');
+                        location.reload(); // sayfayı yeniler
+                    })
+                    .catch(err => console.error(err));
+            });
+        });
+    </script>
     <script>
         // --- IBAN otomatik formatlama (her 4 karakterde bir boşluk) ---
         document.getElementById("iban_no").addEventListener("input", function (e) {
@@ -663,24 +729,25 @@
 
         "use strict";
 
-        function readURL(input,previewImage) {
+        function readURL(input, previewImage) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#'+previewImage).attr('src', e.target.result);
+                    $('#' + previewImage).attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
         // Add the following code if you want the name of the file appear on select
-        $(".custom-file-input").on("change", function() {
+        $(".custom-file-input").on("change", function () {
             let fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
 
-        if(jQuery().summernote) {
+        if (jQuery().summernote) {
             $(".summernote").summernote({
                 dialogsInBody: true,
                 minHeight: 250,
@@ -697,7 +764,7 @@
         }
 
         // Timepicker
-        if(jQuery().timepicker && $(".timepicker").length) {
+        if (jQuery().timepicker && $(".timepicker").length) {
             $(".timepicker").timepicker({
                 icons: {
                     up: 'fas fa-chevron-up',
@@ -708,13 +775,18 @@
 
         async function initMap() {
 
-            if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition( function(position) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
                         getLatLongPosition(position);
                     },
                     function (error) {
                         console.log('Location access denied. Using default location.')
-                        getLatLongPosition({ coords: { latitude: {{$restaurant->lat}}, longitude: {{$restaurant->long}} } }); // Default: Dhaka
+                        getLatLongPosition({
+                            coords: {
+                                latitude: {{$restaurant->lat}},
+                                longitude: {{$restaurant->long}}
+                            }
+                        }); // Default: Dhaka
                     }
                 );
             } else {
@@ -723,10 +795,10 @@
 
             function getLatLongPosition(position) {
 
-                let latitude  = position.coords.latitude;
+                let latitude = position.coords.latitude;
                 let longitude = position.coords.longitude;
 
-                const myLatlng = { lat: latitude, lng: longitude };
+                const myLatlng = {lat: latitude, lng: longitude};
 
                 const map = new google.maps.Map(document.getElementById("googleMap"), {
                     zoom: 15,
@@ -759,33 +831,34 @@
                     marker = new google.maps.Marker({
                         position: myLatlng,
                         map,
-                        draggable:true,
+                        draggable: true,
                         title: "Your current location.",
                     });
 
-                    changeMarkerPosition(latLng,marker)
+                    changeMarkerPosition(latLng, marker)
 
                 });
 
                 marker = new google.maps.Marker({
                     position: myLatlng,
                     map,
-                    draggable:true,
+                    draggable: true,
                     title: "Your current location.",
                 });
             }
         }
 
-        function changeMarkerPosition(latLng,marker) {
+        function changeMarkerPosition(latLng, marker) {
             var latlng = new google.maps.LatLng(latLng.lat, latLng.lng);
             marker.setPosition(latlng);
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.select2').select2();
         });
     </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
     <script src="{{ asset('js/restaurant/create.js') }}"></script>
 @endpush

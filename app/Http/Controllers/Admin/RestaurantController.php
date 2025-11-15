@@ -132,10 +132,33 @@ class RestaurantController extends BackendController
         if (blank($limitAmount)) {
             $limitAmount = 0;
         }
+
+        if ($request->has('iban_no') && $request->has('iban_name') && $request->has('mersis_no')) {
+            $respay = RestaurantPayInformation::where('restaurant_id', $restaurant->id)->first();
+            if ($respay) {
+                $respay->update([
+                    'iban_no' => $request->iban_no,
+                    'iban_name' => $request->iban_name,
+                    'mersis_no' => $request->mersis_no,
+                    'cap_address' => $request->cap_address,
+                ]);
+            }else {
+                RestaurantPayInformation::create([
+                    'restaurant_id' => $restaurant->id,
+                    'iban_no' => $request->iban_no,
+                    'iban_name' => $request->iban_name,
+                    'mersis_no' => $request->mersis_no,
+                    'cap_address' => $request->cap_address,
+                ]);
+            }
+        }
+
         $depositService = app(DepositService::class)->depositAdjust($user->id, $depositAmount, $limitAmount);
         if ($depositService->status) {
             return redirect(route('admin.restaurants.index'))->withSuccess('The Data Inserted Successfully');
         }
+
+
         return redirect(route('admin.restaurants.index'))->withError($depositService->message);
     }
 

@@ -8,7 +8,6 @@
 @endpush
 
 @section('content')
-
     <div class="row">
         <div class="col-12">
             <div class="custome-breadcrumb">
@@ -27,34 +26,34 @@
                             </div>
                             <div class="db-card-body">
                                 <div class="row">
-        
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title required" for="name">{{ __('levels.name') }}</label>
                                         <input type="text" name="name" id="name" class="db-field-control @error('name') invalid @enderror" value="{{ old('name') }}">
-            
+
                                         @error('name')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title" for="opening_time">{{ __('levels.opening_time') }}</label>
                                         <input type="time" name="opening_time" id="opening_time" class="db-field-control @error('opening_time') invalid @enderror" value="{{ old('opening_time') }}">
-            
+
                                         @error('opening_time')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title" for="closing_time">{{ __('levels.closing_time') }}</label>
                                         <input type="time" name="closing_time" id="closing_time" class="db-field-control @error('closing_time') invalid @enderror" value="{{ old('closing_time') }}">
-            
+
                                         @error('closing_time')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title" for="cuisines">{{ __('levels.cuisines') }}</label>
                                         <div class="db-field-down-arrow">
@@ -67,12 +66,12 @@
                                                 @endif
                                             </select>
                                         </div>
-            
+
                                         @error('cuisines')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-        
+
                                     <div class="form-col-12">
                                         <label class="db-field-title required" for="restaurantaddress">{{ __('levels.restaurant_address') }}</label>
                                         <input type="text" name="restaurantaddress"
@@ -82,7 +81,7 @@
                                             <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-        
+
                                     <div class="form-col-12">
                                         <label class="db-field-title" for="description">{{ __('levels.description') }}</label>
                                         <textarea name="description"
@@ -93,27 +92,26 @@
                                             <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-        
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title" for="customFile">{{ __('restaurant.logo') }}</label>
-            
+
                                         <input type="file" name="restaurant_logo" id="customFile" class="db-field-control @error('restaurant_logo') invalid @enderror">
-            
+
                                         @if ($errors->has('restaurant_logo'))
                                         <small class="db-field-alert">{{ $errors->first('restaurant_logo') }}</small>
                                         @endif
                                     </div>
-        
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title" for="customFile">{{ __('restaurant.background_image') }}</label>
-            
+
                                         <input type="file" name="image" id="customFile" class="db-field-control @error('image') invalid @enderror">
-            
+
                                         @if ($errors->has('image'))
                                         <small class="db-field-alert">{{ $errors->first('image') }}</small>
                                         @endif
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -138,7 +136,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('delivery_status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -156,7 +154,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('pickup_status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -174,7 +172,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('table_status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -193,7 +191,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('current_status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -210,7 +208,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -227,19 +225,19 @@
                                                 @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('waiter_status')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-            
+
                                     <div class="col-12 mt-4">
                                         <button type="submit" class="db-btn text-white bg-primary">
                                             <i class="fa-solid fa-circle-check"></i>
                                             <span>{{ __('levels.save') }}</span>
                                         </button>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -251,29 +249,29 @@
                             </div>
                             <div class="db-card-body">
                                 <div class="row">
-        
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="name">{{ __('levels.latitude') }}</label>
                                         <input type="text" name="lat" id="lat" class="db-field-control @error('lat') invalid @enderror" value="{{ old('lat') }}">
-            
+
                                         @error('lat')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="name">{{ __('levels.longitude') }}</label>
                                         <input type="text" name="long" id="long" class="db-field-control @error('long') invalid @enderror" value="{{ old('long') }}">
-            
+
                                         @error('long')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <div id="googleMap"></div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -283,65 +281,61 @@
                             </div>
                             <div class="db-card-body">
                                 <div class="row">
-        
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="first_name">{{ __('levels.first_name') }}</label>
                                         <input type="text" name="first_name" id="first_name" class="db-field-control @error('first_name') invalid @enderror" value="{{ old('first_name') }}">
-            
+
                                         @error('first_name')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-        
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="last_name">{{ __('levels.last_name') }}</label>
                                         <input type="text" name="last_name" id="last_name" class="db-field-control @error('last_name') invalid @enderror" value="{{ old('last_name') }}">
-            
+
                                         @error('last_name')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-        
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="email">{{ __('levels.email') }}</label>
                                         <input type="text" name="email" id="email" class="db-field-control @error('email') invalid @enderror" value="{{ old('email') }}">
-            
+
                                         @error('email')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title" for="username">{{ __('levels.username') }}</label>
                                         <input type="text" name="username" id="username" class="db-field-control @error('username') invalid @enderror" value="{{ old('username') }}">
-            
+
                                         @error('username')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="password">{{ __('levels.password') }}</label>
                                         <input type="password" name="password" id="password" class="db-field-control @error('password') invalid @enderror" value="{{ old('password') }}">
-            
+
                                         @error('password')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
+
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title required" for="phone">{{ __('levels.phone') }}</label>
                                         <input type="text" name="phone" id="phone" class="db-field-control @error('phone') invalid @enderror" value="{{ old('phone') }}" onkeypress='validate(event)'>
-            
+
                                         @error('phone')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-    
-                                   
-                                    
-                                    
-        
+
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title required" for="address">{{ __('levels.address') }}</label>
                                         <input type="text" name="address"
@@ -352,12 +346,11 @@
                                         @enderror
                                     </div>
 
-        
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title" for="deposit_amount">{{ __('levels.deposit_amount') }}</label>
-            
+
                                         <input type="number" step="0.1" name="deposit_amount" id="deposit_amount" value="{{ old('deposit_amount') }}" class="db-field-control @error('deposit_amount') invalid @enderror">
-            
+
                                         @error('deposite_amount')
                                             <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
@@ -374,25 +367,55 @@
                                             @endforeach
                                             </select>
                                         </div>
-            
+
                                         @error('userstatus')
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
-                                    
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="db-card mt-5">
+                            <div class="db-card-header">
+                                <h3 class="db-card-title">Hesap Bilgileri </h3>
+                            </div>
+
+                            <div class="p-5">
+                                <div class="mb-5">
+                                    <label for="cap_address" class="block text-sm font-medium text-gray-600">CAP Adresi</label>
+                                    <input value="{{ old('cap_address') }}" required type="text" id="cap_address" name="cap_address"
+                                            class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                            placeholder="Örn: cap@firma.com">
+                                </div>
+
+                                <div class="mb-5">
+                                    <label for="iban_no" class="block text-sm font-medium text-gray-600">IBAN Numarası</label>
+                                    <input value="{{ old('iban_no') }}" required type="text" id="iban_no" name="iban_no"
+                                            class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                            placeholder="TR00 0000 0000 0000 0000 0000 00">
+                                </div>
+
+                                <div class="mb-5">
+                                    <label for="iban_name" class="block text-sm font-medium text-gray-600">IBAN Adı</label>
+                                    <input value="{{ old('iban_name') }}"  required type="text" id="iban_name" name="iban_name"
+                                            class="mt-1  db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                            placeholder="Hesap Sahibinin Adı">
+                                </div>
+
+                                <div class="mb-5">
+                                    <label for="mersis_no" class="block text-sm font-medium text-gray-600">MERSİS Numarası</label>
+                                    <input value="{{ old('mersis_no') }}"  type="text" id="mersis_no" name="mersis_no"
+                                           class="mt-1 db-field-control block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                           placeholder="Örn: 0123456789012345">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
             </form>
         </div>
-
     </div>
-
 @endsection
 
 @push('js')
@@ -402,4 +425,59 @@
     </script>
     <script src="{{ asset('js/restaurant/create.js') }}"></script>
     <script src="{{ asset('js/phone_validation/index.js') }}"></script>
+    <script>
+        // --- IBAN otomatik formatlama (her 4 karakterde bir boşluk) ---
+        document.getElementById("iban_no").addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\s+/g, '').toUpperCase();
+
+            // Sadece TR ve rakamlar kalsın
+            value = value.replace(/[^A-Z0-9]/g, '');
+
+            // TR ekli değilse ekle
+            if (!value.startsWith("TR")) {
+                value = "TR" + value.replace(/^TR/i, '');
+            }
+
+            // Maksimum 26 karakter (TR + 24 rakam)
+            if (value.length > 26) {
+                value = value.slice(0, 26);
+            }
+
+            // 4 karakterde bir boşluk ekle
+            e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
+        });
+
+        // --- MERSİS sadece sayı kabul etsin ---
+        document.getElementById("mersis_no").addEventListener("input", function (e) {
+            e.target.value = e.target.value.replace(/\D/g, ''); // sadece rakam
+        });
+
+        // --- Form gönderimi ---
+        document.getElementById("companyForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const cap = document.getElementById("cap_address").value.trim();
+            const iban = document.getElementById("iban_no").value.replace(/\s/g, '');
+            const name = document.getElementById("iban_name").value.trim();
+            const mersis = document.getElementById("mersis_no").value.trim();
+
+            // Basit doğrulamalar
+            if (!cap || !iban || !name || !mersis) {
+                alert("Lütfen tüm alanları doldurun!");
+                return;
+            }
+
+            if (iban.length !== 26) {
+                alert("Lütfen geçerli bir IBAN giriniz. (26 karakter olmalı)");
+                return;
+            }
+
+            if (mersis.length !== 16) {
+                alert("MERSİS numarası 16 haneli olmalıdır.");
+                return;
+            }
+
+            alert("Form başarıyla kaydedildi!");
+        });
+    </script>
 @endpush
