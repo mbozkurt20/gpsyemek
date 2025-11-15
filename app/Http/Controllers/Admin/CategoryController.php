@@ -95,7 +95,7 @@ class CategoryController extends BackendController
         if (request()->ajax()) {
             $queryArray = [];
 
-            if(!auth()->user()->myrole == UserRole::ADMIN ){
+            if(auth()->user()->myrole != UserRole::ADMIN){
                 $queryArray['status'] = Status::ACTIVE;
             }
 
@@ -118,9 +118,9 @@ class CategoryController extends BackendController
                 ->editColumn('status', function ($category) {
                     return $category->statusName;
                 })
-                ->editColumn('created_by', function ($category) {
+               /* ->editColumn('created_by', function ($category) {
                     return optional($category->creator)->name;
-                })
+                }) */
                 ->rawColumns(['action'])
 
                 ->escapeColumns([])

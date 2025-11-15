@@ -33,7 +33,7 @@ function load_data(status = '', requested = '') {
         },
         columns: [
             { data: 'name', name: 'name' },
-            { data: 'created_by', name: 'created_by' },
+          //  { data: 'created_by', name: 'created_by' },
             { data: 'status', name: 'status' },
             { data: 'action', name: 'action' },
         ],

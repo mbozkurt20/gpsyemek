@@ -11,6 +11,7 @@
 
     <div class="col-12">
         <div class="db-card">
+           <p class="p-2" style="color: #4e0505"> 𖠂 Detay sayfasına giderek süreli olarak ürünlerinizi kapatabilirsiniz.</p>
             <div class="db-card-header border-none">
                 <h3 class="db-card-title">{{ __('restaurant.menu_items_details') }}</h3>
                 <div class="db-card-filter">
@@ -39,8 +40,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 @endsection

@@ -1,7 +1,7 @@
 @extends('admin.app')
 
 @section('content')
-  
+
 <div class="row">
     <div class="col-12">
         <div class="custome-breadcrumb">
@@ -29,7 +29,7 @@
                     <thead class="db-table-head">
                         <tr class="db-table-head-tr">
                             <th class="db-table-head-th">{{ __('levels.name') }}</th>
-                            <th class="db-table-head-th">{{ __('levels.created_by') }}</th>
+                            <!--th class="db-table-head-th">{{ __('levels.created_by') }}</th-->
                             <th class="db-table-head-th">{{ __('levels.status') }}</th>
                             <th class="db-table-head-th">{{ __('levels.actions') }}</th>
                         </tr>
@@ -48,7 +48,7 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('backend/lib/datatable/css/dataTables.tailwindcss.css') }}">
 @endpush
-    
+
 @push('js')
     <script src="{{ asset('backend/lib/datatable/js/dataTables.js') }}"></script>
     <script src="{{ asset('backend/lib/datatable/js/dataTables.tailwindcss.js') }}"></script>
