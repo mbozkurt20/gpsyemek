@@ -108,7 +108,7 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
-    Route::post('//restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
+    Route::post('/restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
     Route::get('restaurant/status{status}/{restaurant}',    [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
     Route::get('restaurant/{restaurant}',                   [RestaurantController::class, 'show'])->name('restaurant.show');
     Route::post('restaurant/ratings',                       [RestaurantController::class, 'Ratings'])->name('restaurant.ratings-update')->middleware('auth');
@@ -261,6 +261,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::resource('category',                              CategoryController::class);
     Route::resource('cuisine',                               CuisineController::class);
     Route::resource('menu-items',                            MenuItemController::class);
+    Route::post('/menu-items/{productId}/temporary-close',         [MenuItemController::class, 'temporaryClose'])->name('menu-items.temporary-close');
 
     Route::post('menu-items-import',                    [MenuItemController::class, 'import'])->name('menu-items-import');
     Route::get('menu-items/{id}/modify',                    [MenuItemController::class, 'modify'])->name('menu-items.modify');

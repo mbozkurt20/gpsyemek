@@ -38,6 +38,26 @@ class MenuItemController extends BackendController
         $this->middleware(['permission:menu-items_show'])->only('show');
     }
 
+    public function temporaryClose(Request $request,$id)
+    {
+        $menuItem = MenuItem::find($id);
+
+        $minutes = $request->input('minutes');
+
+        if ($minutes === 'unlimited') {
+            $menuItem->update([
+                'status' => MenuItemStatus::INACTIVE,
+                'closed_until' => null,
+            ]);
+        } elseif (is_numeric($minutes) && $minutes > 0) {
+            $menuItem->update([
+                'status' => MenuItemStatus::INACTIVE,
+                'closed_until' => now()->addMinutes($minutes),
+            ]);
+        }
+
+        return back()->with('success', 'Durum güncellendi.');
+    }
     /**
      * Display a listing of the resource.
      *

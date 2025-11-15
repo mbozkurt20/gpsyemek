@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Enums\MenuItemStatus;
+use App\Models\MenuItem;
 use App\Models\Restaurant;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,6 +21,16 @@ class Kernel extends ConsoleKernel
             Restaurant::where('temporary_closed_until', '<', Carbon::now())
                 ->update(['temporary_closed_until' => null]);
         })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            MenuItem::where('status', MenuItemStatus::INACTIVE)
+                ->whereNotNull('closed_until')
+                ->where('closed_until', '<=', Carbon::now())
+                ->update([
+                    'status' => MenuItemStatus::ACTIVE,
+                    'closed_until' => null
+                ]);
+        })->everyMinute();
     }
 
     /**
