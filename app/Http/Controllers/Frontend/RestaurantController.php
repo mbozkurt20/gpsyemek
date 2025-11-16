@@ -42,6 +42,15 @@ class RestaurantController extends FrontendController
         return Redirect::back()->withSuccess('Restoran Durumu Güncellendi');
     }
 
+    public function orderStatus($id)
+    {
+        $pendingExists = Order::where('restaurant_id', $id)
+            ->where('status', OrderStatus::PENDING)
+            ->exists();
+
+        return response()->json(['pending' => $pendingExists]);
+    }
+
     public function close(Request $request, $id)
     {
         $restaurant = Restaurant::findOrFail($id);

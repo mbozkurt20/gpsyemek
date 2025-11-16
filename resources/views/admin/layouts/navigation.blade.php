@@ -39,6 +39,56 @@
 
         --}}
         @if(auth()->user()?->myrole === 3)
+
+            <div id="pendingAlert" style="display:none; margin:10px 0;">
+                <a class="text-primary" href="{{ url('admin/orders') }}">
+                    🔔 Bekleyen Siparişler Var – Görüntüle
+                </a>
+            </div>
+
+            <!-- bekleyen sipariş  durumu  -->
+            <audio id="alarmSound" loop>
+                <source src="/beep.mp3" type="audio/mpeg">
+            </audio>
+
+            <script>
+                let audio = document.getElementById('alarmSound');
+                let alertBox = document.getElementById('pendingAlert');
+
+                // Açılışta SESİ KAPAT
+                audio.pause();
+                audio.currentTime = 0;
+
+                function checkPendingOrders() {
+                    fetch(`/restaurant/is-order/{{ auth()->user()->restaurant->id }}`)
+                        .then(res => res.json())
+                        .then(data => {
+
+                            if (data.pending) {
+                                // Pending VAR → linki göster, sesi çal
+                                alertBox.style.display = "block";
+
+                                if (audio.paused) {
+                                    audio.play();
+                                }
+
+                            } else {
+                                // Pending YOK → linki gizle, sesi durdur
+                                alertBox.style.display = "none";
+                                audio.pause();
+                                audio.currentTime = 0;
+                            }
+                        });
+                }
+
+                // İlk yüklemede hemen kontrol et
+                checkPendingOrders();
+
+                // Sonra 5 saniyede bir tekrar kontrol et
+                setInterval(checkPendingOrders, 5000);
+            </script>
+
+
             <div class="flex items-center py-2 px-3 border border-gray-200">
                 <div class="flex items-center space-x-2 pr-12">
                     <span class="pr-2">Restoran Durumu</span>
@@ -69,6 +119,7 @@
                         </div>
                     </div>
 
+                    <!-- bekleyen sipariş  durumu  -->
                     @php
                         $closedUntil = auth()->user()->restaurant->temporary_closed_until
                             ? \Carbon\Carbon::parse(auth()->user()->restaurant->temporary_closed_until)
