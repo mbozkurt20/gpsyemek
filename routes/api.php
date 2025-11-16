@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\v1\AdministratorController;
 use App\Http\Controllers\Api\v1\Auth\LoginController;
 use App\Http\Controllers\Api\v1\Auth\LogoutController;
 use App\Http\Controllers\Api\v1\Auth\MeController;
+use App\Http\Controllers\Api\v1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\v1\Auth\RegisterController;
 use App\Http\Controllers\Api\v1\Auth\SocialLoginController;
 use App\Http\Controllers\Api\v1\BannerController;
@@ -50,6 +51,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/webhook/orders', [WebhookController::class, 'handle']);
+    Route::post('/password/forgot', [PasswordResetController::class, 'forgot']);
+    Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 
     Route::post('login',                                        [LoginController::class, 'action']);
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);

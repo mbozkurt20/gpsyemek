@@ -78,8 +78,8 @@ Route::prefix('agreements')->group(function () {
 
 
 Route::get('mail',function(){
-    Mail::raw('tsest', function ($mail)  {
-        $mail->to('mbozkurt020@hotmail.com')
+    Mail::raw('vbgfgffgjg', function ($mail)  {
+        $mail->to('mehmet.bozkurt@plusclouds.com')
             ->subject('Laravel Test Mail');
     });
 
@@ -106,7 +106,7 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
 });
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
-    Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
+     Route::get('/home',                                    [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
     Route::post('/restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
     Route::get('restaurant/status{status}/{restaurant}',    [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
@@ -265,7 +265,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
 
     Route::post('menu-items-import',                    [MenuItemController::class, 'import'])->name('menu-items-import');
     Route::get('menu-items/{id}/modify',                    [MenuItemController::class, 'modify'])->name('menu-items.modify');
-    Route::put('menu-items/{id}/modify',                    [MenuItemController::class, 'modifyUpdate'])->name('menu-items.modify');
+    Route::put('menu-items/{id}/modify',                    [MenuItemController::class, 'modifyUpdate'])->name('menu-items.modify.update');
     Route::resource('reservation',                          ReservationsController::class);
     Route::post('reservation/timeeSlot',                    [ReservationsController::class, 'timeSlot'])->name('reservation.timeSlot');
     Route::post('reservation/user',                         [ReservationsController::class, 'user'])->name('reservation.user');
@@ -354,29 +354,29 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::get('get-transaction',                           [TransactionController::class, 'getTransaction'])->name('transaction.get-transaction');
 
     Route::get('restaurant-owner-sales-report',             [RestaurantOwnerSalesReportController::class, 'index'])->name('restaurant-owner-sales-report.index');
-    Route::post('restaurant-owner-sales-report',            [RestaurantOwnerSalesReportController::class, 'index'])->name('restaurant-owner-sales-report.index');
+    Route::post('restaurant-owner-sales-report',            [RestaurantOwnerSalesReportController::class, 'index'])->name('restaurant-owner-sales-report.store');
 
     Route::get('admin-commission-report',                   [AdminCommissionReportController::class, 'index'])->name('admin-commission-report.index');
-    Route::post('admin-commission-report',                  [AdminCommissionReportController::class, 'index'])->name('admin-commission-report.index');
+    Route::post('admin-commission-report',                  [AdminCommissionReportController::class, 'index'])->name('admin-commission-report.store');
 
     Route::get('credit-balance-report',                     [CreditBalanceReportController::class, 'index'])->name('credit-balance-report.index');
-    Route::post('credit-balance-report',                    [CreditBalanceReportController::class, 'index'])->name('credit-balance-report.index');
+    Route::post('credit-balance-report',                    [CreditBalanceReportController::class, 'index'])->name('credit-balance-report.store');
     Route::post('get-role-user',                            [CreditBalanceReportController::class, 'getUsers'])->name('get-role-user');
 
     Route::get('cash-on-delivery-order-balance-report',     [CashOnDeliveryOrderBalanceReportController::class, 'index'])->name('cash-on-delivery-order-balance-report.index');
-    Route::post('cash-on-delivery-order-balance-report',    [CashOnDeliveryOrderBalanceReportController::class, 'index'])->name('cash-on-delivery-order-balance-report.index');
+    Route::post('cash-on-delivery-order-balance-report',    [CashOnDeliveryOrderBalanceReportController::class, 'index'])->name('cash-on-delivery-order-balance-report.store');
 
     Route::get('delivery-boy-collection-report',            [CollectionReportController::class, 'index'])->name('delivery-boy-collection-report.index');
-    Route::post('delivery-boy-collection-report',           [CollectionReportController::class, 'index'])->name('delivery-boy-collection-report.index');
+    Route::post('delivery-boy-collection-report',           [CollectionReportController::class, 'index'])->name('delivery-boy-collection-report.store');
 
     Route::get('withdraw-report',                           [WithdrawReportController::class, 'index'])->name('withdraw-report.index');
-    Route::post('withdraw-report',                          [WithdrawReportController::class, 'index'])->name('withdraw-report.index');
+    Route::post('withdraw-report',                          [WithdrawReportController::class, 'index'])->name('withdraw-report.store');
 
     Route::get('reservation-report',                        [ReservationReportController::class, 'index'])->name('reservation-report.index');
-    Route::post('reservation-report',                       [ReservationReportController::class, 'index'])->name('reservation-report.index');
+    Route::post('reservation-report',                       [ReservationReportController::class, 'index'])->name('reservation-report.store');
 
     Route::get('customer-report',                           [CustomerReportController::class, 'index'])->name('customer-report.index');
-    Route::post('customer-report',                          [CustomerReportController::class, 'index'])->name('customer-report.index');
+    Route::post('customer-report',                          [CustomerReportController::class, 'index'])->name('customer-report.store');
 
     Route::resource('role',                      RoleController::class);
     Route::post('role/save-permission/{id}',                [RoleController::class, 'savePermission'])->name('role.save-permission');
