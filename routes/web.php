@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeoController;
+use App\Http\Middleware\RestaurantStatusMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -110,7 +111,9 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
     Route::post('/restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
     Route::get('restaurant/status{status}/{restaurant}',    [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
-    Route::get('restaurant/{restaurant}',                   [RestaurantController::class, 'show'])->name('restaurant.show');
+    Route::get('restaurant/{restaurant}', [RestaurantController::class, 'show'])
+        ->middleware(RestaurantStatusMiddleware::class)
+        ->name('restaurant.show');
     Route::post('restaurant/ratings',                       [RestaurantController::class, 'Ratings'])->name('restaurant.ratings-update')->middleware('auth');
 
     Route::get('reservation/booking',                       [ReservationController::class, 'booking'])->name('restaurant.reservation')->middleware('auth');
