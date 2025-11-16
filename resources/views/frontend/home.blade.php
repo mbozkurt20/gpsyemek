@@ -196,13 +196,38 @@
                 <h2 class="section-title borderd">{{ __('frontend.most_visited_restaurants') }}</h2>
                 <div class="row">
                     @foreach ($bestSellingRestaurants as $restaurant)
+                        @php
+                            $closedUntil = $restaurant->temporary_closed_until
+                                ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
+                                : null;
+                        @endphp
+
+                        @php
+                            $restaurantUrl = '';
+
+                            if ($restaurant->permanently_closed || ($closedUntil && $closedUntil->isFuture())) {
+                                $restaurantUrl = 'javascript:void(0)'; // Kapalıysa tıklanmasın veya başka bir URL
+                            } elseif ($closedUntil && $closedUntil->isFuture()) {
+                                $restaurantUrl = 'javascript:void(0) 3'; // Açık değilse veya başka durum
+                            } elseif ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s')){
+                                $restaurantUrl = route('restaurant.show', [$restaurant]);
+                            } else {
+                                 $restaurantUrl = 'javascript:void(0) 3';
+                            }
+                        @endphp
+
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                             <a
-                                @if($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'))
-                                    onclick="toastr.info('Restaurant Şu an Kapalı!');"
-                                @endif
+                            @if ($restaurant->permanently_closed || ($closedUntil && $closedUntil->isFuture()))
+                                onclick="toastr.info('Restaurant Şu an Kapalı!');"
+                            @elseif ($closedUntil && $closedUntil->isFuture())
+                                onclick="toastr.info('Restaurant Şu an Kapalı!');"
+                            @elseif ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'))
+                            @else
+                                onclick="toastr.info('Restaurant Şu an Kapalı!');"
+                            @endif
 
-                                href="{{ $restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s') ? 'javascript:void(0)' :  route('restaurant.show', [$restaurant]) }}" class="restaurant-card">
+                            href="{{$restaurantUrl}}" class="restaurant-card">
                                 <figure class="figure position-relative">
                                     <img class="bestSellingRestaurantsImage" src="{{ $restaurant->image }}"
                                          alt="restaurant">
@@ -249,12 +274,6 @@
                                         </svg>
                                         <span>{{ Str::of(strip_tags($restaurant->address)) }}</span>
                                     </div>
-
-                                    @php
-                                        $closedUntil = $restaurant->temporary_closed_until
-                                            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
-                                            : null;
-                                    @endphp
 
                                     @if ($restaurant->permanently_closed)
                                         <p class="off">Süresiz kapalı</p>
