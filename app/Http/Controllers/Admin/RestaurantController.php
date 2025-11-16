@@ -42,11 +42,7 @@ class RestaurantController extends BackendController
         $this->middleware(['permission:restaurants_show'])->only('show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         if (auth()->user()->myrole == 3) {
@@ -61,11 +57,7 @@ class RestaurantController extends BackendController
         return view('admin.restaurant.index', $this->data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
 
@@ -298,7 +290,7 @@ class RestaurantController extends BackendController
     public function destroy($id)
     {
         Restaurant::restaurantowner()->findOrFail($id)->delete();
-        return redirect(route('admin.restaurants.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.restaurants.index'))->withSuccess('Restaurant Başarıyla Silindi');
     }
 
     public function getRestaurant(Request $request)

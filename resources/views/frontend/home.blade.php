@@ -185,6 +185,9 @@
     @endif
     <!--========== Cusines PART END =========-->
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <!--=========  RESTAURANT PART START ========-->
     @if (!blank($bestSellingRestaurants))
@@ -194,7 +197,12 @@
                 <div class="row">
                     @foreach ($bestSellingRestaurants as $restaurant)
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <a href="{{ route('restaurant.show', [$restaurant]) }}" class="restaurant-card">
+                            <a
+                                @if($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'))
+                                    onclick="toastr.info('Restaurant Şu an Kapalı!');"
+                                @endif
+
+                                href="{{ $restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s') ? 'javascript:void(0)' :  route('restaurant.show', [$restaurant]) }}" class="restaurant-card">
                                 <figure class="figure position-relative">
                                     <img class="bestSellingRestaurantsImage" src="{{ $restaurant->image }}"
                                          alt="restaurant">
