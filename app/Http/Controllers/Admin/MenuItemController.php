@@ -127,7 +127,7 @@ class MenuItemController extends BackendController
             $menuItem->addMediaFromRequest('image')->toMediaCollection('menu-items');
         }
 
-        return redirect()->back()->withSuccess('The data inserted successfully!');
+        return redirect()->back()->withSuccess('Veriler başarıyla eklendi!');
     }
 
     /**
@@ -272,7 +272,7 @@ class MenuItemController extends BackendController
     public function storeMedia(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'nullable|image|mimes:jpeg,jpg,png|max:3096',
+            'file' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:3096',
         ]);
 
         if ($validator->fails()) {
@@ -305,7 +305,7 @@ class MenuItemController extends BackendController
         $menuItem = MenuItem::owner()->find($id);
         if (!blank($menuItem)) {
             $validator = Validator::make($request->all(), [
-                'file' => 'nullable|image|mimes:jpeg,jpg,png|max:3096',
+                'file' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:3096',
             ]);
 
             if ($validator->fails()) {
@@ -352,7 +352,7 @@ class MenuItemController extends BackendController
     public function modifyUpdate(Request $request, $id)
     {
         if (blank($request->all())) {
-            return redirect(route('admin.menu-items.modify', $id))->withError("The meun item variation/option required.");
+            return redirect(route('admin.menu-items.modify', $id))->withError("İstenen menü öğesi varyasyonu/seçeneği.");
         }
 
         $menuItem       = MenuItem::owner()->findOrFail($id);
@@ -453,7 +453,7 @@ class MenuItemController extends BackendController
             MenuItemOption::insert($optionArray);
         }
 
-        return redirect(route('admin.menu-items.modify', $id))->withSuccess("The Meun item updated successfully.");
+        return redirect(route('admin.menu-items.modify', $id))->withSuccess("Menü öğesi başarıyla güncellendi.");
     }
 
     private function priceValidationCheck($array)

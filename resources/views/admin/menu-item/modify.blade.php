@@ -84,8 +84,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
-
                         </div>
                     </div>
 
@@ -96,7 +94,7 @@
                             <h3 class="db-card-title">{{ __('restaurant.product_option') }}</h3>
                             <button class="db-btn h-[38px] text-white bg-primary" id="option-add">
                                 <i class="fa-solid fa-circle-plus"></i>
-                                <span>add new</span>
+                                <span>Yeni Ekle</span>
                             </button>
                         </div>
                         <div class="db-card-body">
@@ -131,13 +129,13 @@
                                                 @endphp
                                                 <tr class="db-table-body-tr border-none">
                                                     <td class="db-table-body-td">
-                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="Na{{__('levels.name')}}me" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name", $menu_item_option->name) }}">
+                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name", $menu_item_option->name) }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="{{__('levels.price')}}" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price", $menu_item_option->price) }}">
+                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price", $menu_item_option->price) }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
+                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button>
                                                     </td>
                                                 </tr>
                                             @endforeach

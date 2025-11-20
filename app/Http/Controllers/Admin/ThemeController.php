@@ -63,9 +63,9 @@ class ThemeController extends BackendController
     private function themeValidateArray()
     {
         return [
-            'site_logo'        => 'nullable|image|mimes:jpeg,jpg,png,gif|max:3096',
-            'fav_icon'         => 'nullable|image|mimes:jpeg,jpg,png,gif|max:3096',
-            'site_footer_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:3096',
+            'site_logo'        => 'nullable|image|mimes:jpeg,webp,jpg,png,gif|max:3096',
+            'fav_icon'         => 'nullable|image|mimes:jpeg,webp,jpg,png,gif|max:3096',
+            'site_footer_logo' => 'nullable|image|mimes:jpeg,webp,jpg,png,gif|max:3096',
         ];
     }
 }

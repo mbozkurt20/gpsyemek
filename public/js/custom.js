@@ -22,6 +22,6 @@ jQuery(".file-upload-input").on('change', function() {
 
 jQuery(document).ready(function(){
     jQuery(".delete").on("click", function(){
-        return confirm("Are you sure want to delete this record?");
+        return confirm("Silmek İstediğinize Emin Misiniz");
     });
 });
