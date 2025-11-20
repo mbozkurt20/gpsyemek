@@ -46,13 +46,13 @@
                                             @foreach(session('variation') as $variation)
                                                 <tr class="db-table-body-tr border-none">
                                                     <td class="db-table-body-td">
-                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="{{__('levels.name')}}" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name") }}">
+                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name") }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="{{__('levels.price')}}" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price") }}">
+                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price") }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="{{__('levels.discount_price')}}" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price") }}">
+                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="İndirim" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price") }}">
                                                     </td>
                                                     <td class="db-table-body-td">
                                                         <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
@@ -67,16 +67,16 @@
                                                 @endphp
                                                 <tr class="db-table-body-tr border-none">
                                                     <td class="db-table-body-td">
-                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="{{__('levels.name')}}" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name", $menu_item_variation->name) }}">
+                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name", $menu_item_variation->name) }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="{{__('levels.price')}}" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price", $menu_item_variation->price) }}">
+                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price", $menu_item_variation->price) }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="{{__('levels.discount_price')}}" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price",$menu_item_variation->discount_price) }}">
+                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="İndirim" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price",$menu_item_variation->discount_price) }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
+                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -112,10 +112,10 @@
                                             @foreach(session('option') as $option)
                                                 <tr class="db-table-body-tr border-none">
                                                     <td class="db-table-body-td">
-                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="{{__('levels.name')}}" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name") }}">
+                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name") }}">
                                                     </td>
                                                     <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="{{__('levels.price')}}" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price") }}">
+                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price") }}">
                                                     </td>
                                                     <td class="db-table-body-td">
                                                         <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
