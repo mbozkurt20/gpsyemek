@@ -5,13 +5,13 @@ function variationItemDesign() {
     var markup = '';
     markup += '<tr class="db-table-body-tr border-none">';
         markup += '<td class="db-table-body-td">';
-            markup += '<input type="text" name="variation['+menu_item_variation_count+'][name]" placeholder="Name" name="name" class="db-field-control form-control-sm !w-auto">';
+            markup += '<input type="text" name="variation['+menu_item_variation_count+'][name]" placeholder="İsim" name="name" class="db-field-control form-control-sm !w-auto">';
         markup +='</td>';
         markup +='<td class="db-table-body-td">';
-            markup += '<input type="text" step=".01" name="variation['+menu_item_variation_count+'][price]" placeholder="Price" class="db-field-control form-control-sm !w-auto change-productprice">';
+            markup += '<input type="text" step=".01" name="variation['+menu_item_variation_count+'][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice">';
         markup += '</td>';
         markup +='<td class="db-table-body-td">';
-        markup +='<input type="text" step=".01" name="variation['+menu_item_variation_count+'][discount_price]" placeholder="Discount Price" class="db-field-control form-control-sm !w-auto change-productdiscountprice">';
+        markup +='<input type="text" step=".01" name="variation['+menu_item_variation_count+'][discount_price]" placeholder="İndirim" class="db-field-control form-control-sm !w-auto change-productdiscountprice">';
         markup +='</td>';
         markup +='<td class="db-table-body-td">';
             markup += '<button class="db-table-action delete removeBtn"> '
@@ -28,10 +28,10 @@ function optionItemDesign() {
     var markup = '';
     markup += '<tr class="db-table-body-tr border-none">';
         markup += '<td class="db-table-body-td">';
-            markup += '<input type="text" name="option['+menu_item_option_count+'][name]" placeholder="Name" class="db-field-control form-control-sm !w-auto">';
+            markup += '<input type="text" name="option['+menu_item_option_count+'][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto">';
         markup +='</td>';
         markup +='<td class="db-table-body-td">';
-            markup += '<input type="text" step=".01" name="option['+menu_item_option_count+'][price]" placeholder="Price" class="db-field-control form-control-sm !w-auto change-productprice">';
+            markup += '<input type="text" step=".01" name="option['+menu_item_option_count+'][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice">';
         markup += '</td>';
         markup +='<td class="db-table-body-td">';
             markup += '<button class="db-table-action delete removeBtn"> '
