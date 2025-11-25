@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->longText('address')->nullable();
             $table->integer('balance_id');
+            $table->text('reason')->nullable();
             $table->longtext('device_token')->nullable();
             $table->boolean('is_membership_conditions')->default(true);
             $table->boolean('is_illumination_text')->default(true);

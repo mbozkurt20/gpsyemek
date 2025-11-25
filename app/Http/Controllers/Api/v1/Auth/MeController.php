@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Auth;
 
+use App\Enums\UserStatus;
 use App\Models\User;
 use App\Models\Report;
 use App\Models\Address;
@@ -11,6 +12,7 @@ use App\Enums\RatingStatus;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\RestaurantRating;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
@@ -43,6 +45,34 @@ class MeController extends Controller
         }
 
         return $this->successResponse($data);
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Sebep kontrolü
+        $request->validate([
+            'reason' => 'nullable|string|max:500'
+        ]);
+
+        try {
+          $user->update([
+              'reason' => $request->reason,
+              'status' => UserStatus::INACTIVE
+          ]);
+
+            return response()->json(['message' => 'Account deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete account.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function refresh()

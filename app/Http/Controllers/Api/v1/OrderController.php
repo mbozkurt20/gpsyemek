@@ -162,7 +162,6 @@ class OrderController extends Controller
                 $order = Order::find($orderService->order_id);
 
                 try {
-
                     app(PushNotificationService::class)->NotificationForRestaurant($order, $order->restaurant->user, 'restaurant');
                     app(PushNotificationService::class)->NotificationForCustomer($order,  $order->user, 'customer');
 
@@ -171,7 +170,6 @@ class OrderController extends Controller
                 } catch (\Exception $exception) {
                     //
                 }
-
 
                 return response()->json([
                     'status'  => 200,

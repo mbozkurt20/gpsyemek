@@ -57,12 +57,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login',                                        [LoginController::class, 'action']);
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);
     Route::post('logout',                                       [LogoutController::class, 'action']);
-    Route::post('register',                                          [RegisterController::class, 'action']);
+    Route::post('register',                                     [RegisterController::class, 'action']);
     //push notification
     Route::post('fcm-subscribe',                                [PushNotificationController::class, 'fcmSubscribe']);
     Route::post('fcm-unsubscribe',                              [PushNotificationController::class, 'fcmUnsubscribe']);
 
     Route::get('me',                                            [MeController::class, 'action']);
+    Route::post('/account/delete',                            [MeController::class, 'deleteAccount']);
     Route::get('refresh',                                       [MeController::class, 'refresh']);
     Route::post('profile',                                      [MeController::class, 'update']);
     Route::put('change-password',                               [MeController::class, 'changePassword']);
