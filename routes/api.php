@@ -97,7 +97,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('popular-restaurant',                            [PopularRestaurantController::class, 'index']); //done
     Route::get('/restaurant/index/{id?}/{status?}/{applied?}',  [RestaurantController::class, 'index']); //done
-    Route::get('restaurant/{id}',                               [RestaurantController::class, 'show']); //done
+    Route::get('restaurant/{id}',                               [RestaurantController::class, 'show'])->middleware('auth:api'); //done
     Route::get('/search',                                       [SearchController::class, 'index']); //done
 
     Route::post('coupon',                                       [CouponController::class, 'apply']);

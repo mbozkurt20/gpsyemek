@@ -20,7 +20,7 @@ class   MenuItemController extends BackendController
     public function __construct(MenuItemService $menuItemService)
     {
         parent::__construct();
-        $this->middleware('auth:api');
+       // $this->middleware('auth:api');
         $this->menuItemService = $menuItemService;
 
     }

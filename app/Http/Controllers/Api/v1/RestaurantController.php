@@ -32,7 +32,7 @@ class RestaurantController extends BackendController
     {
         parent::__construct();
         $this->data['siteTitle'] = 'Restaurants';
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->restaurantService = $restaurantService;
     }
     /**

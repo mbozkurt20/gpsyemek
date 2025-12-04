@@ -13,13 +13,14 @@ use App\Http\Controllers\BackendController;
 class PopularRestaurantController extends BackendController
 {
     use ApiResponse;
-
+/*
     public function __construct()
     {
         parent::__construct();
         $this->middleware('auth:api');
 
     }
+/*
     /**
      * Display a listing of the resource.
      * @param Request $request
@@ -51,6 +52,4 @@ class PopularRestaurantController extends BackendController
         }
 
     }
-
-
 }
