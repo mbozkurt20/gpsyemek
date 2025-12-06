@@ -268,7 +268,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::resource('menu-items',                            MenuItemController::class);
     Route::post('/menu-items/{productId}/temporary-close',         [MenuItemController::class, 'temporaryClose'])->name('menu-items.temporary-close');
 
-    Route::post('menu-items-import',                    [MenuItemController::class, 'import'])->name('menu-items-import');
+    Route::post('menu-items-import',                        [MenuItemController::class, 'import'])->name('menu-items-import');
+    Route::post('menu-variant-import',                        [MenuItemController::class, 'variantImport'])->name('menu-variant-import');
+    Route::post('menu-option-import',                        [MenuItemController::class, 'optionImport'])->name('menu-option-import');
     Route::get('menu-items/{id}/modify',                    [MenuItemController::class, 'modify'])->name('menu-items.modify');
     Route::put('menu-items/{id}/modify',                    [MenuItemController::class, 'modifyUpdate'])->name('menu-items.modify.update');
     Route::resource('reservation',                          ReservationsController::class);

@@ -8,6 +8,8 @@ use App\Enums\Status;
 use App\Http\Controllers\BackendController;
 use App\Http\Requests\MenuItemRequest;
 use App\Imports\ProductImport;
+use App\Imports\ProductOptionVariant;
+use App\Imports\ProductVariantImport;
 use App\Models\Category;
 use App\Models\MenuItem;
 use App\Models\MenuItemOption;
@@ -66,6 +68,43 @@ class MenuItemController extends BackendController
     public function index(Request $request)
     {
         return $this->getMenuItem($request);
+    }
+
+    function variantImport(Request $request)
+    {
+        $request->validate([
+            'importFile' => 'required|file|mimes:xlsx,csv',
+            'menuItemId' => 'required',
+        ]);
+
+        $menuItem  = MenuItem::find($request->input('menuItemId'));
+
+        $restaurant_id = $menuItem->restaurant_id;
+
+        try {
+            Excel::import(new ProductVariantImport($restaurant_id,$menuItem->id), $request->file('importFile'));
+            return back()->with('success', 'Ürün varyantları başarıyla içe aktarıldı! 🎉');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Bir hata oluştu: ' . $e->getMessage());
+        }
+    }
+
+    function optionImport(Request $request)
+    {
+        $request->validate([
+            'importFile' => 'required|file|mimes:xlsx,csv',
+            'menuItemId' => 'required',
+        ]);
+
+        $menuItem  = MenuItem::find($request->input('menuItemId'));
+
+        $restaurant_id = $menuItem->restaurant_id;
+        try {
+            Excel::import(new ProductOptionVariant($restaurant_id,$menuItem->id), $request->file('importFile'));
+            return back()->with('success', 'Ürün seçenekleri başarıyla içe aktarıldı! 🎉');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Bir hata oluştu: ' . $e->getMessage());
+        }
     }
 
     function import(Request $request)

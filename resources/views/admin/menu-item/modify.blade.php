@@ -12,6 +12,89 @@
         {{ Breadcrumbs::render('menu-items/edit', $menuItem) }}
         </div>
     </div>
+
+    <div class="col-12 db-card  px-6">
+        @if (auth()->user()->myrole == 1)
+
+            <div class="flex flex-col sm:flex-row gap-4">
+
+                <div class="border border-gray-300 rounded-xl p-3 gap-4">
+                    {{-- Ürün Seçenekleri İçe Aktarma --}}
+                    <form action="{{ route('admin.menu-option-import') }}" method="POST" enctype="multipart/form-data"
+                          class="inline-flex items-center gap-2 import-form">
+                        @csrf
+                        <input value="{{ $menuItem->id }}" name="menuItemId" type="hidden">
+
+                        <label for="importOptionsFile" class="db-card-filter-btn pseudo-none cursor-pointer">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span>Ürün Seçenekleri İçe Aktar</span>
+                        </label>
+
+                        <input type="file" name="importFile" id="importOptionsFile" class="hidden" accept=".csv,.xlsx">
+                        <button type="submit" class="hidden"></button>
+                    </form>
+
+                    <a  download href="{{ asset('/imports/menu-options.csv') }}" class="px-3 text-indigo-600 underline text-sm">
+                        Örnek Ürün Seçeneği Excel
+                    </a>
+                </div>
+
+
+                <div class="border border-gray-300 rounded-xl gap-4 p-5">
+                    {{-- Ürün Varyantları İçe Aktarma --}}
+                    <form action="{{ route('admin.menu-variant-import') }}" method="POST" enctype="multipart/form-data"
+                          class="inline-flex items-center gap-2 import-form">
+                        @csrf
+                        <input value="{{ $menuItem->id }}" name="menuItemId" type="hidden">
+
+                        <label for="importVariantFile" class="db-card-filter-btn pseudo-none cursor-pointer">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span>Ürün Varyantlarını İçe Aktar</span>
+                        </label>
+
+                        <input type="file" name="importFile" id="importVariantFile" class="hidden" accept=".csv,.xlsx">
+                        <button type="submit" class="hidden"></button>
+                    </form>
+
+                    <a download href="{{ asset('/imports/menu-variant.csv') }}" class="px-3 text-indigo-600 underline text-sm">
+                        Örnek Ürün Varyant Excel
+                    </a>
+                </div>
+            </div>
+
+            <script>
+                // Tüm import-form'lar için tek script
+                document.querySelectorAll('.import-form').forEach(form => {
+                    const fileInput = form.querySelector('input[type="file"]');
+                    const submitBtn = form.querySelector('button[type="submit"]');
+
+                    fileInput.addEventListener('change', () => {
+                        if (fileInput.files.length > 0) {
+                            submitBtn.click();
+                        }
+                    });
+                });
+            </script>
+        @endif
+
+        <hr>
+
+        {{-- Mesajlar --}}
+        @if (session('success'))
+            <div class="mt-3 p-3 rounded-xl bg-green-100 text-green-700 text-sm font-medium flex items-center gap-2">
+                <i class="fa-solid fa-check-circle"></i>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mt-3 p-3 rounded-xl bg-red-100 text-red-700 text-sm font-medium flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+
+    </div>
     <div class="col-12">
         <div class="db-card">
             <div class="db-card-header">
@@ -92,6 +175,7 @@
                     <div class="db-card">
                         <div class="db-card-header">
                             <h3 class="db-card-title">{{ __('restaurant.product_option') }}</h3>
+
                             <button class="db-btn h-[38px] text-white bg-primary" id="option-add">
                                 <i class="fa-solid fa-circle-plus"></i>
                                 <span>Yeni Ekle</span>
