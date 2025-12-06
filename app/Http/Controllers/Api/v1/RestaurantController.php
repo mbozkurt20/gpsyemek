@@ -90,15 +90,7 @@ class RestaurantController extends BackendController
             }
         }
 
-        if (auth()->user()) {
-            $order = Order::where([
-                'restaurant_id' => $id,
-                'status'        => OrderStatus::COMPLETED,
-                'user_id'       => auth()->user()->id
-            ])->get();
-        } else {
-            $order = [];
-        }
+        $order = [];
         $this->data['order_status']        = !blank($order);
 
         try {
