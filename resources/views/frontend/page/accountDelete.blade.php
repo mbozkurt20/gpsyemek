@@ -1,6 +1,15 @@
 @extends('frontend.layouts.app')
 
 @section('main-content')
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="container py-5">
 
         <div class="row justify-content-center">
