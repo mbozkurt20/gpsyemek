@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('content')
+@section('main-content')
     <div class="container py-5">
 
         <header class="mb-4">
