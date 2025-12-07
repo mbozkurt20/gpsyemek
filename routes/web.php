@@ -79,26 +79,6 @@ Route::prefix('agreements')->group(function () {
 });
 
 Route::get('privacy', [FrontendPageController::class, 'privacy'])->name('privacy');
-Route::get('/account/delete', [FrontendPageController::class, 'accountDelete'])->name('accountDelete');
-
-Route::post('/email-submit', function (Illuminate\Http\Request $request) {
-    $request->validate([
-        'email' => 'required|email'
-    ]);
-
-    $user = \App\Models\User::where('email',$request->input('email'))->first();
-
-    if (!$user) {
-        return response()->json(['message' => 'Unauthorized'], 401);
-    }
-
-      $user->update([
-          'status' => UserStatus::INACTIVE
-      ]);
-
-    // İşlem yapılacak yer (DB, mail, kayıt vs.)
-    return back()->with('success', 'Hesabınız Başarıyla Silinmiştir.');
-})->name('email.submit');
 
 Route::get('mail',function(){
     Mail::raw('vbgfgffgjg', function ($mail)  {
