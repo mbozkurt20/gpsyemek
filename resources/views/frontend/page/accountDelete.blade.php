@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('content')
+@section('main-content')
     <br>
     <br>
     <br>
