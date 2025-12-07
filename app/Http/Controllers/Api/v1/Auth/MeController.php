@@ -47,6 +47,27 @@ class MeController extends Controller
         return $this->successResponse($data);
     }
 
+    public function destroyAccount()
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        try {
+            $user->update([
+                'status' => UserStatus::INACTIVE
+            ]);
+
+            return response()->json(['message' => 'Account deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete account.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
     public function deleteAccount(Request $request)
     {
         $user = auth()->user();

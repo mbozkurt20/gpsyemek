@@ -63,7 +63,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('fcm-unsubscribe',                              [PushNotificationController::class, 'fcmUnsubscribe']);
 
     Route::get('me',                                            [MeController::class, 'action']);
-    Route::post('/account/delete',                            [MeController::class, 'deleteAccount']);
+    Route::post('/account/delete',                              [MeController::class, 'deleteAccount']);
+    Route::get('/account/destroy',                              [MeController::class, 'destroyAccount']);
     Route::get('refresh',                                       [MeController::class, 'refresh']);
     Route::post('profile',                                      [MeController::class, 'update']);
     Route::put('change-password',                               [MeController::class, 'changePassword']);
