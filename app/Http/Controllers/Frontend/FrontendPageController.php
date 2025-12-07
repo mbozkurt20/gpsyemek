@@ -19,6 +19,11 @@ class FrontendPageController extends FrontendController
         return view('frontend.page.privacy');
     }
 
+    public function accountDelete()
+    {
+        return view('frontend.page.accountDelete');
+    }
+
     public function index($slug)
     {
         $page = Page::where(['slug'=> $slug,'status'=>Status::ACTIVE])->first();
