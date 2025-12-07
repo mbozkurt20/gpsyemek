@@ -14,6 +14,11 @@ class FrontendPageController extends FrontendController
         $this->data['site_title'] = setting('site_name');
     }
 
+    public function privacy()
+    {
+        return view('frontend.page.privacy');
+    }
+
     public function index($slug)
     {
         $page = Page::where(['slug'=> $slug,'status'=>Status::ACTIVE])->first();

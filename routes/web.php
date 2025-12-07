@@ -77,6 +77,7 @@ Route::prefix('agreements')->group(function () {
     Route::get('/explicit-consent', [RegisterController::class, 'explicitConsent']);
 });
 
+Route::get('privacy', [FrontendPageController::class, 'privacy'])->name('privacy');
 
 Route::get('mail',function(){
     Mail::raw('vbgfgffgjg', function ($mail)  {
