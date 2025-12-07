@@ -1,115 +1,123 @@
 @extends('frontend.layouts.app')
+
 @section('content')
-    <div class="container">
-        <header>
-            <div>
-                <h1>Gizlilik Politikası</h1>
-                <div class="muted">Gpsyemek — gpsyemek.com ve mobil uygulama</div>
-            </div>
+    <div class="container py-5">
+
+        <header class="mb-4">
+            <h1 class="h3 mb-1">Gizlilik Politikası</h1>
+            <p class="text-muted mb-0">Gpsyemek — gpsyemek.com ve mobil uygulama</p>
         </header>
 
+        <div class="row">
+            <div class="col-md-4 mb-4">
 
-        <div class="card" role="article" aria-label="Gpsyemek Gizlilik Politikası">
-
-
-            <nav aria-label="İçindekiler">
-                <div class="toc">
-                    <strong>İçindekiler</strong>
-                    <ul>
-                        <li><a href="#toplanan-bilgiler">1. Toplanan Bilgiler</a></li>
-                        <li><a href="#kullanim-amaclari">2. Verilerin Kullanım Amaçları</a></li>
-                        <li><a href="#veri-paylasimi">3. Verilerin Paylaşımı</a></li>
-                        <li><a href="#veri-guvenligi">4. Veri Güvenliği</a></li>
-                        <li><a href="#cookie">5. Çerezler (Cookies)</a></li>
-                        <li><a href="#kullanici-haklari">6. Kullanıcı Hakları</a></li>
-                        <li><a href="#guncellemeler">7. Güncellemeler</a></li>
-                        <li><a href="#iletisim">İletişim Bilgileri</a></li>
+                <!-- İçindekiler -->
+                <div class="card">
+                    <div class="card-header fw-semibold">
+                        İçindekiler
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="#toplanan-bilgiler">1. Toplanan Bilgiler</a></li>
+                        <li class="list-group-item"><a href="#kullanim-amaclari">2. Verilerin Kullanım Amaçları</a></li>
+                        <li class="list-group-item"><a href="#veri-paylasimi">3. Verilerin Paylaşımı</a></li>
+                        <li class="list-group-item"><a href="#veri-guvenligi">4. Veri Güvenliği</a></li>
+                        <li class="list-group-item"><a href="#cookie">5. Çerezler (Cookies)</a></li>
+                        <li class="list-group-item"><a href="#kullanici-haklari">6. Kullanıcı Hakları</a></li>
+                        <li class="list-group-item"><a href="#guncellemeler">7. Güncellemeler</a></li>
+                        <li class="list-group-item"><a href="#iletisim">İletişim Bilgileri</a></li>
                     </ul>
                 </div>
-            </nav>
 
+            </div>
 
-            <section id="toplanan-bilgiler">
-                <h2>1. Toplanan Bilgiler</h2>
-                <p>Platformumuzu kullandığınızda aşağıdaki bilgiler toplanabilir:</p>
-                <ul>
-                    <li>Ad, soyad, iletişim bilgileri (telefon, e-posta, adres)</li>
-                    <li>Ödeme bilgileri (kredi/banka kartı vb. — üçüncü taraf güvenli ödeme sağlayıcıları aracılığıyla işlenir)</li>
-                    <li>Lokasyon bilgisi (teslimat adresi ve yakın restoran önerileri için)</li>
-                    <li>Kullanım verileri (sipariş geçmişi, tercih edilen restoranlar, uygulama kullanım alışkanlıkları)</li>
-                </ul>
-            </section>
+            <div class="col-md-8">
 
+                <div class="card p-4">
 
-            <section id="kullanim-amaclari">
-                <h2>2. Verilerin Kullanım Amaçları</h2>
-                <p>Toplanan kişisel verileriniz şu amaçlarla kullanılmaktadır:</p>
-                <ul>
-                    <li>Siparişlerin alınması, hazırlanması ve teslim edilmesi</li>
-                    <li>Kullanıcı hesabının yönetilmesi ve müşteri desteği sağlanması</li>
-                    <li>Promosyon, kampanya ve bilgilendirme gönderimleri</li>
-                    <li>Platformun geliştirilmesi ve kullanıcı deneyiminin iyileştirilmesi</li>
-                    <li>Yasal yükümlülüklerin yerine getirilmesi</li>
-                </ul>
-            </section>
+                    <!-- 1. Toplanan Bilgiler -->
+                    <section id="toplanan-bilgiler" class="mb-4">
+                        <h2 class="h5">1. Toplanan Bilgiler</h2>
+                        <p>Platformumuzu kullandığınızda aşağıdaki bilgiler toplanabilir:</p>
+                        <ul>
+                            <li>Ad, soyad, iletişim bilgileri (telefon, e-posta, adres)</li>
+                            <li>Ödeme bilgileri (kredi/banka kartı — güvenli ödeme sağlayıcıları aracılığıyla)</li>
+                            <li>Lokasyon bilgisi (teslimat adresi ve yakın restoran önerileri için)</li>
+                            <li>Kullanım verileri (sipariş geçmişi, tercih edilen restoranlar, kullanım alışkanlıkları)</li>
+                        </ul>
+                    </section>
 
+                    <!-- 2. Verilerin Kullanım Amaçları -->
+                    <section id="kullanim-amaclari" class="mb-4">
+                        <h2 class="h5">2. Verilerin Kullanım Amaçları</h2>
+                        <p>Toplanan kişisel veriler şu amaçlarla kullanılmaktadır:</p>
+                        <ul>
+                            <li>Siparişlerin alınması, hazırlanması ve teslim edilmesi</li>
+                            <li>Kullanıcı hesabı yönetimi ve müşteri desteği</li>
+                            <li>Promosyon ve kampanya bilgilendirmeleri</li>
+                            <li>Platform geliştirme ve kullanıcı deneyimi iyileştirme</li>
+                            <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+                        </ul>
+                    </section>
 
-            <section id="veri-paylasimi">
-                <h2>3. Verilerin Paylaşımı</h2>
-                <p>Kişisel verileriniz aşağıdaki durumlarda paylaşılabilir:</p>
-                <ul>
-                    <li>Siparişlerin teslimi için yalnızca iş birliği yapılan restoranlar ve kuryelerle paylaşım.</li>
-                    <li>Ödeme işlemleri için üçüncü taraf güvenilir ödeme kuruluşlarıyla sınırlı paylaşım.</li>
-                    <li>Yasal zorunluluklar kapsamında resmi merciler ile paylaşım.</li>
-                    <li>Kullanıcı onayı olmadan üçüncü kişilerle ticari amaçlarla paylaşılmaz.</li>
-                </ul>
-            </section>
+                    <!-- 3. Verilerin Paylaşımı -->
+                    <section id="veri-paylasimi" class="mb-4">
+                        <h2 class="h5">3. Verilerin Paylaşımı</h2>
+                        <p>Kişisel veriler aşağıdaki durumlarda paylaşılabilir:</p>
+                        <ul>
+                            <li>İş birliği yapılan restoranlar ve kuryeler</li>
+                            <li>Güvenilir üçüncü taraf ödeme sağlayıcıları</li>
+                            <li>Yasal zorunluluklar kapsamında resmi merciler</li>
+                            <li>Kullanıcı onayı olmadan ticari amaçlı paylaşım yapılmaz</li>
+                        </ul>
+                    </section>
 
+                    <!-- 4. Veri Güvenliği -->
+                    <section id="veri-guvenligi" class="mb-4">
+                        <h2 class="h5">4. Veri Güvenliği</h2>
+                        <p>Kullanıcı verileri güvenli sunucularda saklanır ve yetkisiz erişime karşı korunur.</p>
+                        <p>Ödeme bilgileriniz SSL ile şifrelenir ve tarafımızca kayıt altına alınmaz.</p>
+                    </section>
 
-            <section id="veri-guvenligi">
-                <h2>4. Veri Güvenliği</h2>
-                <p>Kullanıcı verileri, güvenli sunucularda saklanmakta ve yetkisiz erişime karşı korunmaktadır.</p>
-                <p>Ödeme bilgileriniz SSL şifreleme teknolojisi ile korunur ve Gpsyemek tarafından kayıt altında tutulmaz.</p>
-            </section>
+                    <!-- 5. Çerezler -->
+                    <section id="cookie" class="mb-4">
+                        <h2 class="h5">5. Çerezler (Cookies)</h2>
+                        <p>Kullanıcı deneyimini geliştirmek amacıyla çerezler kullanılmaktadır. Tarayıcınızdan çerez ayarlarını değiştirebilirsiniz.</p>
+                    </section>
 
+                    <!-- 6. Kullanıcı Hakları -->
+                    <section id="kullanici-haklari" class="mb-4">
+                        <h2 class="h5">6. Kullanıcı Hakları</h2>
+                        <p>KVKK kapsamında kullanıcıların şu hakları bulunmaktadır:</p>
+                        <ul>
+                            <li>Kişisel verilere erişim, düzeltme ve silme</li>
+                            <li>İşleme faaliyetlerinin durdurulmasını talep etme</li>
+                            <li>Açık rızayı geri çekme</li>
+                        </ul>
+                        <p>Dilekçe ve talepler için: <a href="mailto:destek@gpsyemek.com">destek@gpsyemek.com</a></p>
+                    </section>
 
-            <section id="cookie">
-                <h2>5. Çerezler (Cookies)</h2>
-                <p>Platformumuzda kullanıcı deneyimini geliştirmek için çerezler kullanılmaktadır. Çerez ayarlarınızı dilediğiniz zaman tarayıcı üzerinden değiştirebilirsiniz.</p>
-            </section>
+                    <!-- 7. Güncellemeler -->
+                    <section id="guncellemeler" class="mb-4">
+                        <h2 class="h5">7. Güncellemeler</h2>
+                        <p>Gizlilik Politikası zaman zaman güncellenebilir. Web sitemizde yayınlandığında yürürlüğe girer.</p>
+                    </section>
 
+                    <!-- İletişim -->
+                    <section id="iletisim" class="mb-4">
+                        <h2 class="h5">📌 İletişim Bilgileri</h2>
+                        <p class="text-muted mb-1">Web: <a href="https://gpsyemek.com" target="_blank">gpsyemek.com</a></p>
+                        <p class="text-muted mb-1">Mail: <a href="mailto:destek@gpsyemek.com">destek@gpsyemek.com</a></p>
+                        <p class="text-muted">Telefon: <a href="tel:+908503030477">0850 303 04 77</a></p>
+                    </section>
 
-            <section id="kullanici-haklari">
-                <h2>6. Kullanıcı Hakları</h2>
-                <p>KVKK kapsamında kullanıcılar aşağıdaki haklara sahiptir:</p>
-                <ul>
-                    <li>Kişisel verilerine erişim, düzeltme ve silme</li>
-                    <li>İşleme faaliyetlerinin durdurulmasını talep etme</li>
-                    <li>Açık rızasını geri çekme</li>
-                </ul>
-                <p>Bu hakların kullanımı için <a href="mailto:destek@gpsyemek.com">destek@gpsyemek.com</a> adresinden bizimle iletişime geçebilirsiniz.</p>
-            </section>
+                    <!-- Footer -->
+                    <footer class="text-muted mt-4">
+                        <small>Hazırlayan: Gpsyemek • Son güncelleme: <time datetime="2025-12-08">8 Aralık 2025</time></small>
+                    </footer>
 
-
-            <section id="guncellemeler">
-                <h2>7. Güncellemeler</h2>
-                <p>Gizlilik Politikamız zaman zaman güncellenebilir. Güncellemeler web sitemiz üzerinden yayınlandığı andan itibaren geçerlidir.</p>
-            </section>
-
-
-            <section id="iletisim">
-                <h2>📌 İletişim Bilgileri</h2>
-                <p class="muted">Web: <a href="https://gpsyemek.com" target="_blank" rel="noopener">gpsyemek.com</a></p>
-                <p class="muted">Mail: <a href="mailto:destek@gpsyemek.com">destek@gpsyemek.com</a></p>
-                <p class="muted">Telefon: <a href="tel:+908503030477">0850 303 04 77</a></p>
-            </section>
-
-
-            <footer class="muted" aria-hidden="false">
-                <p>Hazırlayan: Gpsyemek • Son güncelleme: <time datetime="2025-12-08">8 Aralık 2025</time></p>
-            </footer>
-
-
+                </div>
+            </div>
         </div>
+
     </div>
 @endsection
