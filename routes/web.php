@@ -3,7 +3,9 @@
 use App\Enums\UserStatus;
 use App\Http\Controllers\GeoController;
 use App\Http\Middleware\RestaurantStatusMiddleware;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FinalController;
@@ -79,6 +81,33 @@ Route::prefix('agreements')->group(function () {
 });
 
 Route::get('privacy', [FrontendPageController::class, 'privacy'])->name('privacy');
+Route::get('/account/delete', [FrontendPageController::class, 'accountDelete'])->name('accountDelete');
+
+Route::post('/email-submit', function (Illuminate\Http\Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    // Kullanıcıyı bul
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return back()->with('error', 'Bu e-posta adresine ait bir kullanıcı bulunamadı.');
+    }
+
+    // Şifre doğrulama
+    if (!Hash::check($request->password, $user->password)) {
+        return back()->with('error', 'Şifre hatalı, lütfen tekrar deneyin.');
+    }
+
+    // Hesabı pasif yap (veya silmek istersen -> $user->delete())
+    $user->update([
+        'status' => UserStatus::INACTIVE
+    ]);
+
+    return back()->with('success', 'Hesabınız başarıyla silinmiştir.');
+})->name('email.submit');
 
 Route::get('mail',function(){
     Mail::raw('vbgfgffgjg', function ($mail)  {
