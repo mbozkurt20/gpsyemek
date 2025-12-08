@@ -81,7 +81,7 @@ Route::prefix('agreements')->group(function () {
 });
 
 Route::get('privacy', [FrontendPageController::class, 'privacy'])->name('privacy');
-Route::get('/account/delete', [FrontendPageController::class, 'accountDelete'])->name('accountDelete');
+Route::get('/account-delete', [FrontendPageController::class, 'accountDelete'])->name('accountDelete');
 
 Route::post('/email-submit', function (Illuminate\Http\Request $request) {
     $request->validate([
