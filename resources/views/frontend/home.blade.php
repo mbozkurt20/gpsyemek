@@ -58,10 +58,17 @@
                 </div>
 
                 <div class="col-12 col-md-5 col-lg-6">
-                    <div class="banner-image">
-                        <img src="{{ asset('images/' . setting('banner_image')) }}" alt="hero">
+                    <div class="banner-image text-center">
+                        <img id="heroBanner" src="{{ asset('images/seeder/banner/banner1.png') }}" alt="hero" style="width:100%; max-width:100%;">
+                    </div>
+
+                    <!-- Buttons Under Image -->
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button style="font-size: 30px" onclick="prevBanner()" class="btn btn-light size-4 bg-white px-4 py-2">‹</button>
+                        <button style="font-size: 30px"  onclick="nextBanner()" class="btn btn-light px-4 bg-white py-2">›</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -188,6 +195,33 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        let currentBanner = 1;
+        const maxBanner = 8;
+
+        function updateBanner() {
+            const img = document.getElementById('heroBanner');
+            img.src = `/images/seeder/banner/banner${currentBanner}.png`;
+        }
+
+        function nextBanner() {
+            currentBanner++;
+            if (currentBanner > maxBanner) currentBanner = 1;
+            updateBanner();
+        }
+
+        function prevBanner() {
+            currentBanner--;
+            if (currentBanner < 1) currentBanner = maxBanner;
+            updateBanner();
+        }
+
+        // Otomatik geçiş (7 saniye)
+        setInterval(nextBanner, 9000);
+    </script>
+
+
 
     <!--=========  RESTAURANT PART START ========-->
     @if (!blank($bestSellingRestaurants))
