@@ -8,7 +8,41 @@
 @endpush
 
 @section('main-content')
+<style>.pagination {
+        justify-content: center;
+        margin-top: 2rem;
+        gap: 6px;
+    }
 
+    .page-item .page-link {
+        border-radius: 14px;
+        padding: 10px 16px;
+        border: 1px solid #bbf7d0;
+        color: #15803d;
+        background-color: #ffffff;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .page-item .page-link:hover {
+        background-color: #dcfce7;
+        color: #166534;
+        transform: translateY(-1px);
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        border-color: #16a34a;
+        color: #ffffff;
+        box-shadow: 0 8px 18px rgba(22, 163, 74, 0.35);
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #f0fdf4;
+        color: #86efac;
+        border-color: #dcfce7;
+    }
+</style>
     <!--======== BANNER PART START ==========-->
     <section class="banner section-gap-90">
         <div class="container">
@@ -325,6 +359,9 @@
                             </a>
                         </div>
                     @endforeach
+
+                        {!! $bestSellingRestaurants->links('pagination::bootstrap-5') !!}
+
                 </div>
             </div>
         </section>

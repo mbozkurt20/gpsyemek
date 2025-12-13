@@ -62,7 +62,7 @@ class HomeController extends FrontendController
             ->groupBy('restaurants.id')
             ->orderByDesc('orders_count')
             ->take(8)
-            ->get();
+            ->paginate(8);
     }
 
     private function getBestSellingCuisines()
