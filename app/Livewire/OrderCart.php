@@ -229,6 +229,10 @@ class OrderCart extends Component
 
                 $this->discountAmount = $discount;
                 $this->totalCartAmount();
+
+                if ($coupon->user_id != null){
+                    $coupon->delete();
+                }
             } else {
                 $this->discountAmount = 0;
                 $this->couponID = 0;

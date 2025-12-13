@@ -28,6 +28,7 @@ return new class extends Migration
             $table->dateTime('to_date');
             $table->auditColumn();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

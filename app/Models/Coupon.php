@@ -9,6 +9,7 @@ use App\Enums\CouponStatus;
 use App\Enums\DiscountStatus;
 use Carbon\Carbon;
 use Google\Service\SecureSourceManager\Branch;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Sluggable\SlugOptions;
@@ -17,7 +18,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Coupon extends BaseModel
 {
-    use HasSlug, WatchableTrait;
+    use HasSlug, WatchableTrait,SoftDeletes;
 
     protected $table       = 'coupons';
     protected $auditColumn = true;
