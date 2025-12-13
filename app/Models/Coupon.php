@@ -8,6 +8,7 @@ use App\Models\BaseModel;
 use App\Enums\CouponStatus;
 use App\Enums\DiscountStatus;
 use Carbon\Carbon;
+use Google\Service\SecureSourceManager\Branch;
 use Spatie\Sluggable\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Sluggable\SlugOptions;
@@ -20,7 +21,7 @@ class Coupon extends BaseModel
 
     protected $table       = 'coupons';
     protected $auditColumn = true;
-    protected $fillable    = ['name', 'slug', 'discount_type', 'coupon_type', 'restaurant_id', 'user_limit', 'limit', 'amount', 'minimum_order_amount', 'from_date', 'to_date'];
+    protected $fillable    = ['user_id','name', 'slug', 'discount_type', 'coupon_type', 'restaurant_id', 'user_limit', 'limit', 'amount', 'minimum_order_amount', 'from_date', 'to_date'];
 
 
     public function getSlugOptions(): SlugOptions
@@ -51,6 +52,9 @@ class Coupon extends BaseModel
         return $this->morphTo();
     }
 
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 
     public function restaurants()
     {

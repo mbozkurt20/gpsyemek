@@ -64,7 +64,29 @@
 						</div>
 						@endif
 
-						<div class="form-col-12 sm:form-col-6 md:form-col-4">
+
+                            <div class="form-col-12 sm:form-col-6 md:form-col-4">
+                                <label class="db-field-title">Müşteriler <small class="text-primary">Müşteriye özel ise ekleyiniz.</small></label>
+                                <div class="db-field-down-arrow">
+                                    <select name="user_id"
+                                            class="db-field-control select2 appearance-none @error('user_id') invalid @enderror">
+                                        <option value="">Müşteri seçiniz</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}"
+                                                {{ $coupon->user_id == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                @error('user_id')
+                                <small class="db-field-alert">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+
+                            <div class="form-col-12 sm:form-col-6 md:form-col-4">
 							<label class="db-field-title required">{{ __('levels.discount_type') }}</label>
 							<div class="db-field-down-arrow">
 							<select name="discount_type" class="db-field-control select2 appearance-none @error('discount_type') invalid @enderror">

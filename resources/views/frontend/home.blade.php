@@ -329,7 +329,6 @@
             </div>
         </section>
     @endif
-    <!--=========  RESTAURANT PART End ========-->
 @endsection
 
 @push('js')

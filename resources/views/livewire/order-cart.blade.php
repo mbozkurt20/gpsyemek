@@ -124,7 +124,7 @@
                         </li>
                     @endif
 
-                    @if (Schema::hasColumn('coupons', 'slug'))
+                    @if (Schema::hasColumn('coupons', 'slug'))F
                         <li class="cart-amount-item">
                             <span>{{ __('frontend.discount') }}</span>
                             <span>{{ setting('currency_code') }}{{ $discountAmount }} </span>

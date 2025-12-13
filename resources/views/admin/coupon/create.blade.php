@@ -5,6 +5,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.9/jquery.datetimepicker.min.css"
         integrity="sha512-f0tzWhCwVFS3WeYaofoLWkTP62ObhewQ1EZn65oSYDZUg1+CyywGKkWzm8BxaJj5HGKI72PnMH9jYyIFz+GH7g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 @endsection
 
 @section('content')
@@ -75,7 +78,28 @@
                                 </div>
                             @endif
 
-                            <div class="form-col-12 sm:form-col-6 md:form-col-4">
+                                <div class="form-col-12 sm:form-col-6 md:form-col-4">
+                                    <label class="db-field-title">Müşteriler <small class="text-primary">Müşteriye özel ise ekleyiniz.</small></label>
+                                    <div class="db-field-down-arrow">
+                                        <select name="user_id"
+                                                class="db-field-control select2 appearance-none @error('user_id') invalid @enderror">
+                                            <option value="">Müşteri seçiniz</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}"
+                                                    {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    @error('user_id')
+                                    <small class="db-field-alert">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+
+                                <div class="form-col-12 sm:form-col-6 md:form-col-4">
                                 <label class="db-field-title required">{{ __('levels.discount_type') }}</label>
                                 <div class="db-field-down-arrow">
                                     <select name="discount_type" class="db-field-control select2 appearance-none @error('discount_type') invalid @enderror">
@@ -181,6 +205,10 @@
 @endsection
 
 @section('scripts')
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.9/jquery.datetimepicker.full.min.js"
         integrity="sha512-hDFt+089A+EmzZS6n/urree+gmentY36d9flHQ5ChfiRjEJJKFSsl1HqyEOS5qz7jjbMZ0JU4u/x1qe211534g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

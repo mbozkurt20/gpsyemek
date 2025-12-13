@@ -67,6 +67,10 @@
                     <span class="db-list-item-title">{{ __('levels.ends_at') }}</span>
                     <span class="db-list-item-text">{{ date('h:i A d/m/Y',strtotime($coupon->to_date)) }}</span>
                 </li>
+                <li class="db-list-item">
+                    <span class="db-list-item-title">{{ __('levels.user') }}</span>
+                    <span class="db-list-item-text">{{ $coupon->user->name }}</span>
+                </li>
             </ul>
         </div>
         <div class="db-tabDiv" id="usetimes">

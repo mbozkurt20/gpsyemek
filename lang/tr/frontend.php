@@ -19,7 +19,7 @@ return array(
     'coupon' => 'KUPON : ',
     'report' => 'Bildir',
     'required' => 'Zorunlu',
-    'combo' => 'Klasik Boyutlu Menü',
+    'combo' => 'Opsiyonlar',
     'addon' => 'Ekstra',
     'mycart' => 'Sepetim',
     'tel' => 'Tel',

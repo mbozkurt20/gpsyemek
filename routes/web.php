@@ -89,19 +89,16 @@ Route::post('/email-submit', function (Illuminate\Http\Request $request) {
         'password' => 'required',
     ]);
 
-    // Kullanıcıyı bul
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
         return back()->with('error', 'Bu e-posta adresine ait bir kullanıcı bulunamadı.');
     }
 
-    // Şifre doğrulama
     if (!Hash::check($request->password, $user->password)) {
         return back()->with('error', 'Şifre hatalı, lütfen tekrar deneyin.');
     }
 
-    // Hesabı pasif yap (veya silmek istersen -> $user->delete())
     $user->update([
         'status' => UserStatus::INACTIVE
     ]);

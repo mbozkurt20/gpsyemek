@@ -203,7 +203,7 @@ class OrderCart extends Component
             if (blank($coupon)) {
                 $this->msg = 'Bu Kupon Geçersiz';
             } elseif ($coupon->coupon_type == CouponType::VOUCHER && $coupon->restaurant_id != $restaurant_id) {
-                $this->msg = 'Bu Kupon Geçersiz';
+                $this->msg = 'Bu kupon bu restoran için geçerli değil';
             } elseif ($total_used >= $coupon->limit) {
                 $this->msg = 'Tutar limitten eşit ve büyük olamaz';
             } elseif (!(($coupon->to_date >= $today) && ($coupon->from_date <= $today))) {
@@ -212,6 +212,9 @@ class OrderCart extends Component
                 $this->msg = 'Limitiniz kupon limitinden büyük olamaz';
             } elseif ($total_amount < $coupon->minimum_order_amount) {
                 $this->msg = 'Bu Kupon için Minimum Sipariş Tutarı ' . currencyFormat($coupon->minimum_order_amount);
+            }
+            elseif ($coupon->user_id != null && $coupon->user_id != auth()->id()) {
+                $this->msg = 'Üzgünüz, ku kopon sadece belirli müşteriler için geçerlidir.';
             } else {
                 $this->msg = '';
             }

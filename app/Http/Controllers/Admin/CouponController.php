@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserStatus;
 use App\Models\Coupon;
 use App\Models\Cuisine;
 use App\Models\Discount;
@@ -9,6 +10,7 @@ use App\Enums\CouponType;
 use App\Models\Restaurant;
 use App\Enums\CouponStatus;
 use App\Enums\DiscountType;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Http\Requests\CouponRequest;
@@ -73,13 +75,13 @@ class CouponController extends BackendController
             }
         }
         $this->data['restaurants'] = Restaurant::select('id', 'name')->get();
+        $this->data['users'] = User::orderBy('id','asc')->where('status',UserStatus::ACTIVE)->get();
         return view('admin.coupon.create', $this->data);
     }
 
 
     public function store(CouponRequest $request)
     {
-
         $coupon = $this->couponService->store($request);
         return redirect(route('admin.coupon.index'))->withSuccess('Kupon Başarıyla Eklendi.');
     }
@@ -95,6 +97,7 @@ class CouponController extends BackendController
     {
         $this->data['coupon'] = Coupon::findOrFail($id);
         $this->data['restaurants'] = Restaurant::select('id', 'name')->get();
+        $this->data['users'] = User::orderBy('id','asc')->where('status',UserStatus::ACTIVE)->get();
         return view('admin.coupon.edit', $this->data);
     }
 

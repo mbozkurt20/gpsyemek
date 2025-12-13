@@ -33,6 +33,7 @@ class CouponRequest extends FormRequest
         $rules = [
             'name'                 => ['required', 'string'],
             'slug'                 => ['nullable', 'string'],
+            'user_id'              => ['nullable'],
             'discount_type'        => ['required', 'numeric'],
             'from_date'            => ['required', 'date'],
             'to_date'              => ['required', 'date', 'after:from_date'],

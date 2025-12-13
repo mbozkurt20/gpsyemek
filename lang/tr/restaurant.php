@@ -28,6 +28,6 @@ return array (
   'add_category'                 => 'Kategori Ekle',
   'category_image'               => 'Kategori Görseli',
   'delete_category'              => 'Evet, Kategoriyi Sil',
-  'product_variation'            => 'Ürün Varyasyonu',
+  'product_variation'            => 'Ürün Opsiyonları',
   'product_option'               => 'Ürün Seçeneği',
 );

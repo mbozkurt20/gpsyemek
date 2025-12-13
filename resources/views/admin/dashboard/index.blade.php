@@ -68,7 +68,7 @@
                             <div>
                                 <h3 class="font-bold text-white">{{ __('dashboard.total_income') }}</h3>
                                 <h4 class="font-bold text-white text-2xl leading[34px]">
-                                    {{ currencyFormat(number_format($totalIncome, 2)) }}</h4>
+                                    {{ currencyFormat($totalIncome) }}</h4>
                             </div>
                         </div>
                     </div>

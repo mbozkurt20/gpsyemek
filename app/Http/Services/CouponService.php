@@ -34,6 +34,7 @@ class CouponService
     {
         $coupon                       = new Coupon;
         $coupon->name                 = $request->name;
+        $coupon->user_id              = $request->user_id;
         $coupon->discount_type        = $request->discount_type;
         $coupon->coupon_type          = ($request->restaurant_id == 0) ? CouponType::COUPON : CouponType::VOUCHER;
         $coupon->limit                = $request->limit;
@@ -52,6 +53,7 @@ class CouponService
     {
         $coupon                       = Coupon::findOrFail($id);
         $coupon->name                 = $request->name;
+        $coupon->user_id              = $request->user_id;
         $coupon->discount_type        = $request->discount_type;
         $coupon->coupon_type          = ($request->restaurant_id == 0) ? CouponType::COUPON : CouponType::VOUCHER;
         $coupon->limit                = $request->limit;
