@@ -397,7 +397,6 @@ class RestaurantController extends BackendController
         $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
         $restaurant->address         = $request->address;
         $restaurant->current_status  = $request->current_status;
-        $restaurant->api_token       = Str::random(40);
         $restaurant->waiter_status   = $request->waiter_status;
         $restaurant->delivery_status = $request->delivery_status;
         $restaurant->pickup_status   = $request->pickup_status;

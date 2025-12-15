@@ -374,6 +374,7 @@ class OrderController extends BackendController
 
     public function changeStatus($id, $status)
     {
+
         $order = Order::findOrFail($id);
         $orderService = app(OrderService::class)->orderUpdate($order->id, $status);
         if ($orderService->status) {

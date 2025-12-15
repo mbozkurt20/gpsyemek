@@ -46,10 +46,35 @@ class RestaurantController extends FrontendController
     {
         $pendingExists = Order::where('restaurant_id', $id)
             ->where('status', OrderStatus::PENDING)
+            ->whereDate('created_at', Carbon::today())
             ->exists();
 
         return response()->json(['pending' => $pendingExists]);
     }
+
+    public function closeStatus(Request $request, $restaurantId)
+    {
+        $restaurant = Restaurant::findOrFail($restaurantId);
+
+        if ($request->permanently_closed == 1) {
+            // Süresiz kapalı
+            $restaurant->update([
+                'permanently_closed' => 1,
+                'temporary_closed_until' => null,
+            ]);
+        } else {
+            // Açık
+            $restaurant->update([
+                'permanently_closed' => 0,
+                'temporary_closed_until' => null,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 
     public function close(Request $request, $id)
     {

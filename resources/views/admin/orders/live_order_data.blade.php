@@ -87,8 +87,8 @@
 <div class="db-card">
     <div class="tabs">
         <button class="tab-btn active" data-tab="new">{{__('order.new_order')}} <span class="ml-4 p-1 rounded-full">({{$pending_order}} Adet)</span></button>
-        <button class="tab-btn" data-tab="accepted">{{__('order.accepted')}} <span class="ml-4 p-1 rounded-full">({{$accepted_order}} Adet)</span></button>
-        <button class="tab-btn" data-tab="process">{{__('order.process')}} <span class="ml-4 p-1 rounded-full">({{$process_order}} Adet)</span></button>
+        <button class="tab-btn" data-tab="accepted">{{__('order.process')}} <span class="ml-4 p-1 rounded-full">({{$accepted_order}} Adet)</span></button>
+        <button class="tab-btn" data-tab="process">{{__('Hazırlandı')}} <span class="ml-4 p-1 rounded-full">({{$process_order}} Adet)</span></button>
         <button class="tab-btn" data-tab="courier">{{__('order.on_the_way')}} <span class="ml-4 p-1 rounded-full">({{$courier_order}} Adet)</span></button>
         <button class="tab-btn" data-tab="done">{{__('order.completed')}} <span class="ml-4 p-1 rounded-full">({{$completed_order}} Adet)</span></button>
     </div>
@@ -103,7 +103,7 @@
                     <th>Restoran</th>
                     <th>Kullanıcı</th>
                     <th>Tarih</th>
-                    <th>Tip</th>
+                    <th>Türü</th>
                     <th>Toplam</th>
                     <th>Durum</th>
                     <th>İşlem</th>
@@ -123,12 +123,11 @@
                             <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
                                 {{__('order.details')}}
                             </a>
-                            <button class="btn btn-indigo order-status-btn"
-                                    data-id="{{ $order->id }}"
-                                    data-url="/admin/order/change-status/"
-                                    data-status="{{ App\Enums\OrderStatus::ACCEPT }}">
+                            <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::ACCEPT]) }}"
+                               class="btn btn-indigo"
+                               onclick="return confirm('Sipariş kabul edilsin mi?')">
                                 {{ __('order.accept') }}
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -149,7 +148,7 @@
                     <th>Restoran</th>
                     <th>Kullanıcı</th>
                     <th>Tarih</th>
-                    <th>Tip</th>
+                    <th>Türü</th>
                     <th>Toplam</th>
                     <th>Durum</th>
                     <th>İşlem</th>
@@ -169,19 +168,19 @@
                             <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
                                 {{__('order.details')}}
                             </a>
-                            <button class="btn btn-indigo order-status-btn"
-                                    data-id="{{ $order->id }}"
-                                    data-url="/admin/order/change-status/"
-                                    data-status="{{ App\Enums\OrderStatus::PROCESS }}">
-                                {{ __('order.process') }}
-                            </button>
+                            <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::PROCESS]) }}"
+                               class="btn btn-indigo"
+                               onclick="return confirm('Sipariş hazırlandır durumuna alınsın mı?')">
+                               Hazırlandı Yap
+                            </a>
+
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
         @else
-            <p class="text-center fw-bold">Kabul Edilen Sipariş Bulunmuyor</p>
+            <p class="text-center fw-bold">Hazırlanan Sipariş Bulunmuyor</p>
         @endif
     </div>
 
@@ -195,7 +194,7 @@
                     <th>Restoran</th>
                     <th>Kullanıcı</th>
                     <th>Tarih</th>
-                    <th>Tip</th>
+                    <th>Türü</th>
                     <th>Toplam</th>
                     <th>Durum</th>
                     <th>İşlem</th>
@@ -215,12 +214,11 @@
                             <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
                                 {{__('order.details')}}
                             </a>
-                            <button class="btn btn-indigo order-status-btn"
-                                    data-id="{{ $order->id }}"
-                                    data-url="/admin/order/change-status/"
-                                    data-status="{{ App\Enums\OrderStatus::ON_THE_WAY }}">
-                                {{ __('order.on_the_way') }}
-                            </button>
+                            <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::ON_THE_WAY]) }}"
+                               class="btn btn-indigo"
+                               onclick="return confirm('Sipariş yola çıktı mı?')">
+                                Kuryeye Ver
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -241,7 +239,7 @@
                     <th>Restoran</th>
                     <th>Kullanıcı</th>
                     <th>Tarih</th>
-                    <th>Tip</th>
+                    <th>Türü</th>
                     <th>Toplam</th>
                     <th>Durum</th>
                     <th>İşlem</th>
@@ -261,12 +259,13 @@
                             <a href="{{route('admin.orders.show',$order)}}" class="btn btn-primary">
                                 {{__('order.details')}}
                             </a>
-                            <button class="btn btn-indigo order-status-btn"
-                                    data-id="{{ $order->id }}"
-                                    data-url="/admin/order/change-status/"
-                                    data-status="{{ App\Enums\OrderStatus::COMPLETED }}">
+
+                            <a href="{{ route('admin.order.change-status',
+                                ['id' => $order->id, 'status' => App\Enums\OrderStatus::COMPLETED]) }}"
+                               class="btn btn-indigo"
+                               onclick="return confirm('Sipariş tamamlandı olarak işaretlensin mi?')">
                                 {{ __('order.completed') }}
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -287,7 +286,7 @@
                     <th>Restoran</th>
                     <th>Kullanıcı</th>
                     <th>Tarih</th>
-                    <th>Tip</th>
+                    <th>Türü</th>
                     <th>Toplam</th>
                     <th>Durum</th>
                 </tr>
@@ -321,25 +320,6 @@
 
             this.classList.add("active");
             document.querySelector("#tab-" + this.dataset.tab).classList.add("active");
-        });
-    });
-
-    // Ajax status button
-    $(document).on('click', '.order-status-btn', function () {
-        let orderId = $(this).data('id');
-        let path = $(this).data('url');
-        let status = $(this).data('status');
-        let url = "{{$baseUrl}}" + path + orderId + "/" + status;
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                location.reload();
-            },
-            error: function () {
-                alert('Bir hata oluştu!');
-            }
         });
     });
 </script>

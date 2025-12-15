@@ -360,8 +360,7 @@
                         </div>
                     @endforeach
 
-                        {!! $bestSellingRestaurants->links('pagination::bootstrap-5') !!}
-
+                    {!! $bestSellingRestaurants->links('pagination::bootstrap-5') !!}
                 </div>
             </div>
         </section>

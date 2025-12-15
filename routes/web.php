@@ -138,6 +138,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
      Route::get('/home',                                    [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
     Route::post('/restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
+    Route::post('/restaurant/close-status/{restaurantId}',         [RestaurantController::class, 'closeStatus'])->name('close-status');
     Route::get('/restaurant/is-order/{id}', [RestaurantController::class, 'orderStatus'])
         ->name('restaurant.orderStatus');
     Route::get('restaurant/status{status}/{restaurant}',    [RestaurantController::class, 'statuse'])->name('restaurant.statuse');
