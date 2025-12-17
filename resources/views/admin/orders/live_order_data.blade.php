@@ -124,8 +124,7 @@
                                 {{__('order.details')}}
                             </a>
                             <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::ACCEPT]) }}"
-                               class="btn btn-indigo"
-                               onclick="return confirm('Sipariş kabul edilsin mi?')">
+                               class="btn btn-indigo">
                                 {{ __('order.accept') }}
                             </a>
                         </td>
@@ -134,7 +133,7 @@
                 </tbody>
             </table>
         @else
-            <p class="text-center fw-bold">Yeni Sipariş Bulunmuyor</p>
+            <p class="text-center fw-bold">Yeni Sipariş Bulunmuyor...</p>
         @endif
     </div>
 
@@ -169,8 +168,7 @@
                                 {{__('order.details')}}
                             </a>
                             <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::PROCESS]) }}"
-                               class="btn btn-indigo"
-                               onclick="return confirm('Sipariş hazırlandır durumuna alınsın mı?')">
+                               class="btn btn-indigo">
                                Hazırlandı Yap
                             </a>
 
@@ -215,8 +213,7 @@
                                 {{__('order.details')}}
                             </a>
                             <a href="{{ route('admin.order.change-status', [$order->id, App\Enums\OrderStatus::ON_THE_WAY]) }}"
-                               class="btn btn-indigo"
-                               onclick="return confirm('Sipariş yola çıktı mı?')">
+                               class="btn btn-indigo">
                                 Kuryeye Ver
                             </a>
                         </td>
@@ -262,8 +259,7 @@
 
                             <a href="{{ route('admin.order.change-status',
                                 ['id' => $order->id, 'status' => App\Enums\OrderStatus::COMPLETED]) }}"
-                               class="btn btn-indigo"
-                               onclick="return confirm('Sipariş tamamlandı olarak işaretlensin mi?')">
+                               class="btn btn-indigo">
                                 {{ __('order.completed') }}
                             </a>
                         </td>
