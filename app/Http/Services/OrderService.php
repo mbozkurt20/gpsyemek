@@ -462,22 +462,32 @@ class OrderService
                 ]);
             }
         } else {
-            if($data['address'] == ''){
-                $latitude = 0.0;
-                $longitude = 0.0;
+            if (!empty($data['address_id'])) {
+                $addr = Address::find($data['address_id']);
+
+                if (!$addr) {
+                    ResponseService::set(['message' => 'Address not found']);
+                    return ResponseService::response();
+                }
+
+                $latitude  = $addr->latitude;
+                $longitude = $addr->longitude;
+
                 $address = json_encode([
-                    'address' => '',
+                    'address'   => $addr->address,
+                    'apartment' => $addr->apartment
+                ]);
+            } else {
+                // manuel adres
+                $latitude  = $data['lat'] ?? 0;
+                $longitude = $data['long'] ?? 0;
+
+                $address = json_encode([
+                    'address'   => $data['address'],
                     'apartment' => ''
                 ]);
-            }else {
-                $address = Address::find($data['address']);
-                $latitude = $address->latitude;
-                $longitude = $address->longitude;
-                $address = json_encode([
-                    'address' => $address->address,
-                    'apartment' => $address->apartment
-                ]);
             }
+
         }
 
         $order = [

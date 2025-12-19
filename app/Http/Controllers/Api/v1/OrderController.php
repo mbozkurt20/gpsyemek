@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Services\PushNotificationService;
+use App\Models\Restaurant;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Enums\OrderStatus;
@@ -94,6 +95,34 @@ class OrderController extends Controller
     {
         $validator = new OrderStoreRequest();
         $validator = Validator::make($request->all(), $validator->rules());
+
+        $restaurantId = $request->restaurant_id;
+
+        $restaurant = Restaurant::find($restaurantId);
+
+        if (!$restaurant) {
+            return response()->json([
+                'status'  => 400,
+                'message' => 'Restoran Bulunamadı'
+            ], 400);
+        }
+
+        $closedUntil = $restaurant->temporary_closed_until
+            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
+            : null;
+
+        if ($restaurant->permanently_closed){
+            return response()->json([
+                'status'  => 400,
+                'message' => 'Restarurant Kapalı'
+            ], 400);
+        } elseif ($closedUntil && $closedUntil->isFuture()) {
+            return response()->json([
+                'status'  => 400,
+                'message' => "Restarurant Şu an kapalı ". $closedUntil->diffForHumans(). " sonra açılacaktır"
+            ], 400);
+
+        }
 
         if (!$validator->fails()) {
             $orderItems = json_decode($request->items);

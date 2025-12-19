@@ -52,6 +52,7 @@ class OrderStoreRequest extends FormRequest
                 'delivery_charge' => ['required', 'numeric'],
                 'mobile'          => ['required'],
                 'address'         => ['required', 'string'],
+                'address_id'      => ['nullable'],
                 'restaurant_id'   => ['required'],
                 'lat'             => ['required'],
                 'long'            => ['required'],

@@ -129,8 +129,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('paytr-token',                                   [PaymentController::class, 'payTrToken']); //done
 
-    Route::get('orders',                                        [OrderController::class, 'index']); //done
     Route::post('orders',                                       [OrderController::class, 'store']); //done
+
     Route::put('orders/{id}',                                   [OrderController::class, 'update']); //done
     Route::get('orders/{id}/show',                              [OrderController::class, 'show']); //done
     Route::post('orders/payment',                               [OrderController::class, 'orderPayment']); //done

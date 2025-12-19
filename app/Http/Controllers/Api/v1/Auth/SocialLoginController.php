@@ -19,68 +19,82 @@ class SocialLoginController extends Controller
 
     public function action(Request $request)
     {
-        $isUser = User::where('email', '=', $request->email)
-            ->first();
+        try {
+            $isUser = User::where('email', '=', $request->email)
+                ->first();
 
-        if (!$isUser) {
-            $first_name = '';
-            $last_name  = '';
-            if ($request->has('name')) {
-                $parts      = $this->split_name($request->get('name'));
-                $first_name = $parts[0];
-                $last_name  = $parts[1];
+            if (!$isUser) {
+                $first_name = '';
+                $last_name  = '';
+                if ($request->has('name')) {
+                    $parts      = $this->split_name($request->get('name'));
+                    $first_name = $parts[0];
+                    $last_name  = $parts[1];
+                }
+
+                $username = '';
+                if ($request->has('email')) {
+                    $username = $this->username($request->get('email'));
+                }
+                $user     = User::create([
+                    'first_name'        => $first_name,
+                    'last_name'        => $last_name,
+                    'email'             => $request->email,
+                    'email_verified_at' => now(),
+                    'username'          => $username,
+                    'password'          => Hash::make('123456'),
+                    'provider_id'       => $request->provider_id,
+                    'provider'       => $request->provider,
+                ]);
+
+                $role     = Role::find(2);
+                $user->assignRole($role->name);
+
+                $token = auth()->guard('api')->attempt(['email'=>$request->email,'password'=>'123456']);
+                return (new PrivateUserResource($user))
+                    ->additional([
+                        'token' => $token,
+                    ]);
+            }
+            $token = JWTAuth::fromUser($isUser);
+
+            auth()->guard('api')->login($isUser);
+            $user = auth('api')->user();
+            $role = $request->role;
+            if ($user->status == UserStatus::INACTIVE) {
+                auth('api')->logout();
+                return response()->json([
+                    'data'    => [],
+                    'message' => 'Your account currently inactive. you can\'t login our system.',
+                    'status'  => 401,
+                ], 401);
             }
 
-            $username = '';
-            if ($request->has('email')) {
-                $username = $this->username($request->get('email'));
+            if ($role && ($role != $user->myrole)) {
+                return response()->json([
+                    'data'    => [],
+                    'message' => "You don't have permission to login",
+                    'status'  => 401,
+                ], 401);
             }
-            $user     = User::create([
-                'first_name'        => $first_name,
-                'last_name'        => $last_name,
-                'email'             => $request->email,
-                'email_verified_at' => now(),
-                'username'          => $username,
-                'password'          => Hash::make('123456'),
-                'provider_id'       => $request->provider_id,
-                'provider'       => $request->provider,
-            ]);
 
-            $role     = Role::find(2);
-            $user->assignRole($role->name);
-
-            $token = auth()->guard('api')->attempt(['email'=>$request->email,'password'=>'123456']);
             return (new PrivateUserResource($user))
                 ->additional([
                     'token' => $token,
                 ]);
-        }
-        $token = JWTAuth::fromUser($isUser);
-
-        auth()->guard('api')->login($isUser);
-        $user = auth('api')->user();
-        $role = $request->role;
-        if ($user->status == UserStatus::INACTIVE) {
-            auth('api')->logout();
-            return response()->json([
-                'data'    => [],
-                'message' => 'Your account currently inactive. you can\'t login our system.',
-                'status'  => 401,
-            ], 401);
-        }
-
-        if ($role && ($role != $user->myrole)) {
-            return response()->json([
-                'data'    => [],
-                'message' => "You don't have permission to login",
-                'status'  => 401,
-            ], 401);
-        }
-
-        return (new PrivateUserResource($user))
-            ->additional([
-                'token' => $token,
+        } catch (\Throwable $e) {
+            \Log::error('Social login error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
             ]);
+
+            return response()->json([
+                'message' => 'Server error',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
     }
 
     private function split_name($name)
