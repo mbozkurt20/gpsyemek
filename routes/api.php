@@ -129,13 +129,13 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('paytr-token',                                   [PaymentController::class, 'payTrToken']); //done
 
-    Route::post('orders',                                       [OrderController::class, 'store']); //done
-
     Route::put('orders/{id}',                                   [OrderController::class, 'update']); //done
     Route::get('orders/{id}/show',                              [OrderController::class, 'show']); //done
     Route::post('orders/payment',                               [OrderController::class, 'orderPayment']); //done
     Route::get('orders/{id}/download-attachment',               [OrderController::class, 'attachment']); //done
     Route::get('orders/cancel/{id}',                            [OrderController::class, 'orderCancel']); //done
+    Route::post('orders',                                       [OrderController::class, 'store']); //done
+    Route::get('orders',                                       [OrderController::class, 'index']); //done
 
     Route::get('restaurant-order',                              [RestaurantOrderController::class, 'index']); //done
     Route::get('restaurant-order/history',                      [RestaurantOrderController::class, 'history']); //done

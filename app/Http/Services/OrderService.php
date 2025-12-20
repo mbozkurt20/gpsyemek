@@ -487,7 +487,6 @@ class OrderService
                     'apartment' => ''
                 ]);
             }
-
         }
 
         $order = [
