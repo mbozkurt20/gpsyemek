@@ -1,7 +1,39 @@
 @if (isset($restaurants))
-@foreach ($restaurants as $restaurant)
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+    @foreach ($restaurants as $restaurant)
 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-    <a href="{{ route('restaurant.show', [$restaurant]) }}" class="restaurant-card">
+    @php
+        $closedUntil = $restaurant->temporary_closed_until
+            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
+            : null;
+    @endphp
+
+    @php
+        $restaurantUrl = '';
+
+        if ($restaurant->permanently_closed || ($closedUntil && $closedUntil->isFuture())) {
+            $restaurantUrl = 'javascript:void(0)'; // Kapalıysa tıklanmasın veya başka bir URL
+        } elseif ($closedUntil && $closedUntil->isFuture()) {
+            $restaurantUrl = 'javascript:void(0) 3'; // Açık değilse veya başka durum
+        } elseif ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s')){
+            $restaurantUrl = route('restaurant.show', [$restaurant]);
+        } else {
+             $restaurantUrl = 'javascript:void(0) 3';
+        }
+    @endphp
+
+    <a
+        @if ($restaurant->permanently_closed || ($closedUntil && $closedUntil->isFuture()))
+            onclick="toastr.info('Restaurant Şu an Kapalı!');"
+        @elseif ($closedUntil && $closedUntil->isFuture())
+            onclick="toastr.info('Restaurant Şu an Kapalı!');"
+        @elseif ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'))
+        @else
+            onclick="toastr.info('Restaurant Şu an Kapalı!');"
+        @endif
+        href="{{$restaurantUrl}}"  class="restaurant-card">
         <figure class="figure">
             <img class="bestSellingRestaurantsImage" src="{{ $restaurant->image }}" alt="{{ $restaurant->slug }}">
         </figure>
@@ -51,3 +83,5 @@
 </div>
 @endforeach
 @endif
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

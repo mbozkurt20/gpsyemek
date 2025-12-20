@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Illuminate\Support\Facades\Http;
 
 class ProductImport implements ToModel, WithStartRow
 {
@@ -75,7 +76,39 @@ class ProductImport implements ToModel, WithStartRow
             'menu_item_id' => $menuItem->id,
         ]);
 
-        // Artık return etmiyoruz çünkü zaten DB'ye yazdık
+        // 📸 IMAGE URL IMPORT
+        $imageUrl = $row[4] ?? null;
+
+        if ($imageUrl && filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            try {
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0',
+                    'Referer'    => 'https://www.google.com/',
+                ])->get($imageUrl);
+
+                if ($response->successful()) {
+                    $tempPath = storage_path('app/temp/' . uniqid() . '.jpg');
+
+                    if (!file_exists(dirname($tempPath))) {
+                        mkdir(dirname($tempPath), 0755, true);
+                    }
+
+                    file_put_contents($tempPath, $response->body());
+
+                    $menuItem
+                        ->addMedia($tempPath)
+                        ->toMediaCollection('menu-items');
+
+                    unlink($tempPath);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Image import failed', [
+                    'url' => $imageUrl,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
         return null;
     }
 

@@ -91,7 +91,7 @@ class MenuItem extends BaseModel implements HasMedia
             $image = $this->getMedia('menu-items')->last();
             return $image->getUrl('image');
         }
-        return asset('frontend/images/default/menuitem.png');
+        return asset('/frontend/images/2logo.png');
     }
 
     public function registerMediaConversions(Media $media = null): void

@@ -193,7 +193,7 @@ class RestaurantController extends BackendController
                 $user->username   = $request->username ?? generateUsername($request->email);
                 $user->phone      = $request->get('phone');
                 $user->address    = $request->get('address');
-                $user->status     = $request->get('userstatus');
+                $user->status     = $request->get('status');
 
                 if (!blank($request->get('password')) && (strlen($request->get('password')) >= 4)) {
                     $user->password = bcrypt($request->get('password'));

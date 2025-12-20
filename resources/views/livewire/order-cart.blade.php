@@ -145,9 +145,6 @@
             @else onclick="return false;" @endif>
                 {{ __('frontend.proceed_checkout') }}
             </a>
-
-
-
         </div>
         <!--~~~~~~  WHEN CART IS ORDER CODE END ~~~~~~~~~~~~-->
     @else

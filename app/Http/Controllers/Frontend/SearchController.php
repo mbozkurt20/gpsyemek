@@ -29,7 +29,97 @@ class SearchController extends FrontendController
         ];
     }
 
-    public function filter(Request $request){
+    public function filter(Request $request)
+    {
+        $expedition = $request->get('expedition');
+
+        $restaurants = Restaurant::query()
+            ->with('media')
+            ->where([
+                'status' => Status::ACTIVE,
+                'current_status' => Status::ACTIVE
+            ]);
+
+        /* Cuisines */
+        if (!blank($request->get('cuisines'))) {
+            $cuisineSlugs = $request->get('cuisines');
+            $restaurants->whereHas('cuisines', function ($query) use ($cuisineSlugs) {
+                $query->whereIn('slug', $cuisineSlugs);
+            });
+        }
+
+        /* Search by name */
+        if (!blank($request->get('query'))) {
+            $query = $request->get('query');
+            $restaurants->where('name', 'like', '%' . $query . '%');
+        }
+
+        /* Expedition filter */
+        if (array_key_exists($expedition, $this->expeditionMap)) {
+            $statusColumn = $expedition . '_status';
+            $status = $this->expeditionMap[$expedition];
+            $restaurants->where($statusColumn, $status);
+        }
+
+        /* Distance filter (FIXED) */
+        if (!blank($request->get('lat')) && !blank($request->get('long'))) {
+
+            $lat = (float) $request->get('lat');
+            $lng = (float) $request->get('long');
+            $distance = (float) ($request->get('distance') ?? setting('geolocation_distance_radius'));
+
+            $restaurants
+                ->selectRaw("
+                restaurants.*,
+                (6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(lat))
+                    * cos(radians(`long`) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(lat))
+                )) AS distance
+            ", [$lat, $lng, $lat])
+                ->havingRaw('distance <= ?', [$distance])
+                ->orderBy('distance');
+        }
+
+        /* Clone query for map */
+        $mapQuery = clone $restaurants;
+
+        /* Pagination */
+        $this->data['restaurants'] = $restaurants
+            ->paginate(8)
+            ->appends(request()->query());
+
+        /* Map data */
+        $this->data['mapRestaurants'] = $mapQuery
+            ->get()
+            ->map(function ($restaurant) {
+                return [
+                    'name'    => $restaurant->name,
+                    'slug'    => $restaurant->slug,
+                    'image'   => $restaurant->image,
+                    'logo'    => $restaurant->logo,
+                    'lat'     => $restaurant->lat,
+                    'long'    => $restaurant->long,
+                    'address' => $restaurant->address,
+                    'url'     => route('restaurant.show', [$restaurant]),
+                ];
+            })
+            ->all();
+
+        $this->data['cuisines'] = Cuisine::select('id', 'name', 'slug')
+            ->orderBy('name', 'desc')
+            ->get();
+
+        $this->data['current_data'] = Carbon::now()->format('H:i:s');
+
+        return view('frontend.search', $this->data);
+    }
+
+
+    /*
+         public function filter(Request $request){
         $expedition = $request->get('expedition');
 
         $restaurants = Restaurant::query()
@@ -82,4 +172,5 @@ class SearchController extends FrontendController
         $this->data['current_data'] = Carbon::now()->format('H:i:s');
         return view('frontend.search', $this->data);
     }
+     */
 }

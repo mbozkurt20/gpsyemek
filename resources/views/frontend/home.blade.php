@@ -232,7 +232,7 @@
 
     <script>
         let currentBanner = 1;
-        const maxBanner = 8;
+        const maxBanner = 7;
 
         function updateBanner() {
             const img = document.getElementById('heroBanner');

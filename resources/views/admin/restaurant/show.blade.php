@@ -150,9 +150,9 @@
                         </div>
                     </div>
 
-                    <div class="card card-body bg-white mt-5 py-5">
-                        <h1 class="mb-2">Restaraurant Ürünleri Aktar</h1>
                         @if (auth()->user()->myrole == 1)
+                        <div class="card card-body bg-white mt-5 py-5">
+                            <h1 class="mb-2">Restaraurant Ürünleri Aktar</h1>
                             {{-- Ürün İçe Aktarma Formu --}}
                             <form action="{{ route('admin.menu-items-import') }}" method="POST" enctype="multipart/form-data" class="inline-flex items-center gap-2">
                                 @csrf
@@ -190,8 +190,11 @@
                                     }
                                 });
                             </script>
+
+                            <a download="" class="ml-4 font-semibold hover:underline" href="/imports/menu-import.xlsx">Örnek Dosya İndir</a>
+                        </div>
                         @endif
-                    </div>
+
 
                 </div>
 
