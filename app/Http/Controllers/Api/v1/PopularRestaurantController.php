@@ -37,9 +37,10 @@ class PopularRestaurantController extends BackendController
             ->orderBy('orders_count', 'desc')
             ->where('restaurants.status', RestaurantStatus::ACTIVE)
             ->where('restaurants.current_status', CurrentStatus::YES)
-            ->where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
             ->get();
+
+        //  ->where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
+        //            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
         try{
 
             return $this->successResponse(['status'=> 200, 'data' =>  PopularRestaurantResource::collection(($bestSellingRestaurants))]);
