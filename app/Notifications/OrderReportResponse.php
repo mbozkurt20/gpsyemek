@@ -70,10 +70,10 @@ class OrderReportResponse extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Response regarding your complaint against order #".$this->order->code)
-            ->greeting('Hello '.$notifiable->name.',')
-            ->line("We have taken your complaint against order ".$this->order->code.",  in consideration.Your order is ".trans('report_statuses.' .$this->status))
-            ->line('Thank you for staying with '.setting('site_name'));
+            ->subject("Sipariş #".$this->order->code." ile ilgili şikayetiniz hakkında")
+            ->greeting('Merhaba '.$notifiable->name.',')
+            ->line("Sipariş numarası ".$this->order->code." olan şikayetiniz değerlendirmeye alınmıştır. Siparişinizin durumu: ".trans('report_statuses.'.$this->status))
+            ->line('Bizi tercih ettiğiniz için teşekkür ederiz. '.setting('site_name'));
     }
 
     /**

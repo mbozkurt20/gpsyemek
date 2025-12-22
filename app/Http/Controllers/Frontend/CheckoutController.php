@@ -38,7 +38,10 @@ class CheckoutController extends FrontendController
 
     public function index()
     {
-        if (blank(session()->get('cart'))) {
+        $restaurant = Restaurant::find(session('session_cart_restaurant_id'));
+        $cart = session()->get('cart-' . $restaurant->id);
+
+        if (blank($cart)) {
             return redirect('/');
         }
 
@@ -56,9 +59,11 @@ class CheckoutController extends FrontendController
             $this->data['lastAddress'] = Address::where('user_id', auth()->user()->id)->first();
         }
 
-        $this->data['menuitems'] = session()->get('cart');
-        $this->data['totalPayment'] = session()->get('cart')['totalPayAmount'];
-        $this->data['restaurant'] = Restaurant::find(session('session_cart_restaurant_id'));
+
+        $this->data['menuitems'] = session()->get('cart-' . $restaurant->id);
+        $this->data['totalPayment'] = session()->get('cart-' . $restaurant->id)['totalPayAmount'];
+        $this->data['restaurant'] = $restaurant;
+
         return view('frontend.restaurant.checkout', $this->data);
     }
 
@@ -73,7 +78,7 @@ class CheckoutController extends FrontendController
         $restaurant = Restaurant::find($sessionRestaurantId);
         $validator = $this->validateCheckoutRequest($request, $restaurant);
 
-        $cart = session()->get('cart');
+        $cart = session()->get('cart-' . $sessionRestaurantId);
         if (!$cart || !isset($cart['delivery_type'])) {
             $validation = [
                 'mobile' => 'required',
@@ -92,9 +97,9 @@ class CheckoutController extends FrontendController
         ];
 
         $validator = Validator::make($request->all(), $validation, $messages);
-        $validator->after(function ($validator) use ($request, $restaurant) {
+        $validator->after(function ($validator) use ($request, $restaurant, $cart) {
             if ($request->payment_type == PaymentMethod::WALLET) {
-                if ((float)auth()->user()->balance->balance < (float)(session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))) {
+                if ((float)auth()->user()->balance->balance < (float)($cart['totalAmount'] + session()->get('delivery_charge'))) {
                     $validator->errors()->add('payment_type', 'The Credit balance does not enough for this payment.');
                 }
             }
@@ -134,19 +139,24 @@ class CheckoutController extends FrontendController
             return redirect()->route('login');
         }
     }
+
     public function payTrPayment(Request $r)
     {
+        $restaurantId = session()->get('session_cart_restaurant_id');
+        $request = session()->get('checkoutRequest');
+        $cart = session()->get('cart-' . $restaurantId);
+
         $basket = [
-            ['total', session()->get('cart')['totalAmount'], 1],
+            ['total', $cart['totalAmount'], 1],
             ['delivery', session()->get('delivery_charge'), 1],
         ];
 
         $address = Address::find($r->address);
-        $phone = str_replace('-','',$r->mobile);
-        $name = auth()->user()->first_name. ' '.auth()->user()->last_name;
+        $phone = str_replace('-', '', $r->mobile);
+        $name = auth()->user()->first_name . ' ' . auth()->user()->last_name;
         $email = auth()->user()->email;
 
-        $amount = (session()->get('cart')['totalAmount'] + session()->get('delivery_charge')) * 100;
+        $amount = ($cart['totalAmount'] + session()->get('delivery_charge')) * 100;
         $merchant_oid = uniqid();
 
         Cache::put("paytr_payment_{$merchant_oid}", [
@@ -154,11 +164,12 @@ class CheckoutController extends FrontendController
             'user_id' => auth()->id(),
             'countrycode' => $r->countrycode,
             'mobile' => $r->phone,
-            'cart' => session()->get('cart'),
+            'cart' => $cart,
+            'request' => $request,
         ], now()->addMinutes(10));
 
         $paytr = new PaytrService();
-        $result = $paytr->getToken($name,$address->address,$phone, $email, $amount, $basket,$merchant_oid); // 50.00 TL
+        $result = $paytr->getToken($name, $address->address, $phone, $email, $amount, $basket, $merchant_oid); // 50.00 TL
 
         if ($result['status'] === 'success') {
             return view('frontend.payment.paytr', ['token' => $result['token']]);
@@ -166,34 +177,48 @@ class CheckoutController extends FrontendController
             return back()->withErrors($result['reason']);
         }
     }
+
     public function paytrCallback(Request $request)
     {
-        Log::info('PayTR Callback Request', $request->all());
+        $merchantOid  = $_POST['merchant_oid'] ?? null;
+        $status       = $_POST['status'] ?? null;
+        $totalAmount  = $_POST['total_amount'] ?? null;
+        $hashPost     = $_POST['hash'] ?? null;
 
-        $hash = base64_encode(hash_hmac('sha256', $request->merchant_oid .
-            $request->status . $request->total_amount .
-            setting('paytr_merchant_salt'), setting('paytr_merchant_key'), true));
+        $hash = base64_encode(hash_hmac(
+            'sha256',
+            $merchantOid .
+            $status .
+            $totalAmount .
+            setting('paytr_merchant_salt'),
+            setting('paytr_merchant_key'),
+            true
+        ));
 
-        if ($hash != $request->hash) {
+
+        if ($hash !== $hashPost) {
+            Log::error('PayTR bad hash', $_POST);
             return response('PAYTR notification failed: bad hash', 400);
         }
 
-        if ($request->status == 'success') {
-            $orderService = app(PaymentService::class)->payment(true);
-        } else {
-            $orderService = app(PaymentService::class)->payment(false);
-        }
-
-        return $this->handleOrderServiceResponse($orderService);
+        return response('OK');
     }
+
     public function payTrSuccess(Request $request)
     {
-        $orderService = app(PaymentService::class)->payment(true);
+        if (
+            !session()->has('checkoutRequest') ||
+            !session()->has('session_cart_restaurant_id')
+        ) {
+            Log::warning('payTrSuccess called without session');
+            return redirect()->route('account.order');
+        }
 
+        $orderService = app(PaymentService::class)->payment(true);
         return $this->handleOrderServiceResponse($orderService);
     }
 
-    public function payTrFail(Request $request)
+    public function payTrFail($merchantOid)
     {
         $orderService = app(PaymentService::class)->payment(false);
         return $this->handleOrderServiceResponse($orderService);
@@ -231,7 +256,7 @@ class CheckoutController extends FrontendController
 
         // buyer, addresses, basket items minimal doldurun (README örneğine bakın)
         $buyer = new \Iyzipay\Model\Buyer();
-        $buyer->setId("BY".uniqid());
+        $buyer->setId("BY" . uniqid());
         $buyer->setName(auth()->user()->first_name);
         $buyer->setSurname(auth()->user()->last_name);
         $buyer->setGsmNumber($r->countrycode . $r->mobile);
@@ -299,10 +324,12 @@ class CheckoutController extends FrontendController
 
     public function sslcommerzPayment($request)
     {
+        $restaurantId = session()->get('session_cart_restaurant_id');
+        $cart = session()->get('cart-' . $restaurantId);
         try {
             $array['store_id'] = env('SSLCOMMERZ_STORE_ID');
             $array['store_passwd'] = env('SSLCOMMERZ_STORE_PASSWORD');
-            $array['total_amount'] = session()->get('cart')['totalAmount'] + session()->get('delivery_charge');
+            $array['total_amount'] = $cart['totalAmount'] + session()->get('delivery_charge');
             $array['currency'] = "USD";
             $array['tran_id'] = "SSLCZ_" . uniqid();
             $array['shipping_method'] = "NO";
@@ -317,7 +344,7 @@ class CheckoutController extends FrontendController
             $array['product_name'] = env('APP_NAME');
             $array['product_category'] = "Food";
             $array['product_profile'] = "general";
-            $array['product_amount'] = session()->get('cart')['totalAmount'] + session()->get('delivery_charge');
+            $array['product_amount'] = $cart['totalAmount'] + session()->get('delivery_charge');
             $array['discount_amount'] = "";
             $array['convenience_fee'] = session()->get('delivery_charge');
             $array['success_url'] = url('/sslcommerz/success');
@@ -380,8 +407,11 @@ class CheckoutController extends FrontendController
 
     public function phonePePayment($request)
     {
+        $restaurantId = session()->get('session_cart_restaurant_id');
+        $cart = session()->get('cart-' . $restaurantId);
+
         $phonepe = new LaravelPhonePe();
-        $amount = session()->get('cart')['totalAmount'] + session()->get('delivery_charge');
+        $amount = $cart['totalAmount'] + session()->get('delivery_charge');
         $phone = $request->countrycode . $request->mobile;
         $callbak_url = url('/phonepe/status');
         $uniqueId = uniqid();
@@ -462,7 +492,7 @@ class CheckoutController extends FrontendController
         $validator->after(function ($validator) use ($request, $restaurant) {
             if (
                 $request->payment_type == PaymentMethod::WALLET &&
-                (float)auth()->user()->balance->balance < (float)(session()->get('cart')['totalAmount'] + session()->get('delivery_charge'))
+                (float)auth()->user()->balance->balance < (float)(session()->get('cart-' . $restaurant->id)['totalAmount'] + session()->get('delivery_charge'))
             ) {
                 $validator->errors()->add('payment_type', 'The Credit balance does not enough for this payment.');
             }
@@ -475,7 +505,7 @@ class CheckoutController extends FrontendController
     {
         $stripeService = new StripeService();
         $stripeParameters = [
-            'amount' => session()->get('cart')['totalAmount'] + session()->get('delivery_charge'),
+            'amount' => session()->get('cart-' . $restaurant->id)['totalAmount'] + session()->get('delivery_charge'),
             'currency' => 'USD',
             'token' => request('stripeToken'),
             'description' => 'N/A',
@@ -607,7 +637,7 @@ class CheckoutController extends FrontendController
     {
         if ($orderService->status) {
             $order = Order::find($orderService->order_id);
-            $this->clearSessionData();
+            $this->clearSessionData($order->restaurant_id);
             $this->sendOrderNotifications($order);
             return redirect(route('account.order.show', $order->id))->withSuccess('Siparişiniz Başarıyla Alındı.');
         } else {
@@ -615,12 +645,12 @@ class CheckoutController extends FrontendController
         }
     }
 
-    protected function clearSessionData()
+    protected function clearSessionData($restaurantId)
     {
-        session()->put('cart', null);
+        session()->put('cart-' . $restaurantId, null);
         session()->put('checkoutRequest', null);
         session()->put('session_cart_restaurant_id', 0);
-        session()->put('session_cart_restaurant', null);
+        //session()->put('session_cart_restaurant', null);
     }
 
     protected function sendOrderNotifications($order)

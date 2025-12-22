@@ -15,6 +15,7 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th scope="col">{{ __('frontend.order') }} </th>
+                                    <th scope="col">{{ __('frontend.restaurant') }} </th>
                                     <th scope="col">{{ __('frontend.date_purchased') }} </th>
                                     <th scope="col">{{ __('frontend.status') }}</th>
                                     <th scope="col">{{ __('levels.order_type') }} </th>
@@ -29,6 +30,10 @@
                                             <td data-title="uid">
                                                 <a
                                                     href="{{ route('account.order.show', $order->id) }}">{{ $order->order_code }}</a>
+                                            </td>
+                                            <td data-title="restaurant">
+                                                <a class="badge-text text-dark hover:underline"
+                                                    href="{{ route('restaurant.show', $order->restaurant->slug) }}">{{ $order->restaurant->name }}</a>
                                             </td>
                                             <td data-title="date">
                                                 {{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i:s') }}
@@ -61,11 +66,11 @@
 
                                             <td data-title="action">
                                                 <div class="table-action">
-                                                    <a href="{{ route('account.order.show', $order->id) }}"  type="button"  title="View Details"
+                                                    <a href="{{ route('account.order.show', $order->id) }}"  type="button"  title="Ayrıntıları Görüntüle"
                                                         class="fa-solid fa-eye button"></a>
 
                                                     @if ($order->status == app\Enums\OrderStatus::COMPLETED)
-                                                        <a href="{{ route('account.report', $order->id) }}" type="button"  title="Report"
+                                                        <a href="{{ route('account.report', $order->id) }}" type="button"  title="Rapor"
                                                             class="fa-solid fa-circle-exclamation button
                                                             {{ array_key_exists($order->id, $reports) ? 'bg-warning' : 'bg-danger' }}">
                                                         </a>

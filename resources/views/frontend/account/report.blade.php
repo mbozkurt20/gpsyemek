@@ -31,7 +31,7 @@
 
                         <div class="col-12 form-group">
                             <label for="address" class="form-label required"> {{ __('frontend.description') }}</label>
-                            <textarea rows="4" placeholder="Write your complain here...." name="description"
+                            <textarea rows="4" placeholder="Şikayetinizi buraya yazın...." name="description"
                                 class="form-control
                              @error('description') is-invalid @enderror"
                                 value="{{ old('description') }}">{{ old('description') }}</textarea>

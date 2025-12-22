@@ -70,10 +70,10 @@ class OrderCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Your order #".$this->order->id." has been created at ".setting('site_name'))
-            ->greeting('Hello '.$notifiable->name.',')
-            ->line("This is to confirm that your order ".$this->order->id.", created on ".$this->order->created_at)
-            ->line('Thank you for making order on '.setting('site_name'));
+            ->subject("Siparişiniz (#".$this->order->id.") ".setting('site_name')." üzerinden oluşturuldu")
+            ->greeting('Merhaba '.$notifiable->name.',')
+            ->line("".$this->order->id." numaralı siparişiniz ".$this->order->created_at." tarihinde başarıyla oluşturulmuştur.")
+            ->line(setting('site_name').' üzerinden verdiğiniz sipariş için teşekkür ederiz.');
     }
 
     /**

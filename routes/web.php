@@ -182,6 +182,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
     Route::get('account/order',                             [AccountController::class, 'getOrder'])->name('account.order')->middleware('auth');
     Route::get('account/get-order',                         [AccountController::class, 'getOrderList'])->name('account.get-order')->middleware('auth');
     Route::get('account/order/{id}',                        [AccountController::class, 'orderShow'])->name('account.order.show')->middleware('auth');
+    Route::get('account/order/{id}/refresh',               [AccountController::class, 'orderRefresh'])->name('account.order.refresh')->middleware('auth');
     Route::get('account/order-cancel/{id}',                 [AccountController::class, 'orderCancel'])->name('account.order.cancel')->middleware('auth');
 
     Route::get('account/order-file/{id}',                   [AccountController::class, 'getDownloadFile'])->name('account.order.file')->middleware('auth');

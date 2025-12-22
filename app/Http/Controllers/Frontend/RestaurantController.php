@@ -88,7 +88,7 @@ class RestaurantController extends FrontendController
             $restaurant->temporary_closed_until = null;
         } else {
             // Geçici olarak kapalı
-            $minutes = (int) $duration;
+            $minutes = (int)$duration;
             $restaurant->temporary_closed_until = now()->addMinutes($minutes);
             $restaurant->permanently_closed = false;
         }
@@ -110,12 +110,16 @@ class RestaurantController extends FrontendController
         $this->restaurant = $restaurant;
         $this->filepond = $filepond;
 
-        if (session('session_cart_restaurant_id') != $this->restaurant->id) {
-            session()->forget('cart');
-        }
+        session()->put('session_cart_restaurant_id', $restaurant->id);
+
         $this->loadCategoriesAndProducts();
         $this->loadRatings();
-        $this->data['order_status'] = auth()->id() ? Order::where(['restaurant_id' => $this->restaurant->id, 'status' => OrderStatus::COMPLETED, 'user_id' => auth()->id()])->get() : [];
+
+        $this->data['order_status'] = auth()->id()
+            ? Order::where(['restaurant_id' => $this->restaurant->id,
+                'status' => OrderStatus::COMPLETED,
+                'user_id' => auth()->id()])->get()
+            : [];
         $this->loadVouchers();
 
         $this->loadViewData();

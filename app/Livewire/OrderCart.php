@@ -52,7 +52,7 @@ class OrderCart extends Component
 
         }
 
-        $this->carts = session()->get('cart');
+        $this->carts = session()->get('cart-'.$restaurant->id);
         if (!blank($this->carts)) {
             $this->totalCartAmount();
         }
@@ -174,14 +174,18 @@ class OrderCart extends Component
 
         $this->dispatch('showCartQty', ['qty' => $this->totalQty]);
 
-        session()->put('cart', $this->carts);
-        $this->carts = session()->get('cart');
+        $restaurant  = Restaurant::find(session()->get('session_cart_restaurant_id'));
+
+        session()->put('cart-'.$restaurant->id, $this->carts);
+        $this->carts = session()->get('cart-'.$restaurant->id);
     }
 
     public function removeItem($id)
     {
+        $restaurant  = Restaurant::find(session()->get('session_cart_restaurant_id'));
+
         unset($this->carts['items'][$id]);
-        session()->put('cart', $this->carts);
+        session()->put('cart-'.$restaurant->id, $this->carts);
         $this->totalCartAmount();
     }
 

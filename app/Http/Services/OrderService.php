@@ -508,8 +508,6 @@ class OrderService
             'paid_amount'     => $data['paid_amount'],
         ];
 
-
-
         $order   = Order::create($order);
         $orderId = $order->id;
         OrderHistory::create([
@@ -611,5 +609,12 @@ class OrderService
             ]);
         }
         return ResponseService::response();
+    }
+
+    public function refresh($orderId)
+    {
+        $order = Order::find($orderId);
+
+
     }
 }

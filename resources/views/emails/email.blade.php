@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Email</title>
+    <title>E-posta</title>
 </head>
 <body>
-    <p>Hello, {{ $name }}!</p>
-    <p>{{ $user_message }}</p>
-    <br>
-    <p>Thanks for your email.</p>
+<p>Merhaba, {{ $name }}!</p>
+<p>{{ $user_message }}</p>
+<br>
+<p>E-postanız için teşekkür ederiz.</p>
 </body>
 </html>

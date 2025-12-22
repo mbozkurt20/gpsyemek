@@ -71,10 +71,10 @@ class NewShopOrderCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("A new order #".$this->order->id." has been created")
-            ->greeting('Hello '.$notifiable->name.',')
-            ->line("A new order #".$this->order->id." has been created By ".$this->order->user->name)
-            ->line('Thank you for managing your shop in'.setting('site_name'));
+            ->subject("Yeni Sipariş Oluşturuldu (#".$this->order->id.")")
+            ->greeting('Merhaba '.$notifiable->name.',')
+            ->line($this->order->user->name.' tarafından '.$this->order->id.' numaralı yeni bir sipariş oluşturuldu.')
+            ->line(setting('site_name').' üzerindeki mağazanızı yönettiğiniz için teşekkür ederiz.');
     }
 
     /**
@@ -103,8 +103,8 @@ class NewShopOrderCreated extends Notification implements ShouldQueue
 
     public function toFirebase($notifiable)
     {
-        $title = 'Hello '.$notifiable->name;
-        $body  = "A new order #".$this->order->id." has been created by ".$this->order->user->name;
+        $title = 'Merhaba '.$notifiable->name;
+        $body  = $this->order->user->name.' tarafından #'.$this->order->id.' numaralı yeni bir sipariş oluşturuldu.';
         $icon  = public_path('images/fav.png');
         $image = $this->order->restaurant->image;
 

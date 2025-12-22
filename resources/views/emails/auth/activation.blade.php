@@ -1,16 +1,16 @@
 @component('mail::message')
-# Account Activation
+    # Hesap Aktivasyonu
 
-Hello,
+    Merhaba,
 
-Thank you for signing up.
+    Kayıt olduğunuz için teşekkür ederiz.
 
-Please activate your account to get started.
+    Hesabınızı kullanmaya başlayabilmek için lütfen aşağıdaki butona tıklayarak hesabınızı aktive edin.
 
-@component('mail::button', ['url' => route('activation.activate', $token), 'color' => 'green'])
-    Activate
-@endcomponent
+    @component('mail::button', ['url' => route('activation.activate', $token), 'color' => 'green'])
+        Hesabı Aktifleştir
+    @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+    Teşekkürler,<br>
+    {{ config('app.name') }}
 @endcomponent

@@ -29,7 +29,7 @@
                 <div class="checkout-group">
                     <div class="checkout-delivery">
                         <div class="checkout-card">
-                            @if (!session()->get('cart')['delivery_type'])
+                            @if (!session()->get('cart-'.$restaurant->id)['delivery_type'])
 
                                 <div class="checkout-card-head">
                                     <h3>{{ __('frontend.delivery_address') }}</h3>
@@ -506,7 +506,7 @@
         }
 
         const siteName = "{{ setting('site_name') }}";
-        let orderType = "{{ session()->get('cart')['delivery_type'] }}";
+        let orderType = "{{ session()->get('cart-'.$restaurant->id)['delivery_type'] }}";
         const siteLogo = "{{ asset('images/' . setting('site_logo')) }}";
         const currencyName = "{{ setting('currency_name') }}";
         const razorpayKey = "{{ env('RAZORPAY_KEY') }}";

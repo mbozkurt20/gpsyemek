@@ -329,8 +329,8 @@ class PushNotificationService
                 "message" => [
                     "token" => $FcmWabToken[0],
                     "notification" => [
-                        'title' => 'Hello ' . $user->name,
-                        'body'  => "A new order #" . $order->id . " has been created by " . $order->user->name,
+                        'title' => 'Merhaba ' . $user->name,
+                        'body'  => $order->id . ' numaralı yeni bir sipariş ' . $order->user->name . ' tarafından oluşturuldu.',
                     ]
                 ]
             ];
@@ -415,7 +415,7 @@ class PushNotificationService
                     ],
                 ]
             ];
-            
+
 
             $url = 'https://fcm.googleapis.com/v1/projects/' . setting('projectId') . '/messages:send';
 
@@ -472,13 +472,13 @@ class PushNotificationService
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
-        
+
         $result = curl_exec($ch);
         if ($result === FALSE) {
             Log::error('Curl failed: ' . curl_error($ch));
         }
         curl_close($ch);
-        
+
         Log::info("FCM Response: " . $result);
         return $result;
 

@@ -25,7 +25,7 @@ class ShowCart extends Component
     {
 
         session()->put('session_cart_restaurant_id', $restaurant_id);
-        session()->put('session_cart_restaurant', $this->restaurant->slug);
+      //  session()->put('session_cart_restaurant', $this->restaurant->slug);
 
         $variationArray = $optionArray = [];
         $variationId = $totalPrice = $discount = null;

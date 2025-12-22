@@ -4,8 +4,8 @@
         <!--~~~~~~ WHEN CART IS ORDER CODE START ~~~~~~~~-->
         <h2 class="cart-title">{{ __('frontend.mycart') }}
             (<span class="cartCount" id="carTNumber">
-               @if (!blank(session()->get('cart')))
-                    {{ session()->get('cart')['totalQty'] }}
+               @if (!blank(session()->get('cart-'.$restaurant->id)))
+                    {{ session()->get('cart-'.$restaurant->id)['totalQty'] }}
                 @else
                     0
                 @endif
@@ -152,8 +152,8 @@
         <div class="cart-empty">
             <h2 class="cart-title">{{ __('frontend.mycart') }}
                 (<span class="cartCount" id="carTNumber">
-                    @if (!blank(session()->get('cart')))
-                        {{ session()->get('cart')['totalQty'] }}
+                    @if (!blank(session()->get('cart-'.$restaurant->id)))
+                        {{ session()->get('cart-'.$restaurant->id)['totalQty'] }}
                     @else
                         0
                     @endif

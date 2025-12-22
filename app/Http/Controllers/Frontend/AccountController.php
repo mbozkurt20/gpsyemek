@@ -150,7 +150,24 @@ class AccountController extends FrontendController
         return redirect(route('account.password'))->with('success', 'The Password Updated Successfully');
     }
 
+    public function orderRefresh($id)
+    {
+        $order = Order::with('items')->find($id);
 
+        if (blank($order)) {
+            return response()->json(['error' => true], 404);
+        }
+
+        $item = $order->items->first();
+
+        return response()->json([
+            'menu_item_id' => $item->menu_item_id,
+            'qty'          => $item->quantity,
+            'variationID'  => $item->variation_id,
+            'options'      => $item->options ?? [],
+            'instructions' => $item->instructions,
+        ]);
+    }
     public function orderShow($id)
     {
         $this->data['order'] = Order::where('user_id', auth()->id())->findOrFail($id);
@@ -169,7 +186,7 @@ class AccountController extends FrontendController
             if (!blank($order)) {
                 $orderService = app(OrderService::class)->cancel($id);
                 if ($orderService->status) {
-                    return redirect(route('account.order.show', $order->id))->withSuccess('Successfully order cancel');
+                    return redirect(route('account.order.show', $order->id))->withSuccess('Sipariş başarıyla iptal edildi.');
                 } else {
                     return redirect(route('account.order.show', $order->id))->withError($orderService->message);
                 }
