@@ -188,198 +188,233 @@
                     </div>
 
                     <div id="invoice-print" class="d-none">
+                        <style>
+                            @media print {
+                                body {
+                                    margin: 0;
+                                }
+                            }
+
+                            body {
+                                font-family: Arial, Helvetica, sans-serif;
+                                color: #111;
+                                font-size: 12pt;
+                            }
+
+                            .invoice {
+                                width: 210mm;
+                                min-height: 297mm;
+                                padding: 15mm;
+                                margin: auto;
+                                box-sizing: border-box;
+                            }
+
+                            /* TOP BAR */
+                            .top-bar {
+                                display: flex;
+                                justify-content: space-between;
+                                margin-bottom: 14px;
+                                font-size: 11.5pt;
+                            }
+
+                            .top-bar strong {
+                                font-weight: bold;
+                            }
+
+                            /* INFO BOXES */
+                            .info-grid {
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 12px;
+                                margin-bottom: 16px;
+                            }
+
+                            .info-box {
+                                border: 1px solid #e3e7ed;
+                                border-radius: 8px;
+                                padding: 12px;
+                            }
+
+                            .info-box h4 {
+                                margin: 0 0 8px 0;
+                                font-size: 12pt;
+                            }
+
+                            .info-box p {
+                                margin: 4px 0;
+                            }
+
+                            .badge {
+                                display: inline-block;
+                                padding: 3px 8px;
+                                border-radius: 12px;
+                                font-size: 10.5pt;
+                                font-weight: bold;
+                            }
+
+                            .badge-success {
+                                background: #e7f8ed;
+                                color: #1a7f37;
+                            }
+
+                            .badge-info {
+                                background: #e6f6ff;
+                                color: #0369a1;
+                            }
+
+                            /* TABLE */
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 10px;
+                                font-size: 11.5pt;
+                            }
+
+                            thead {
+                                background: #fdecee;
+                            }
+
+                            th {
+                                text-align: left;
+                                padding: 10px 8px;
+                                font-weight: bold;
+                                color: #15803d;
+                            }
+
+                            td {
+                                padding: 10px 8px;
+                                border-bottom: 1px solid #eef1f5;
+                            }
+
+                            tbody tr:nth-child(even) {
+                                background: #f7f9fc;
+                            }
+
+                            td.text-right,
+                            th.text-right {
+                                text-align: right;
+                            }
+
+                            td.text-center {
+                                text-align: center;
+                            }
+
+                            /* TOTALS */
+                            .totals {
+                                margin-top: 10px;
+                            }
+
+                            .totals td {
+                                border: none;
+                                padding: 10px 8px;
+                                font-size: 11.5pt;
+                            }
+
+                            .totals .grand {
+                                font-weight: bold;
+                                color: #16a34a;
+                                font-size: 12.5pt;
+                            }
+
+                            /* FOOTER */
+                            .footer {
+                                margin-top: 40px;
+                                text-align: center;
+                                font-size: 11pt;
+                            }
+
+                            .footer strong {
+                                display: block;
+                                margin-top: 4px;
+                            }
+                        </style>
+
                         <div class="invoice">
-                            <style>
-                                .invoice {
-                                    max-width: 390px;
-                                    width: 100%;
-                                    margin: auto;
-                                    padding: 8px;
-                                    font-family: 'OpenSauceOne', sans-serif;
-                                }
-
-                                p {
-                                    margin-top: 4px;
-                                    margin-bottom: 0px;
-                                }
-
-                                h2,
-                                h3 {
-                                    font-size: 32px;
-                                    font-weight: bolder;
-                                    margin-top: 4px;
-                                    margin-bottom: 2px;
-                                }
-
-                                h3 {
-                                    font-size: 28px;
-                                    margin-bottom: 8px;
-                                }
-
-                                p,
-                                td {
-                                    font-size: 16px;
-                                }
-
-                                table {
-                                    width: 100%;
-                                    margin-top: 4px;
-                                    margin-bottom: 4px;
-                                }
-
-                                .invoiceFooter p {
-                                    font-size: 14px;
-                                    font-weight: 400;
-
-                                }
-
-                                .invoiceFooter small {
-                                    font-size: 12px;
-                                    margin-top: 24px;
-                                }
-
-                                .border-dashed {
-                                    border-top: 1px dashed gainsboro;
-                                }
-
-                                .text-center {
-                                    text-align: center;
-                                }
-
-                                .text-start {
-                                    text-align: start;
-                                }
-
-                                .text-end {
-                                    text-align: end;
-                                }
-
-                                .align-top {
-                                    vertical-align: top;
-                                }
-
-                                .min-w-80 {
-                                    min-width: 80px;
-                                    width: 80px;
-                                }
-
-                                ul {
-                                    list-style: none;
-                                }
-                            </style>
-                            <div class="text-center pb-2">
-                                <h2> {{ setting('site_name') ? setting('site_name') : '' }}
-                                    {{ __('frontend.restaurant') }}</h2>
-                                <h3>{{ __('frontend.food_ordering_delivery_system') }}</h3>
-                                <p> {{ __('frontend.email') }}: {{ setting('site_email') }}</p>
-                                <p class="mt-2"> {{ __('frontend.tel') }}:
-                                    {{ setting('site_phone_number') }}
-                                </p>
+                            <img style="height: 40px;width: auto;margin-bottom: 10px" src="/frontend/images/gpsyemek.png" alt="">
+                            <!-- TOP -->
+                            <div class="top-bar">
+                                <div>
+                                    <strong>Sipariş No:</strong>
+                                    <span style="color:#0284c7">#{{ $order->order_code }}</span>
+                                </div>
+                                <div>
+                                    <strong>Sipariş Tarihi:</strong>
+                                    {{ $order->created_at->format('d-m-Y H:i:s') }}
+                                </div>
                             </div>
-                            <div class="border-dashed">
-                                <ul>
-                                    <li class="pt-1">
-                                        <td class="text-start">#{{ $order->order_code }}</td>
-                                    </li>
-                                    <li class="pb-1 d-flex justify-content-between align-items-center">
-                                        <span class="text-start mt-1"> {{ $order->created_at->format('d M Y') }}</span>
-                                        <span class="text-end">{{ $order->created_at->format('h:i A') }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="border-dashed">
-                                <ul class="d-flex align-items-center justify-content-between">
-                                    <li class="text-start pb-3">
-                                        {{ __('frontend.quantity') }}</li>
-                                    </li>
-                                    <li class="text-start pb-3">
-                                        {{ __('frontend.item') }} </li>
-                                    <li class="text-end pb-3">
-                                        {{ __('frontend.totals') }}</li>
-                                </ul>
 
-                                @foreach ($items as $itemKey => $item)
-                                    <ul class="d-flex align-items-start justify-content-between">
-                                        <li class="text-start align-top pb-2 min-w-80"> {{ $item->quantity }}</li>
-                                        <li class="text-start pb-2"> {{ $item->menuItem->name }}
-                                            {{ $item->variation ? ' ( ' . $item->variation['name'] . ' )' : '' }}
-                                            @if ($item->options)
-                                                <p>
-                                                    @foreach (json_decode($item->options, true) as $option)
-                                                        <span>{{ $option['name'] }}</span>
-                                                    @endforeach
-                                                </p>
-                                            @endif
-                                        </li>
-                                        <li class="text-end align-top pb-2 min-w-80">
-                                            {{ currencyFormat($item->item_total) }}
-                                        </li>
-                                    </ul>
+                            <!-- INFO -->
+                            <div class="info-grid">
+                                <div class="info-box">
+                                    <h4>Teslimat Adresi</h4>
+                                    <p><strong>Ad:</strong> {{ $order->user->name ?? '' }}</p>
+                                    <p><strong>Telefon:</strong> {{ $order->mobile ?? '' }}</p>
+                                    <p><strong>Adres:</strong> {{ orderAddress($order->address) }}</p>
+                                </div>
+
+                                <div class="info-box">
+                                    <h4>Teslimat Durumu</h4>
+                                    <p>
+                                        <strong>Sipariş Durumu:</strong>
+                                        <span class="badge badge-info">Tamamlandı</span>
+                                    </p>
+                                    <p><strong>Sipariş Türü:</strong> {{ $order->getOrderType }}</p>
+                                    <p>
+                                        <strong>Ödeme Durumu:</strong>
+                                        <span class="badge badge-success">Ödendi</span>
+                                    </p>
+                                    <p><strong>Ödeme Yöntemi:</strong>
+                                        {{ trans('payment_method.' . $order->payment_method) }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- ITEMS -->
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Ürün</th>
+                                    <th class="text-right">Fiyat</th>
+                                    <th class="text-center">Adet</th>
+                                    <th class="text-right">Toplam</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($items as $item)
+                                    <tr>
+                                        <td>{{ $item->quantity }} x {{ $item->menuItem->name }}</td>
+                                        <td class="text-right">{{ currencyFormat($item->item_total) }}</td>
+                                    </tr>
                                 @endforeach
+                                </tbody>
+                            </table>
 
+                            <!-- TOTALS -->
+                            <table class="totals">
+                                <tr>
+                                    <td>Ara Toplam</td>
+                                    <td class="text-right">{{ currencyFormat($order->sub_total) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Teslimat Ücreti</td>
+                                    <td class="text-right">{{ currencyFormat($order->delivery_charge) }}</td>
+                                </tr>
+                                <tr class="grand">
+                                    <td>Toplam</td>
+                                    <td class="text-right">{{ currencyFormat($order->total) }}</td>
+                                </tr>
+                            </table>
+
+                            <!-- FOOTER -->
+                            <div class="footer">
+                                <p>Bizi tercih ettiğiniz için teşekkür ederiz...</p>
+                                <strong>{{ $order->restaurant->name }}</strong>
+                                <p>{{setting('site_name')}}</p>
                             </div>
-                            <div class="border-dashed ps-5">
-                                <ul class="ms-4">
-                                    <li class="d-flex align-items-center justify-content-between">
-                                        <span class="text-start"> {{ __('frontend.subtotal') }}:</span>
-                                        <span class="text-end align-top">{{ currencyFormat($order->sub_total) }}</span>
-                                    </li>
-                                    @if ($order->discount && $order->discount->amount > 0 && Schema::hasColumn('coupons', 'slug'))
-                                        <li class="d-flex align-items-center justify-content-between">
-                                            <span class="text-start"> {{ __('frontend.discount') }}:
-                                            </span>
-                                            <span class="text-end align-top">
-                                                {{ currencyFormat($order->discount->amount) }}</span>
-                                        </li>
-                                    @endif
-                                    <li class="d-flex align-items-center justify-content-between">
-                                        <span class="text-start"> {{ __('frontend.delivery_charge') }}:
-                                        </span>
-                                        <span class="text-end align-top">{{ currencyFormat($order->delivery_charge) }}
-                                        </span>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between">
-                                        <span class="text-start"> {{ __('frontend.total') }}:</span>
-                                        <span class="text-end align-top"> {{ currencyFormat($order->total) }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="border-dashed">
-                                <ul class="pt-1 pb-1">
-                                    <li class="d-flex align-items-center">
-                                        <span>{{ __('levels.order_type') }}:</span>
-                                        <span>{{ $order->getOrderType }}</span>
-                                    </li>
-                                    <li class="d-flex align-items-center">
-                                        <span>{{ __('frontend.payment_status') }}:</span>
-                                        <span>{{ trans('payment_status.' . $order->payment_status) ?? null }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="border-dashed">
-                                <ul class="pt-1 pb-1">
-                                    <li class="d-flex">
-                                        <span class="pb-2 min-w-80">{{ __('levels.customer') }}:</span>
-                                        <span>{{ $order->user->name ?? '' }}</span>
-                                    </li>
-                                    <li class="d-flex">
-                                        <span class="pb-2 min-w-80">{{ __('frontend.phone') }}: </span>
-                                        <span>{{ $order->mobile ?? '' }}</span>
-                                    </li>
-                                    <li class="d-flex">
-                                        <span class="pb-2 min-w-80">{{ __('frontend.address') }}:</span>
-                                        <span>{{ orderAddress($order->address) }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="text-center border-dashed pt-2"> {{ __('levels.thank_you') }} </p>
-                            <div class="text-end invoiceFooter mt-4">
-                                <small>{{ setting('site_name') ? setting('site_name') : '' }}</small>
-                                <p>{{ __('frontend.restaurant') }} {{ __('frontend.food_ordering_delivery_system') }}
-                                </p>
-                            </div>
+
                         </div>
                     </div>
+
 
                     <div class="order-btns pt-4">
                         @if ($order->status == \App\Enums\OrderStatus::PENDING)
