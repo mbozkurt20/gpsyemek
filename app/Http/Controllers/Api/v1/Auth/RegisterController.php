@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Api\v1\Auth;
 
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\v1\RegisterResource;
+use App\Mail\VerifyCodeMail;
 use App\Models\DeliveryBoyAccount;
 use App\Models\User;
+use App\Models\Verification;
+use App\Services\NetGsmService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
@@ -61,12 +66,36 @@ class RegisterController extends Controller
             'username'   => $username,
             'phone'      => $request->get('phone'),
             'password'   => bcrypt($request->get('password')),
+            'status'     => UserStatus::INACTIVE
         ];
 
         $user     = User::create($userArray);
         $mainuser = User::find($user->id);
 
         $mainuser->assignRole($role->name);
+
+        $otp = rand(100000, 999999);
+
+        if (Verification::where('otp', $otp)->exists()) {
+            $otp = rand(100000, 999999);
+        }
+
+        Verification::create([
+            'type' => 'phone',
+            'value' => $request->phone,
+            'otp' => $otp,
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        $netgsm = new NetGsmService();
+        $message =
+            "GpsYemek hesabınız için doğrulama kodunuz: {$otp}. "
+            . "Bu kod 5 dakika boyunca geçerlidir. Güvenliğiniz için lütfen kodu kimseyle paylaşmayınız.\n\n"
+            . "İyi günler dileriz,\n"
+            . "GpsYemek";
+        $netgsm->sendSms($request->phone, $message);
+        Log::info("SMS OTP gönderildi: {$otp} - {$request->phone}");
+
 
         if ($request->role == 4) {
             $deliveryBoyAccount                  = new DeliveryBoyAccount();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VerificationController;
 use App\Enums\UserStatus;
 use App\Http\Controllers\GeoController;
 use App\Http\Middleware\RestaurantStatusMiddleware;
@@ -74,6 +75,15 @@ use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 use App\Http\Controllers\Api\v1\Auth\RegisterController;
 
+Route::get('/test', function (){
+    $d = new \App\Services\NetGsmService();
+    $f = $d->sendSms('5453455125','test');
+})->name('home');
+
+Route::get('/verify', [VerificationController::class, 'showForm'])->name('verify.code');
+Route::post('/verify/send', [VerificationController::class, 'sendOtp'])->name('verify.send');
+Route::post('/verify/check', [VerificationController::class, 'verifyOtp'])->name('verify.check');
+
 Route::prefix('agreements')->group(function () {
     Route::get('/membership', [RegisterController::class, 'membership']);
     Route::get('/lighting', [RegisterController::class, 'lighting']);
@@ -135,7 +145,7 @@ Route::group(['prefix' => 'install', 'as' => 'LaravelInstaller::', 'middleware' 
 });
 
 Route::group(['middleware' => ['installed', 'license-activate']], function () {
-     Route::get('/home',                                    [HomeController::class, 'index'])->name('home');
+    Route::get('/home',                                     [HomeController::class, 'index'])->name('home');
     Route::get('/',                                         [HomeController::class, 'index'])->name('home');
     Route::post('/restaurant/close/{restaurantId}',         [RestaurantController::class, 'close'])->name('close');
     Route::post('/restaurant/close-status/{restaurantId}',         [RestaurantController::class, 'closeStatus'])->name('close-status');
@@ -161,7 +171,7 @@ Route::group(['middleware' => ['installed', 'license-activate']], function () {
 
     Route::post('/paytr/callback', [CheckoutController::class, 'paytrCallback'])->name('paytr.callback');
     Route::get('/paytr/success', [CheckoutController::class, 'payTrSuccess'])->name('paytr.success');
-    Route::post('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
+    Route::get('/paytr/fail',    [CheckoutController::class, 'payTrFail'])->name('paytr.fail');
 
     Route::post('paytm/status', [CheckoutController::class, 'paytmCallback']);
 

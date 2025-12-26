@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\VerifyMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'permission'         => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'backend_permission' => \App\Http\Middleware\IsHasBackendPermission::class,
+        'verify' => VerifyMiddleware::class
     ];
 }

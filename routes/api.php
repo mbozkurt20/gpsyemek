@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\v1\WithdrawController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);
     Route::post('logout',                                       [LogoutController::class, 'action']);
     Route::post('register',                                     [RegisterController::class, 'action']);
+    Route::post('/verify/send',                                 [VerificationController::class, 'sendOtpApi']);
+    Route::post('/verify/check',                                [VerificationController::class, 'verifyOtpApi']);
     //push notification
     Route::post('fcm-subscribe',                                [PushNotificationController::class, 'fcmSubscribe']);
     Route::post('fcm-unsubscribe',                              [PushNotificationController::class, 'fcmUnsubscribe']);
@@ -129,13 +132,13 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('paytr-token',                                   [PaymentController::class, 'payTrToken']); //done
 
+    Route::get('orders',                                        [OrderController::class, 'index']); //done
+    Route::post('orders',                                       [OrderController::class, 'store']); //done
     Route::put('orders/{id}',                                   [OrderController::class, 'update']); //done
     Route::get('orders/{id}/show',                              [OrderController::class, 'show']); //done
     Route::post('orders/payment',                               [OrderController::class, 'orderPayment']); //done
     Route::get('orders/{id}/download-attachment',               [OrderController::class, 'attachment']); //done
     Route::get('orders/cancel/{id}',                            [OrderController::class, 'orderCancel']); //done
-    Route::post('orders',                                       [OrderController::class, 'store']); //done
-    Route::get('orders',                                       [OrderController::class, 'index']); //done
 
     Route::get('restaurant-order',                              [RestaurantOrderController::class, 'index']); //done
     Route::get('restaurant-order/history',                      [RestaurantOrderController::class, 'history']); //done
