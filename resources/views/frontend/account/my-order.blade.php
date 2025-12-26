@@ -84,6 +84,9 @@
 
                             </tbody>
                         </table>
+                        @if (blank($orders))
+                            <p class="text-center py-4 text-secondary">Henüz Bir Siparişiniz Bulunmuyor...</p>
+                        @endif
                     </div>
                     <div class="custormpaginate mt-3">
                         {!! $orders->onEachSide(0)->links() !!}

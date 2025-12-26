@@ -330,7 +330,7 @@
                         </style>
 
                         <div class="invoice">
-                            <img style="height: 40px;width: auto;margin-bottom: 10px" src="/frontend/images/gpsyemek.png" alt="">
+                            <img style="height: 0px;width: auto;margin-bottom: 10px" src="/frontend/images/gpsyemek.png" alt="">
                             <!-- TOP -->
                             <div class="top-bar">
                                 <div>
