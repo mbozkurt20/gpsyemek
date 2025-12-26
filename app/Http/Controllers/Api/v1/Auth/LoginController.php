@@ -24,7 +24,7 @@ class LoginController extends Controller
         if (!$token) {
             return response()->json([
                 'data'    => [],
-                'message' => 'You try to using invalid username or password',
+                'message' => 'Geçersiz kullanıcı adı veya şifre kullanmaya çalışıyorsunuz.',
                 'status'  => 401,
             ], 401);
         }
@@ -43,7 +43,7 @@ class LoginController extends Controller
             auth('api')->logout();
             return response()->json([
                 'data'    => [],
-                'message' => 'Your account currently inactive. you can\'t login our system.',
+                'message' => 'Hesabınız şu anda aktif değil. Sistemimize giriş yapamazsınız.',
                 'status'  => 401,
             ], 401);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserStatus;
 use App\Mail\VerifyCodeMail;
 use App\Models\User;
 use App\Models\Verification;
@@ -47,6 +48,9 @@ class VerificationController extends Controller
         }
 
         $otp = rand(100000, 999999);
+        if (Verification::where('otp', $otp)->exists()) {
+            $otp = rand(100000, 999999);
+        }
 
         Verification::create([
             'type' => $request->type,
@@ -97,11 +101,11 @@ class VerificationController extends Controller
         }
 
         if ($verification->expires_at->isPast()) {
-            return response()->json(['error' => 'Kodun süresi dolmuş.'], 400);
+            return response()->json(['error' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.'], 401);
         }
 
         if ($verification->otp !== $request->otp) {
-            return response()->json(['error' => 'Kod hatalı.'], 400);
+            return response()->json(['error' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.'], 401);
         }
 
         $verification->update(['verified' => true]);
@@ -112,6 +116,78 @@ class VerificationController extends Controller
             'verified_value' => $request->value,
         ]);
 
-        return redirect()->route('register')->with('message', 'Başarıyla doğrulandı.');
+        return redirect()->route('register')->with('message', 'Başarıyla Doğrulandı.');
+    }
+
+    public function sendOtpApi(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|in:email,phone',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $otp = rand(100000, 999999);
+        if (Verification::where('otp', $otp)->exists()) {
+            $otp = rand(100000, 999999);
+        }
+
+        Verification::create([
+            'type' => $request->type,
+            'value' => $request->value,
+            'otp' => $otp,
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        if ($request->type === 'email') {
+            Mail::raw("Doğrulama kodun: {$otp}", function () use ($request,$otp) {
+                Mail::to($request->value)->send(new VerifyCodeMail($otp));
+            });
+        } else {
+            $netgsm = new NetGsmService();
+            $message =
+                "GpsYemek hesabınız için doğrulama kodunuz: {$otp}. "
+                . "Bu kod 5 dakika boyunca geçerlidir. Güvenliğiniz için lütfen kodu kimseyle paylaşmayınız.\n\n"
+                . "İyi günler dileriz,\n"
+                . "GpsYemek";
+            $netgsm->sendSms($request->value, $message);
+            Log::info("SMS OTP gönderildi: {$otp} - {$request->value}");
+        }
+
+
+        return response()->json(['success' => 'Doğrulama kodu başarıyla gönderildi.', 'data' => [$request->type => $request->value]], 201);
+    }
+    public function verifyOtpApi(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:email,phone',
+            'value' => 'required',
+            'otp' => 'required',
+        ]);
+
+        $verification = Verification::where('type', $request->type)
+            ->where('value', $request->value)
+            ->latest()
+            ->first();
+
+        if (!$verification) {
+            return response()->json(['error' => 'Doğrulama isteği bulunamadı.'], 404);
+        }
+
+        if ($verification->expires_at->isPast()) {
+            return response()->json(['error' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.'], 401);
+        }
+
+        if ($verification->otp !== $request->otp) {
+            return response()->json(['error' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.'], 401);
+        }
+
+        $verification->update(['verified' => true]);
+        User::where($request->type, $request->value)->update(['status' => UserStatus::ACTIVE]);
+
+        return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
     }
 }

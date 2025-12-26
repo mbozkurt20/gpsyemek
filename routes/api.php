@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\v1\WithdrawController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);
     Route::post('logout',                                       [LogoutController::class, 'action']);
     Route::post('register',                                     [RegisterController::class, 'action']);
+    Route::post('/verify/send',                                 [VerificationController::class, 'sendOtpApi']);
+    Route::post('/verify/check',                                [VerificationController::class, 'verifyOtpApi']);
     //push notification
     Route::post('fcm-subscribe',                                [PushNotificationController::class, 'fcmSubscribe']);
     Route::post('fcm-unsubscribe',                              [PushNotificationController::class, 'fcmUnsubscribe']);

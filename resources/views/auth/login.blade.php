@@ -21,13 +21,13 @@
 
                                 <div class="form-group">
                                     <label for="email" class="form-label"> {{ __('auth.email') }} </label>
-                                    <p class="border border-green-700 py-2 rounded px-2 font-bold">{{ session()->has('verified_value') ? session('verified_value') : old('email') }}</p>
-                                    <input style="display: none" id="demoemail" type="email"
+                                    {{-- <p class="border border-green-700 py-2 rounded px-2 font-bold">{{ session()->has('verified_value') ? session('verified_value') : old('email') }}</p> --}}
+                                    <input  id="demoemail" type="email"
                                            class="form-control  @if ($errors->has('email') || session('block')) is-invalid @endif"
                                            name="email" value="{{ session()->has('verified_value') ? session('verified_value') : old('email') }}"
                                            autocomplete="email" autofocus
                                            placeholder="Email">
-                                    <small class="form-alert green">{{ __('auth.email_privacy') }}</small>
+                                    <!--small class="form-alert green">{{ __('auth.email_privacy') }}</small-->
 
                                     @if ($errors->has('email'))
                                         <span class="is-invalid" role="alert">
