@@ -8,29 +8,23 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('otp', function (Blueprint $table) {
+        Schema::create('password_rest_codes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
+            $table->string('phone');
             $table->string('code');
-            $table->timestamp('expire_date');
+            $table->timestamp('expires_at');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('otp');
+        Schema::dropIfExists('password_rest_codes');
     }
 };

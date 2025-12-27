@@ -28,7 +28,12 @@ class RegisterRequest extends FormRequest
             'email'                 => 'required|email|unique:users,email',
             'username'              => request('username') ? 'required|unique:users,username' : 'nullable',
             'name'                  => 'required|max:40',
-            'phone'                 => 'nullable|max:40',
+            'phone'    => [
+                'required',
+                'string',
+                'max:40',
+                Rule::unique('users', 'phone')->ignore($this->id),
+            ],
             'roles'                 => 'nullable|numeric',
             'password'              => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required',

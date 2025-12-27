@@ -52,8 +52,8 @@ use App\Http\Controllers\VerificationController;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/webhook/orders', [WebhookController::class, 'handle']);
-    Route::post('/password/forgot', [PasswordResetController::class, 'forgot']);
-    Route::post('/password/reset', [PasswordResetController::class, 'reset']);
+    Route::post('/password/forgot', [PasswordResetController::class, 'smsForgot']);
+    Route::post('/password/reset', [PasswordResetController::class, 'smsReset']);
 
     Route::post('login',                                        [LoginController::class, 'action']);
     Route::post('social-login',                                 [SocialLoginController::class, 'action']);

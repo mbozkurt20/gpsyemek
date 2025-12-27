@@ -193,7 +193,7 @@ class VerificationController extends Controller
         $verification->update(['verified' => true]);
 
         $authUser = auth('api')->user();
-        $authUser->update(['phone_verify' => true, 'phone' => $request->value]);
+        $authUser->update(['phone_verify' => true]);
 
         return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
     }
