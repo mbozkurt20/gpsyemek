@@ -18,7 +18,8 @@
                         @csrf
                         @method('PUT')
                         <div class="row">
-                            <div class="form-col-12 sm:form-col-6 md:form-col-4">
+                            {{--
+                                <div class="form-col-12 sm:form-col-6 md:form-col-4">
                                 <label class="db-field-title required" for="area">{{ __('levels.restaurant') }}</label>
                                 <div class="db-field-down-arrow">
                                     <select name="restaurant_id" id="area"
@@ -38,6 +39,7 @@
                                     <small class="db-field-alert">{{ $message }}</small>
                                 @enderror
                             </div>
+                            --}}
                             <div class="form-col-12 sm:form-col-6 md:form-col-4">
                                 <label class="db-field-title">{{ __('levels.title') }}</label>
                                 <input type="text" name="name"

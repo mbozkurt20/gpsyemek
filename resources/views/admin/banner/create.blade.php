@@ -16,7 +16,8 @@
                     <form action="{{ route('admin.banner.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            @if (auth()->user()->myrole == 1)
+                            {{--
+                              @if (auth()->user()->myrole == 1)
                                 <div class="form-col-12 sm:form-col-6 md:form-col-4">
                                     <label class="db-field-title required"
                                         for="area">{{ __('levels.restaurant') }}</label>
@@ -41,6 +42,9 @@
                             @else
                                 <input type="hidden" name="restaurant_id" value="{{ auth()->user()->restaurant->id ?? 0 }}">
                             @endif
+                            --}}
+
+                            <input type="hidden" name="restaurant_id" value="0">
                             <div class="form-col-12 sm:form-col-6 md:form-col-4">
                                 <label class="db-field-title">{{ __('levels.title') }}</label>
                                 <input type="text" name="name"

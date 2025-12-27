@@ -26,7 +26,7 @@
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th"><i class="fas fa-th"></i></th>
                                 <th class="db-table-head-th font-bold">{{ __('levels.image') }}</th>
-                                <th class="db-table-head-th font-bold">{{ __('levels.restaurant') }}</th>
+                                <!--th class="db-table-head-th font-bold">{{ __('levels.restaurant') }}</th-->
                                 <th class="db-table-head-th font-bold">{{ __('levels.title') }}</th>
                                 <th class="db-table-head-th font-bold">{{ __('levels.status') }}</th>
                                 @if (auth()->user()->can('banner_edit') || auth()->user()->can('banner_delete'))
