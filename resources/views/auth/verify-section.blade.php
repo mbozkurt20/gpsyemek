@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 @section('main-content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div class="min-h-screen flex items-center justify-center  px-4">
         <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
 
             <!-- Sol Kısım -->

@@ -74,29 +74,6 @@ class RegisterController extends Controller
 
         $mainuser->assignRole($role->name);
 
-        $otp = rand(100000, 999999);
-
-        if (Verification::where('otp', $otp)->exists()) {
-            $otp = rand(100000, 999999);
-        }
-
-        Verification::create([
-            'type' => 'phone',
-            'value' => $request->phone,
-            'otp' => $otp,
-            'expires_at' => now()->addMinutes(5),
-        ]);
-
-        $netgsm = new NetGsmService();
-        $message =
-            "GpsYemek hesabınız için doğrulama kodunuz: {$otp}. "
-            . "Bu kod 5 dakika boyunca geçerlidir. Güvenliğiniz için lütfen kodu kimseyle paylaşmayınız.\n\n"
-            . "İyi günler dileriz,\n"
-            . "GpsYemek";
-        $netgsm->sendSms($request->phone, $message);
-        Log::info("SMS OTP gönderildi: {$otp} - {$request->phone}");
-
-
         if ($request->role == 4) {
             $deliveryBoyAccount                  = new DeliveryBoyAccount();
             $deliveryBoyAccount->user_id         = $mainuser->id;
