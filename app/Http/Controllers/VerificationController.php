@@ -16,6 +16,11 @@ use Carbon\Carbon;
 
 class VerificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['showForm','sendOtp','verifyOtp']]);
+    }
+
     public function showForm() {
         return view('auth.verify-section');
     }
@@ -174,19 +179,21 @@ class VerificationController extends Controller
             ->first();
 
         if (!$verification) {
-            return response()->json(['error' => 'Doğrulama isteği bulunamadı.'], 404);
+            return response()->json(['status' => 404,'message' => 'Doğrulama isteği bulunamadı.'], 404);
         }
 
         if ($verification->expires_at->isPast()) {
-            return response()->json(['error' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.'], 401);
+            return response()->json(['status' => 401,'message' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.'], 401);
         }
 
         if ($verification->otp !== $request->otp) {
-            return response()->json(['error' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.'], 401);
+            return response()->json(['status' => 401,'message' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.'], 401);
         }
 
         $verification->update(['verified' => true]);
-        User::where($request->type, $request->value)->update(['phone_verify' => true, 'phone' => $request->value]);
+
+        $authUser = auth('api')->user();
+        $authUser->update(['phone_verify' => true, 'phone' => $request->value]);
 
         return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
     }
