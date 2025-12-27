@@ -40,7 +40,7 @@ class User extends Authenticatable implements JWTSubject, HasMedia
         'is_membership_conditions',
         'is_illumination_text',
         'is_electronic_message',
-        'first_name', 'last_name', 'email', 'username', 'password', 'phone', 'address', 'roles', 'device_token', 'status', 'applied', 'provider', 'provider_id', 'country_code', 'country_code_name'];
+        'first_name', 'last_name', 'email','phone_verify', 'username', 'password', 'phone', 'address', 'roles', 'device_token', 'status', 'applied', 'provider', 'provider_id', 'country_code', 'country_code_name'];
 
     /**
      * The attributes that should be hidden for arrays.

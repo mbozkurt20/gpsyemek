@@ -66,7 +66,7 @@ class RegisterController extends Controller
             'username'   => $username,
             'phone'      => $request->get('phone'),
             'password'   => bcrypt($request->get('password')),
-            'status'     => UserStatus::INACTIVE
+            'status'     => UserStatus::ACTIVE
         ];
 
         $user     = User::create($userArray);

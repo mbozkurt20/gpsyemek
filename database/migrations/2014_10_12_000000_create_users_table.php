@@ -31,6 +31,7 @@ return new class extends Migration
             $table->longtext('device_token')->nullable();
             $table->boolean('is_membership_conditions')->default(true);
             $table->boolean('is_illumination_text')->default(true);
+            $table->boolean('phone_verify')->default(false);
             $table->boolean('is_electronic_message')->default(false);
             $table->unsignedTinyInteger('status')->default(UserStatus::ACTIVE);
             $table->unsignedTinyInteger('applied')->default(UserApplied::ADMIN);

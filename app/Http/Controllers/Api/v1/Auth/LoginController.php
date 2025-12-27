@@ -30,16 +30,6 @@ class LoginController extends Controller
         }
 
         $user = auth('api')->user();
-
-        if ($user->status == UserStatus::INACTIVE) {
-            auth('api')->logout();
-            return response()->json([
-                'data'    => [],
-                'message' => 'Üzgünüz, hesabınız şu anda aktif değil. Sistemimize giriş yapamazsınız.',
-                'status'  => 401,
-            ], 401);
-        }
-
         $role = $request->role;
         if ($role == UserRole::WAITER) {
             $restaurant = !blank($user->waiter->restaurant) ? new RestaurantResource($user->waiter->restaurant) : [];
@@ -52,7 +42,7 @@ class LoginController extends Controller
         if ($role && ($role != $user->myrole)) {
             return response()->json([
                 'data'    => [],
-                'message' => "You don't have permission to login",
+                'message' => "Üzgünüz,Giriş yapma izniniz yok.",
                 'status'  => 401,
             ], 401);
         }

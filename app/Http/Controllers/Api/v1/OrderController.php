@@ -93,6 +93,15 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
+
+        if ($user->phone == null || $user->phone_verify == false) {
+            return response()->json([
+                'status'  => 401,
+                'message' => 'Lütfen önce telefon numaranızı profil sayfasından ekleyiniz.',
+            ], 401);
+        }
+
         $validator = new OrderStoreRequest();
         $validator = Validator::make($request->all(), $validator->rules());
 

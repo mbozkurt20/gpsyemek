@@ -186,7 +186,7 @@ class VerificationController extends Controller
         }
 
         $verification->update(['verified' => true]);
-        User::where($request->type, $request->value)->update(['status' => UserStatus::ACTIVE]);
+        User::where($request->type, $request->value)->update(['phone_verify' => true, 'phone' => $request->value]);
 
         return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
     }
