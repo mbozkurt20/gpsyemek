@@ -173,6 +173,20 @@ class VerificationController extends Controller
             'otp' => 'required',
         ]);
 
+        $authUser = auth('api')->user();
+
+
+        $exists = User::where($request->type, $request->value)
+            ->where('id', '!=', $authUser->id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status'  => 409,
+                'message' => 'Üzgünüz, Bu telefon numarası başka bir hesaba zaten bağlı.',
+            ], 409);
+        }
+
         $verification = Verification::where('type', $request->type)
             ->where('value', $request->value)
             ->latest()
@@ -192,8 +206,8 @@ class VerificationController extends Controller
 
         $verification->update(['verified' => true]);
 
-        $authUser = auth('api')->user();
-        $authUser->update(['phone_verify' => true]);
+
+        $authUser->update(['phone_verify' => true, 'phone' => $request->value]);
 
         return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
     }
