@@ -81,7 +81,7 @@ class PasswordResetController extends Controller
 
         $reset->delete();
 
-        return response()->json(['message' => 'Şifre başarıyla güncellendi']);
+        return response()->json(['status' => 200, 'message' => 'Şifreniz Başarıyla Güncellendi']);
     }
 
 
