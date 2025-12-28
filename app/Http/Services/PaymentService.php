@@ -121,6 +121,7 @@ class PaymentService
         $this->data['total'] = isset($cart['totalAmount']) ? $cart['totalAmount'] : 0;
         $this->data['delivery_charge'] = $delivery_charge;
         $this->data['address'] = isset($request['address']) ? $request['address'] : '';
+        $this->data['address_id'] = isset($request['address']) ? $request['address'] : '';
         $this->data['mobile'] = $request['countrycode'] . $request['mobile'];
 
         $orderService = app(OrderService::class)->order($this->data);

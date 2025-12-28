@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -59,9 +60,9 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if($user->status != 5) {
+        if($user->status != UserStatus::ACTIVE) {
             auth()->logout();
-            return redirect(route('login'))->withBlock('Your account currently inactive. you can\'t login our system.')->withInput();
+            return redirect(route('login'))->withBlock('Hesabınız şu anda aktif değil. Sistemimize giriş yapamazsınız.')->withInput();
         }
         // if ($this->checkCartContent()) {
         //     return redirect(route('checkout.index'));

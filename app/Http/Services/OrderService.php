@@ -439,6 +439,7 @@ class OrderService
         $address = "";
         $latitude = "";
         $longitude = "";
+
         if (isset($data['addressLabel'])) {
             if ($data['addressLabel'] == 'current') {
                 $latitude = $data['lat'];
@@ -464,7 +465,6 @@ class OrderService
         } else {
             if (!empty($data['address_id'])) {
                 $addr = Address::find($data['address_id']);
-
                 if (!$addr) {
                     ResponseService::set(['message' => 'Address not found']);
                     return ResponseService::response();
