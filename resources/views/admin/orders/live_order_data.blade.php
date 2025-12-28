@@ -115,7 +115,7 @@
                         <td>#{{$order->id}}</td>
                         <td>{{$order->restaurant->name}}</td>
                         <td>{{ ucwords($order->user->name) ?? '' }}</td>
-                        <td>{{food_date_format($order->created_at)}}</td>
+                        <td>{{date('d-m-Y H:i',strtotime($order->created_at))}}</td>
                         <td>{{$order->getOrderType}}</td>
                         <td>{{currencyFormat($order->total)}}</td>
                         <td>{{ trans('order_status.' . $order->status) }}</td>

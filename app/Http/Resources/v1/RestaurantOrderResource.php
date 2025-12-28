@@ -42,10 +42,10 @@ class RestaurantOrderResource extends JsonResource
             'mobile'           => $this->mobile,
             'lat'              => $this->lat,
             'long'             => $this->long,
-            'created_at'       => $this->created_at->format('d-m-Y, h:i'),
+            'created_at'       => $this->created_at,
             'updated_at'       => $this->updated_at->format('d-m-Y, h:i'),
             'time_format'           => $this->created_at->diffForHumans(),
-            'date'                  => Carbon::parse($this->created_at)->format('d-m-Y H:i'),
+            'date'                  => $this->created_at,
             'items'            => OrderItemsResource::collection(
                 $this->whenLoaded('items')
             ),

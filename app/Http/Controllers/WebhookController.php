@@ -28,7 +28,7 @@ class WebhookController extends Controller
             case 'get_orders':
                 return $this->getOrders($restaurant);
             case 'order_updated':
-                return $this->updateOrder($restaurant->id, $data['order']);
+                return $this->updateOrder($restaurant->id, $data);
             case 'restaurant_status_changed':
                 return $this->restaurantOrderChange($restaurant->id);
             default:
@@ -53,17 +53,32 @@ class WebhookController extends Controller
 
     private function updateOrder($restaurant_id, $data)
     {
-        $order = Order::where('id', $data['id'])
-            ->where('restaurant_id', $restaurant_id)
+        $order = Order::where('restaurant_id', $restaurant_id)
+            ->where('misc->order_code', $data['order_code'])
             ->first();
 
+
+        switch ($data['status']){
+            case 'PREPARED':
+                $orderStatus = OrderStatus::ACCEPT;
+                break;
+
+            case 'ASSIGNED':
+                $orderStatus = OrderStatus::ON_THE_WAY;
+                break;
+
+            case 'DELIVERED':
+                $orderStatus = OrderStatus::COMPLETED;
+                break;
+        }
+
         if ($order) {
-            $order->status = $data['status'];
+            $order->status = $orderStatus;
             $order->update();
 
             return response()->json(['success' => true]);
         } else {
-            return response()->json(['error' => 'Order not found'], 404);
+            return response()->json(['success' => false, 'error' => 'Order not found'], 404);
         }
     }
 
