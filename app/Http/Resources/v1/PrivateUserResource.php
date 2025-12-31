@@ -30,6 +30,7 @@ class PrivateUserResource extends JsonResource
                 'applied'  => (int)$this->applied,
                 'myrole'   => $this->getrole->name,
                 'mystatus' => $this->mystatus,
+                'phone_verify' => $this->phone_verify,
             ],
         ];
     }

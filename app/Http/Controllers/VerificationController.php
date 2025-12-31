@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserStatus;
+use App\Http\Resources\v1\PrivateUserResource;
 use App\Mail\VerifyCodeMail;
 use App\Models\User;
 use App\Models\Verification;
@@ -175,7 +176,6 @@ class VerificationController extends Controller
 
         $authUser = auth('api')->user();
 
-
         $exists = User::where($request->type, $request->value)
             ->where('id', '!=', $authUser->id)
             ->exists();
@@ -206,9 +206,8 @@ class VerificationController extends Controller
 
         $verification->update(['verified' => true]);
 
-
         $authUser->update(['phone_verify' => true, 'phone' => $request->value]);
 
-        return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.'], 201);
+        return response()->json(['success' => 'Doğrulama kodunuz başarıyla doğrulandı.', 'user' => new PrivateUserResource($authUser->refresh())], 201);
     }
 }

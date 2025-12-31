@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             "status"     => (int)$this->status,
             "applied"    => (int)$this->applied,
             "image"      => $this->image,
+            "phone_verify"      => $this->phone_verify,
         ];
     }
 
