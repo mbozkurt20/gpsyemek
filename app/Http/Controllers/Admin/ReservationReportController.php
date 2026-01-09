@@ -62,7 +62,7 @@ class ReservationReportController extends BackendController
                     return date('d M Y', strtotime($reservation->created_at));
                 })
                 ->editColumn('slot', function ($reservation) {
-                    return date('h:i A', strtotime($reservation->timeSlot->start_time)).'-'.date('h:i A', strtotime($reservation->timeSlot->end_time));
+                    return date('d-m-Y H:i', strtotime($reservation->timeSlot->start_time)).'-'.date('h:i', strtotime($reservation->timeSlot->end_time));
                 })
                 ->editColumn('guest', function ($reservation) {
                     return $reservation->guest_number;

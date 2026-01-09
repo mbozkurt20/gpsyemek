@@ -93,7 +93,4 @@ class ReservationService
 
         return $response;
     }
-
-
-
 }

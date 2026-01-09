@@ -2,14 +2,18 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\isNowInTimeRange;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
 class RestaurantStatusMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
+        /*
         $restaurant = $request->route('restaurant'); // Route parametresinden al
         $closedUntil = $restaurant->temporary_closed_until
             ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
@@ -26,6 +30,32 @@ class RestaurantStatusMiddleware
 
         // Eğer URL'yi request veya view'e taşımak istiyorsan:
         $request->merge(['restaurantUrl' => $restaurantUrl]);
+
+        */
+
+        $restaurant = $request->route('restaurant');
+
+        $now = Carbon::now();
+        if ($restaurant->permanently_closed || ($restaurant->temporary_closed_until && Carbon::parse($restaurant->temporary_closed_until)->isFuture())) {
+            return redirect()->route('home');
+        }
+        $activeTimeSlots = $restaurant->timeSlots->where('status', 5)->values();
+        $isOpen = false;
+        if ($activeTimeSlots->isNotEmpty()) {
+            foreach ($activeTimeSlots as $slot) {
+                if (isNowInTimeRange::isNowInTimeRange($slot->start_time, $slot->end_time, $now)) {
+                    $isOpen = true;
+                    break;
+                }
+            }
+        } else {
+            $isOpen = isNowInTimeRange::isNowInTimeRange($restaurant->opening_time, $restaurant->closing_time, $now);
+        }
+        if (!$isOpen) {
+            return redirect()->route('home');
+        }
+
+        $request->merge(['restaurantUrl' => route('restaurant.show', $restaurant)]);
 
         return $next($request);
     }

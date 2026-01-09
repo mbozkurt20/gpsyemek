@@ -5,8 +5,8 @@
     <input type="radio" class="d-none" id="time-slot-{{ $timeSlot['id'] }}" name="time-sloat">
     <label for="time-slot-{{ $timeSlot['id'] }}">
         <p class="d-none time-slot-p">{{ $timeSlot['id'] }}</p>
-        {{ date('h:i A', strtotime($timeSlot['start_time'])) }} -
-        {{ date('h:i A', strtotime($timeSlot['end_time'])) }}
+        {{ date('h:i', strtotime($timeSlot['start_time'])) }} -
+        {{ date('h:i', strtotime($timeSlot['end_time'])) }}
     </label>
 </li>
 @endforeach

@@ -6,6 +6,7 @@ return [
     'welcome_back' => 'Tekrar Hoş Geldiniz!',
     'enter_login_details' => 'Lütfen giriş bilgilerinizi giriniz',
     'email' => 'E-posta',
+    'phone' => 'Telefon Numaranız',
     'email_privacy' => 'E-posta adresiniz asla başkalarıyla paylaşılmayacaktır.',
     'password' => 'Şifre',
     'remember_me' => 'Beni Hatırla',

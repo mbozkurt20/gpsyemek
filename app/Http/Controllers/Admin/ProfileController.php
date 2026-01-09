@@ -168,7 +168,7 @@ class ProfileController extends BackendController
     public function deleteAddress($id)
     {
         Address::findOrFail($id)->delete();
-        return redirect()->back()->withSuccess('The Data Deleted Successfully');
+        return redirect()->back()->withSuccess('Veri Başarıyla Silindi.');
     }
 
     private function checkLabelAddress()

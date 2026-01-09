@@ -68,8 +68,10 @@ class LoginController extends Controller
         //     return redirect(route('checkout.index'));
         // }
         if('admin' == $request->type || $request->type == 'restaurant'){
+            session()->forget(['verified_type','verified_value','name','email']);
             return redirect(route('admin.dashboard.index'));
         }else{
+            session()->forget(['verified_type','verified_value','name','email']);
             return redirect(route('home'));
         }
     }

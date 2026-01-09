@@ -102,6 +102,6 @@ class CustomerReportController extends BackendController
         }
 
         $pdf = PDF::loadView('admin.report.customerReport.pdf', $this->data);
-        return $pdf->download('customerreport-' . date('d-M-Y H:i A') . '.pdf');
+        return $pdf->download('customerreport-' . date('d-M-Y H:i') . '.pdf');
     }
 }

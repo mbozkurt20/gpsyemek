@@ -61,11 +61,11 @@
                 </li>
                 <li class="db-list-item">
                     <span class="db-list-item-title">{{ __('levels.starts_at') }}</span>
-                    <span class="db-list-item-text">{{ date('h:i A d/m/Y',strtotime($coupon->from_date)) }}</span>
+                    <span class="db-list-item-text">{{ date('h:i d/m/Y',strtotime($coupon->from_date)) }}</span>
                 </li>
                 <li class="db-list-item">
                     <span class="db-list-item-title">{{ __('levels.ends_at') }}</span>
-                    <span class="db-list-item-text">{{ date('h:i A d/m/Y',strtotime($coupon->to_date)) }}</span>
+                    <span class="db-list-item-text">{{ date('h:i d/m/Y',strtotime($coupon->to_date)) }}</span>
                 </li>
                 <li class="db-list-item">
                     <span class="db-list-item-title">{{ __('levels.user') }}</span>

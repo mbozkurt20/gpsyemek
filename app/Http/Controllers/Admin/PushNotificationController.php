@@ -81,7 +81,7 @@ class PushNotificationController extends BackendController
     public function destroy($id)
     {
         PushNotification::findOrFail($id)->delete();
-        return redirect(route('admin.push-notification.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.push-notification.index'))->withSuccess('Veri Başarıyla Silindi.');
     }
 
     public function getNotification()

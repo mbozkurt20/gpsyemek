@@ -233,7 +233,7 @@ class MenuItemController extends BackendController
     public function destroy($id)
     {
         MenuItem::owner()->findOrFail($id)->delete();
-        return redirect()->back()->withSuccess('The Data Deleted Successfully');
+        return redirect()->back()->withSuccess('Veri Başarıyla Silindi.');
     }
 
     private function getMenuItem($request)

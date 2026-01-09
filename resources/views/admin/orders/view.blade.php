@@ -410,7 +410,7 @@
                         <li class="pt-1">#{{ $order->order_code }}</li>
                         <li class="pb-1 d-flex justify-content-between align-items-center">
                             <span class="text-start mt-1"> {{ $order->created_at->format('d M Y') }}</span>
-                            <span class="text-end">{{ $order->created_at->format('h:i A') }}</span>
+                            <span class="text-end">{{ $order->created_at->format('h:i') }}</span>
                         </li>
                     </ul>
                 </div>

@@ -4,8 +4,8 @@
         class="db-field-control appearance-none{{ $errors->has('timeSlot') ? ' invalid ' : '' }}">
         @if (!blank($timeSlots))
             @foreach ($timeSlots as $timeSlot)
-                <option value="{{ $timeSlot['id'] }}">{{ date('h:i A', strtotime($timeSlot['start_time'])) }} -
-                    {{ date('h:i A', strtotime($timeSlot['end_time'])) }}</option>
+                <option value="{{ $timeSlot['id'] }}">{{ date('h:i', strtotime($timeSlot['start_time'])) }} -
+                    {{ date('h:i', strtotime($timeSlot['end_time'])) }}</option>
             @endforeach
         @endif
     </select>

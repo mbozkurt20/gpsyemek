@@ -80,7 +80,7 @@ class CollectionController extends BackendController
             $collectionService = app(CollectionService::class)->deleteCollection($collection->user_id, $collection->amount, $collection->delivery_charge);
             if ( $collectionService->status ) {
                 $collection->delete();
-                return redirect(route('admin.collection.index'))->withSuccess('The Data Deleted Successfully');
+                return redirect(route('admin.collection.index'))->withSuccess('Veri Başarıyla Silindi.');
             } else {
                 return redirect(route('admin.collection.index'))->withErrors($collectionService->message);
             }

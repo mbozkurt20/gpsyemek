@@ -125,6 +125,8 @@ class RegisterController extends Controller
             $deliveryBoyAccount->save();
         }
 
+        session()->forget(['verified_type','verified_value','name','email']);
+
         return $user;
     }
 

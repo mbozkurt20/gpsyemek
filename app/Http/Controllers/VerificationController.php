@@ -38,21 +38,6 @@ class VerificationController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $user = $request->type == 'email' ? User::where('email',$request->value)->first()
-            : User::where('phone',$request->value)->first();
-
-        if ($user){
-            session([
-                'verified_type' => $request->type,
-                'verified_value' => $request->value,
-            ]);
-
-            return redirect()->route('login')->with([
-                'type' => $request->type,
-                'value' => $request->value
-            ]);
-        }
-
         $otp = rand(100000, 999999);
         if (Verification::where('otp', $otp)->exists()) {
             $otp = rand(100000, 999999);
@@ -80,7 +65,6 @@ class VerificationController extends Controller
             Log::info("SMS OTP gönderildi: {$otp} - {$request->value}");
         }
 
-
         return view('auth.verify-section',
         [
             'type' => $request->type,
@@ -103,26 +87,34 @@ class VerificationController extends Controller
             ->first();
 
         if (!$verification) {
-            return response()->json(['error' => 'Doğrulama isteği bulunamadı.'], 404);
+            return redirect()->route('verify.code')->with(['error' => 'Doğrulama isteği bulunamadı.','type' => $request->type,'value' => $request->value]);
         }
 
         if ($verification->expires_at->isPast()) {
-            return response()->json(['error' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.'], 401);
+            return redirect()->route('verify.code')->with(['error' => 'Üzgünüz,Doğrulama kodunuzun süresi dolmuş.','type' => $request->type,'value' => $request->value]);
         }
 
         if ($verification->otp !== $request->otp) {
-            return response()->json(['error' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.'], 401);
+            return redirect()->route('verify.code')->with(['error' => 'Doğrulama kodunuz hatalı, kontrol edip tekrar deneyiniz.','type' => $request->type,'value' => $request->value]);
         }
 
         $verification->update(['verified' => true]);
 
-        // Kullanıcının kayıt sayfasına geçebilmesi için session tut
+        $user = $request->type == 'email' ? User::where('email',$request->value)->first()
+            : User::where('phone',$request->value)->first();
+
         session([
             'verified_type' => $request->type,
             'verified_value' => $request->value,
+            'name' => $user->name,
+            'email' => $user->email
         ]);
 
-        return redirect()->route('register')->with('message', 'Başarıyla Doğrulandı.');
+        return redirect()->route($user ? 'login' : 'register')->with([
+            'type' => $request->type,
+            'value' => $request->value,
+            'user' => $user
+        ]);
     }
 
     public function sendOtpApi(Request $request)
@@ -153,6 +145,7 @@ class VerificationController extends Controller
                 Mail::to($request->value)->send(new VerifyCodeMail($otp));
             });
         } else {
+            /*
             $netgsm = new NetGsmService();
             $message =
                 "GpsYemek hesabınız için doğrulama kodunuz: {$otp}. "
@@ -161,6 +154,7 @@ class VerificationController extends Controller
                 . "GpsYemek";
             $netgsm->sendSms($request->value, $message);
             Log::info("SMS OTP gönderildi: {$otp} - {$request->value}");
+             */
         }
 
 

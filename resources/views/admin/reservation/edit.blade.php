@@ -127,8 +127,8 @@
                                         class="db-field-control appearance-none {{ $errors->has('timeSlot') ? ' is-invalid ' : '' }}">
                                         @if (!blank($timeSlots))
                                             <option value="{{ $timeSlots->id }}" selected>
-                                                {{ date('h:i A', strtotime($timeSlots->start_time)) }} -
-                                                {{ date('h:i A', strtotime($timeSlots->end_time)) }}</option>
+                                                {{ date('h:i', strtotime($timeSlots->start_time)) }} -
+                                                {{ date('h:i', strtotime($timeSlots->end_time)) }}</option>
                                         @endif
                                     </select>
                                     @error('time_slot')

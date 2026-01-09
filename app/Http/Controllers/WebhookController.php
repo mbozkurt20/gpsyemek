@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Http\Resources\v1\OrderResource;
 use App\Http\Resources\v1\RestaurantOrderResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Restaurant;
@@ -42,7 +43,7 @@ class WebhookController extends Controller
             ->where('restaurant_id', $restaurant->id)
             ->where('status', OrderStatus::PENDING)
             ->orderBy('created_at', 'desc')
-            ->whereDate('created_at', date('Y-m-d'))
+            ->whereDate('created_at', Carbon::today())
             ->get();
 
         return response()->json([
@@ -57,7 +58,6 @@ class WebhookController extends Controller
             ->where('misc->order_code', $data['order_code'])
             ->first();
 
-
         switch ($data['status']){
             case 'PREPARED':
                 $orderStatus = OrderStatus::ACCEPT;
@@ -69,6 +69,10 @@ class WebhookController extends Controller
 
             case 'DELIVERED':
                 $orderStatus = OrderStatus::COMPLETED;
+                break;
+
+            case 'REJECTED':
+                $orderStatus = OrderStatus::REJECT;
                 break;
         }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\BackendController;
 use App\Http\Requests\TimeSlotRequest;
 use App\Models\Restaurant;
 use App\Models\TimeSlot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Yajra\Datatables\Datatables;
@@ -102,7 +103,7 @@ class TimeSlotController extends BackendController
     public function destroy($id)
     {
         TimeSlot::findOrFail($id)->delete();
-        return redirect(route('admin.time-slots.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.time-slots.index'))->withSuccess('Veri Başarıyla Silindi.');
     }
 
     private function getTimeSlot(Request $request)
@@ -136,10 +137,10 @@ class TimeSlotController extends BackendController
                     return Str::limit($timeSlot->restaurant->name ?? null, 30);
                 })
                 ->editColumn('start_time', function ($timeSlot) {
-                    return date('h:i A', strtotime($timeSlot->start_time));
+                    return Carbon::create($timeSlot->start_time)->format('H:i');
                 })
                 ->editColumn('end_time', function ($timeSlot) {
-                    return date('h:i A', strtotime($timeSlot->end_time));
+                    return  Carbon::create($timeSlot->end_time)->format('H:i');
                 })
                 ->editColumn('status', function ($timeSlot) {
                     return $timeSlot->statusName;

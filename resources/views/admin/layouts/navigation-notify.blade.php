@@ -76,8 +76,7 @@
         </div>
 
         {{-- SAĞ TARAF --}}
-        <div class="text-gray-600 whitespace-nowrap">
-            Açılış - Kapanış
+        <div class="text-gray-600 whitespace-nowrap px-2">
             ({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }}
             -
             {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})

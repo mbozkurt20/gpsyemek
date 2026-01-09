@@ -118,7 +118,7 @@ class LanguageController extends BackendController
     public function destroy($id)
     {
         Language::findOrFail($id)->delete();
-        return redirect(route('admin.language.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.language.index'))->withSuccess('Veri Başarıyla Silindi.');
     }
 
     private function getLanguage(Request $request)

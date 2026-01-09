@@ -15,8 +15,8 @@ class TimeSlotResource extends JsonResource
             'id'             => $this['id'],
             'start_time'     => $this['start_time'],
             'end_time'       => $this['end_time'],
-            'startTime'      => date('h:i A', strtotime($this['start_time'])),
-            'endTime'        => date('h:i A', strtotime($this['end_time'])),
+            'startTime'      => date('d-m-Y H:i', strtotime($this['start_time'])),
+            'endTime'        => date('d-m-Y H:i', strtotime($this['end_time'])),
         ];
 
         return $result;

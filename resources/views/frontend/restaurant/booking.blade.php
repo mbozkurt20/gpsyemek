@@ -179,8 +179,8 @@
                         <li>{{ __('frontend.date') }}<span> {{ $reservationDate }} </span></li>
                         <li>{{ __('frontend.number_of_guests') }} <span>{{ $guest }}
                                 {{ __('frontend.adults') }}</span></li>
-                        <li>{{ __('frontend.time_slot') }}<span> {{ date('h:i A', strtotime($timeSlot->start_time)) }}
-                                - {{ date('h:i A', strtotime($timeSlot->end_time)) }} </span></li>
+                        <li>{{ __('frontend.time_slot') }}<span> {{ date('h:i', strtotime($timeSlot->start_time)) }}
+                                - {{ date('h:i', strtotime($timeSlot->end_time)) }} </span></li>
                     </ul>
                 </div>
             </div>

@@ -39,7 +39,7 @@
                                                 {{ \Carbon\Carbon::parse($reservation->reservation_date)->format('d M Y') }}
                                             </td>
                                             <td data-title="slot">
-                                                {{ date('h:i A', strtotime($reservation->timeSlot->start_time)) . '-' . date('h:i A', strtotime($reservation->timeSlot->end_time)) }}
+                                                {{ date('h:i', strtotime($reservation->timeSlot->start_time)) . '-' . date('h:i', strtotime($reservation->timeSlot->end_time)) }}
                                             </td>
                                             <td data-title="table">{{ $reservation->table->name }} </td>
                                             <td data-title="guest">{{ $reservation->guest_number }}</td>

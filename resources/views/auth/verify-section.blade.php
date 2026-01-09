@@ -50,6 +50,12 @@
                     </div>
                 @endif
 
+                @if(session('error'))
+                    <div class="bg-red-200 text-red-500 p-4 rounded-xl font-medium mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @if($errors->any())
                     <div class="bg-red-50 text-red-700 p-4 rounded-xl font-medium mb-4">
                         @foreach($errors->all() as $error)
@@ -59,20 +65,19 @@
                 @endif
 
                 <!-- Tabs -->
-                <div class="flex justify-between mb-6 border-b mt-5">
-                    <button id="tabEmailBtn"
+                <div class="flex  mt-3">
+                    <!--button id="tabEmailBtn"
                             class="pb-3 border-b-4 border-[#259a38] text-[#259a38] font-bold w-1/2 text-center">
                         Email ile Doğrula
-                    </button>
+                    </button-->
                     <button id="tabPhoneBtn"
-                            class="pb-3 text-gray-400 hover:text-[#259a38] w-1/2 text-center">
+                            class="pb-3 text-gray-400 hover:text-[#259a38]  text-center">
                         Telefon ile Doğrula     {{ session('type')}}
                     </button>
                 </div>
 
-
                 <!-- Email Form -->
-                <div id="tabEmailContent">
+                <div id="tabEmailContent" class="hidden">
                     <form action="{{ route('verify.send') }}" method="POST" class="mb-6">
                         @csrf
                         <input type="hidden" name="type" value="email">
@@ -105,28 +110,42 @@
                 </div>
 
                 <!-- Telefon Form -->
-                <div id="tabPhoneContent" class="hidden">
+                <div id="tabPhoneContent">
                     <form action="{{ route('verify.send') }}" method="POST">
                         @csrf
                         <input type="hidden" name="type" value="phone">
-                        <input id="phoneInput" type="text" value="{{isset($type) && $type == 'phone' ? $value : null}}" name="value" placeholder="5xx xxx xx xx" required
+                        <input id="phoneInput"
+                               type="text"
+                               inputmode="numeric"
+                               autocomplete="off"
+                               value="{{isset($type) && $type == 'phone' ? $value :  session('value')}}"
+                               name="value"
+                               placeholder="5xx xxx xx xx"
+                               maxlength="13"
+                               required
                                class="w-full border border-gray-300 rounded-xl p-3 mb-3 focus:ring-2 focus:ring-[#259a38] focus:outline-none">
 
-                        @if(!isset($type))
+                        @if(!isset($type) || !session('type'))
                             <button type="submit"
-                                    class="w-full bg-[#259a38] text-white py-3 rounded-xl hover:bg-[#1e7a2b] font-semibold">
+                                    class="w-full mb-4 bg-[#259a38] text-white py-3 rounded-xl hover:bg-[#1e7a2b] font-semibold">
                                 Gönder
                             </button>
                         @endif
                     </form>
 
-                    @if(isset($type) && $type == 'phone')
+                    @if(isset($type) && $type == 'phone' || session('type') == 'phone')
                         <form action="{{ route('verify.check') }}" method="POST">
                             @csrf
                             <input type="hidden" name="type" value="phone">
-                            <input type="hidden" name="value" value="{{ $value }}">
-                            <input type="text" name="otp" placeholder="6 haneli OTP kodunu girin" required
+                            <input type="hidden" name="value" value="{{ isset($value) ? $value : session('value') }}">
+                            <input type="text"
+                                   name="otp"
+                                   id="otp"
+                                   placeholder="8 haneli OTP kodunu girin"
+                                   required
+                                   maxlength="8"
                                    class="w-full border border-gray-300 rounded-xl p-3 mb-3 focus:ring-2 focus:ring-[#259a38] focus:outline-none">
+
                             <button type="submit"
                                     class="w-full bg-[#259a38] text-white py-3 rounded-xl hover:bg-[#1e7a2b] font-semibold">
                                 Doğrula
@@ -160,12 +179,58 @@
             tabEmailBtn.classList.remove('border-b-4', 'border-[#259a38]', 'text-[#259a38]', 'font-bold');
             tabEmailBtn.classList.add('text-gray-400');
         });
+    </script>
 
+    <script>
         const phoneInput = document.getElementById('phoneInput');
+
+        // Klavyeden sadece rakam, backspace, delete, ok tuşları
+        phoneInput.addEventListener('keydown', (e) => {
+            const allowedKeys = [
+                'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+            ];
+
+            if (
+                allowedKeys.includes(e.key) ||
+                (e.key >= '0' && e.key <= '9')
+            ) {
+                return;
+            }
+
+            e.preventDefault();
+        });
+
+        // Input + Paste kontrolü
         phoneInput.addEventListener('input', (e) => {
-            let x = e.target.value.replace(/\D/g, '').substring(0, 10);
-            let formatted = x.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4');
-            e.target.value = formatted.trim();
+            let value = e.target.value.replace(/\D/g, '');
+
+            // 5 ile başlamıyorsa komple sıfırla
+            if (value && value[0] !== '5') {
+                value = '';
+            }
+
+            // Max 10 rakam
+            value = value.slice(0, 10);
+
+            // Formatlama: 5xx xxx xx xx
+            let formatted = '';
+            if (value.length > 0) formatted = value.slice(0, 3);
+            if (value.length > 3) formatted += ' ' + value.slice(3, 6);
+            if (value.length > 6) formatted += ' ' + value.slice(6, 8);
+            if (value.length > 8) formatted += ' ' + value.slice(8, 10);
+
+            e.target.value = formatted;
+        });
+    </script>
+    <script>
+        document.getElementById("otp").addEventListener("input", function (e) {
+            // Sadece rakam bırak
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+
+            // 8 haneden fazlasını kes
+            if (e.target.value.length > 8) {
+                e.target.value = e.target.value.slice(0, 8);
+            }
         });
     </script>
 

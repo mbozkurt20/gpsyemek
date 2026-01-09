@@ -94,6 +94,6 @@ class CollectionReportController extends BackendController
 
 
         $pdf = PDF::loadView('admin.report.shopownersales.pdf', $this->data);
-        return $pdf->download('shopownersalesreport-' . date('d-M-Y H:i A') . '.pdf');
+        return $pdf->download('shopownersalesreport-' . date('d-M-Y H:i') . '.pdf');
     }
 }

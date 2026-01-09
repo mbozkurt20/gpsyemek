@@ -1,8 +1,11 @@
 <aside class="db-sidebar">
     <div class="db-sidebar-header">
-        <a href="{{ route('home') }}" class="w-24"><img src="{{ themeSetting('site_logo') ? themeSetting('site_logo')->logo : asset('images/seeder/settings/logo.png') }}" alt="logo"></a>
+        <a href="{{ route('home') }}" class="w-24">
+            <img src="{{ themeSetting('site_logo') ? themeSetting('site_logo')->logo : asset('images/seeder/settings/logo.png') }}" alt="logo">
+        </a>
         <button class="fa-solid fa-xmark xmark-btn"></button>
     </div>
+
     <nav class="db-sidebar-nav">
         @isset($backendMenus)
             @foreach ($backendMenus as $menu)

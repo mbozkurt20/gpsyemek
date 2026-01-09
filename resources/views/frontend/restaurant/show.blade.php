@@ -325,8 +325,8 @@
                             @endforeach
                         </h4>
                     @endif
-                    <p>{{ __('frontend.open') }} {{ date('h:i A', strtotime($restaurant->opening_time)) }} -
-                        {{ date('h:i A', strtotime($restaurant->closing_time)) }} </p>
+                    <p>{{ __('frontend.open') }} {{ date('h:i', strtotime($restaurant->opening_time)) }} -
+                        {{ date('h:i', strtotime($restaurant->closing_time)) }} </p>
                 </div>
                 <div class="nav nav-tabs">
                     <a class="nav-link active" data-bs-toggle="tab" href="#about">{{ __('frontend.about') }}</a>
@@ -338,8 +338,8 @@
                             <ul>
                                 <li>
                                     <h3>{{ __('frontend.delivery_hours') }} </h3>
-                                    <p> {{ date('h:i A', strtotime($restaurant->opening_time)) }} -
-                                        {{ date('h:i A', strtotime($restaurant->closing_time)) }} </p>
+                                    <p> {{ date('h:i', strtotime($restaurant->opening_time)) }} -
+                                        {{ date('h:i', strtotime($restaurant->closing_time)) }} </p>
                                 </li>
                                 <li>
                                     <h3>{{ __('frontend.address') }}</h3>

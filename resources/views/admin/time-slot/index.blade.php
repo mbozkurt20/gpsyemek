@@ -1,7 +1,7 @@
 @extends('admin.app')
 
 @section('content')
-  
+
   <div class="row">
     <div class="col-12">
         <div class="custome-breadcrumb">
@@ -22,7 +22,7 @@
                         @endcan
                     </div>
                 </div>
-    
+
                 <div class="db-table-responsive">
                     <table class="db-table table stripe" id="maintable" data-url="{{ route('admin.time-slots.index') }}" data-status="{{ \App\Enums\Status::ACTIVE }}" data-hidecolumn="{{ auth()->user()->can('time-slots_edit') || auth()->user()->can('time-slots_delete') }}">
                         <thead class="db-table-head">
@@ -46,10 +46,10 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('backend/lib/datatable/css/dataTables.tailwindcss.css') }}">
 @endpush
-    
+
 @push('js')
     <script src="{{ asset('backend/lib/datatable/js/dataTables.js') }}"></script>
     <script src="{{ asset('backend/lib/datatable/js/dataTables.tailwindcss.js') }}"></script>
-    <script src="{{ asset('backend/lib/datatable/js/tailwindcss.js') }}"></script>
+    <!--script src="{{ asset('backend/lib/datatable/js/tailwindcss.js') }}"></script-->
     <script src="{{ asset('js/time-slot/index.js') }}"></script>
 @endpush

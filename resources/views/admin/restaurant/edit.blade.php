@@ -566,8 +566,8 @@
                     </div>
 
                     <span class="text-gray-600 text-sm">
-           Açılış - Kapanış ({{ date('H:i', strtotime($restaurant->opening_time)) }} - {{ date('H:i', strtotime($restaurant->closing_time)) }})
-        </span>
+                        ({{ date('H:i', strtotime($restaurant->opening_time)) }} - {{ date('H:i', strtotime($restaurant->closing_time)) }})
+                    </span>
 
                     @php
                         $closedUntil = $restaurant->temporary_closed_until

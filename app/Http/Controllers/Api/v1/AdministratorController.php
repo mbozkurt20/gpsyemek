@@ -146,7 +146,7 @@ class AdministratorController extends BackendController
         $user = User::role($role->name)->findOrFail($id);
         if ($this->deletePermission($user)) {
             $user->delete();
-            return $this->successresponse(['status'=>200, 'message'=>'The Data Deleted Successfully']);
+            return $this->successresponse(['status'=>200, 'message'=>'Veri Başarıyla Silindi.']);
         }
         return $this->successresponse(['status'=>200, 'message'=>'You don\'t have permission to delete this data']);
     }

@@ -179,6 +179,11 @@ class Restaurant extends BaseModel implements HasMedia
             $media->delete();
         }
     }
+
+    public function timeSlots()
+    {
+        return $this->hasMany(TimeSlot::class,'restaurant_id');
+    }
     public function getCurrentStatusNameAttribute()
     {
         if ($this->current_status == CurrentStatus::YES) {

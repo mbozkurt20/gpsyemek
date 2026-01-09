@@ -58,7 +58,7 @@ class RestaurantRequest extends FormRequest
             'image'             => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5098',
             'restaurant_logo'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5098',
             'username'          => request('username') ? $username : ['nullable'],
-            'phone'             => ['required', 'numeric'],
+            'phone'             => ['required'],
             'address'           => ['required', 'max:200'],
             'userstatus'        => ['required', 'numeric'],
             'waiter_status'     => ['required', 'numeric'],

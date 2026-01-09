@@ -38,7 +38,7 @@
                         <li class="db-list-item">
                             <span class="db-list-item-title">{{ __('levels.timeSlot') }}</span>
                             <span
-                                class="db-list-item-text">{{ date('h:i A', strtotime($reservation->timeSlot->start_time)) . '-' . date('h:i A', strtotime($reservation->timeSlot->end_time)) }}</span>
+                                class="db-list-item-text">{{ date('h:i', strtotime($reservation->timeSlot->start_time)) . '-' . date('h:i', strtotime($reservation->timeSlot->end_time)) }}</span>
                         </li>
                         <li class="db-list-item">
                             <span class="db-list-item-title">{{ __('levels.table') }}</span>

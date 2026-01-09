@@ -24,15 +24,15 @@ class ReservationResource extends JsonResource
             "status"                  => (int)$this->status,
             'status_name'             => trans('reservation_status.' . $this->status),
             "reservation_date"        => date('d M Y',strtotime($this->reservation_date)),
-            "slot"                    => date('h:i A', strtotime($this->timeSlot->start_time)).'-'.date('h:i A', strtotime($this->timeSlot->end_time)),
+            "slot"                    => date('d-m-Y', strtotime($this->timeSlot->start_time)).'-'.date('h:i', strtotime($this->timeSlot->end_time)),
             "table"                   => $this->table->name,
             "guest"                   => (int)$this->guest_number,
             "restaurant_address"      => $this->restaurant->address,
             "restaurant_name"         => $this->restaurant->name,
             "restaurant_phone"        => $this->restaurant->user->phone,
             "restaurant_email"        => $this->restaurant->user->email,
-            "restaurant_opening_time" => Carbon::parse($this->opening_time)->format('h:i A'),
-            "restaurant_closing_time" => Carbon::parse($this->closing_time)->format('h:i A'),
+            "restaurant_opening_time" => Carbon::parse($this->opening_time)->format('h:i'),
+            "restaurant_closing_time" => Carbon::parse($this->closing_time)->format('h:i'),
 
         ];
     }

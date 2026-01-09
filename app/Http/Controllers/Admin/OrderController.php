@@ -170,7 +170,7 @@ class OrderController extends BackendController
     public function destroy($id)
     {
         Order::orderowner()->findOrFail($id)->delete();
-        return redirect(route('admin.orders.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.orders.index'))->withSuccess('Veri Başarıyla Silindi.');
     }
 
     /**

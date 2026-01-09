@@ -141,7 +141,7 @@ class RequestWithdrawController extends BackendController
         $requestWithdraw = RequestWithdraw::where('status', RequestWithdrawStatus::PENDING)->findOrFail($id);
         if ( !blank($requestWithdraw) ) {
             $requestWithdraw->delete();
-            return redirect(route('admin.request-withdraw.index'))->withSuccess('The Data Deleted Successfully');
+            return redirect(route('admin.request-withdraw.index'))->withSuccess('Veri Başarıyla Silindi.');
         } else {
             return redirect(route('admin.request-withdraw.index'))->withError('You cant\'t delete this data');
         }

@@ -157,7 +157,7 @@ class AdministratorController extends BackendController
         $user = User::role($role->name)->findOrFail($id);
         if ($this->deletePermission($user)) {
             $user->delete();
-            return redirect(route('admin.administrators.index'))->withSuccess('The Data Deleted Successfully');
+            return redirect(route('admin.administrators.index'))->withSuccess('Veri Başarıyla Silindi.');
         }
         return redirect(route('admin.administrators.index'))->withError('You don\'t have permission to delete this data');
     }

@@ -7,8 +7,15 @@
             </div>
         </figure>
 
+        @php
+            $status = \App\Helpers\RestaurantHelper::getStatus($restaurant);
+
+            $closedUntil = $restaurant->temporary_closed_until ? \Carbon\Carbon::parse($restaurant->temporary_closed_until) : null;
+            $restaurantUrl = '';
+        @endphp
+
         <div class="product-card-content">
-            @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+           @if ($status != 'open')
                 <h4 class="product-card-title showClosedNotification">
                     {{ \Illuminate\Support\Str::limit($menu_item['name'], 20) }}
                 </h4>
@@ -34,7 +41,7 @@
                     @endif
                 </div>
 
-                @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+               @if ($status != 'open')
                     <button class="product-card-add showClosedNotification">
                         <span>{{ __('frontend.add') }}</span>
                     </button>

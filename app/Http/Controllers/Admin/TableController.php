@@ -102,7 +102,7 @@ class TableController extends BackendController
     public function destroy($id)
     {
         Table::findOrFail($id)->delete();
-        return redirect(route('admin.tables.index'))->withSuccess('The Data Deleted Successfully');
+        return redirect(route('admin.tables.index'))->withSuccess('Veri Başarıyla Silindi.');
     }
 
     private function getTable($request)

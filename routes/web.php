@@ -75,11 +75,6 @@ use App\Http\Controllers\Admin\CashOnDeliveryOrderBalanceReportController;
 use App\Http\Controllers\Admin\ReservationController as ReservationsController;
 use App\Http\Controllers\Api\v1\Auth\RegisterController;
 
-Route::get('/test', function (){
-    $d = new \App\Services\NetGsmService();
-    $f = $d->sendSms('5453455125','test');
-})->name('home');
-
 Route::get('/verify', [VerificationController::class, 'showForm'])->name('verify.code');
 Route::post('/verify/send', [VerificationController::class, 'sendOtp'])->name('verify.send');
 Route::post('/verify/check', [VerificationController::class, 'verifyOtp'])->name('verify.check');

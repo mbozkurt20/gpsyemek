@@ -115,7 +115,7 @@ class WithdrawController extends BackendController
                                 $requestWithdraw->save();
                             }
                         }
-                        return redirect(route('admin.withdraw.index'))->withSuccess('The Data Deleted Successfully');
+                        return redirect(route('admin.withdraw.index'))->withSuccess('Veri Başarıyla Silindi.');
                     } else {
                         return redirect(route('admin.withdraw.index'))->withError($response->message);
                     }

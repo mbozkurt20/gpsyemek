@@ -20,13 +20,16 @@
                                        value="{{request()->has('type') ? request()->type : 'frontend'}}">
 
                                 <div class="form-group">
-                                    <label for="email" class="form-label"> {{ __('auth.email') }} </label>
-                                    {{-- <p class="border border-green-700 py-2 rounded px-2 font-bold">{{ session()->has('verified_value') ? session('verified_value') : old('email') }}</p> --}}
-                                    <input  id="demoemail" type="email"
+                                    @php $t = session()->has('verified_type') ? session('verified_type') : 'Email' @endphp
+                                    <p ><span class="fw-bold">Sayın {{ session()->has('name') ? session('name') : '' }} [  {{ session()->has('verified_value') ? session('verified_value') : '' }} ]</span> numaranıza ait hesap şifrenizi giriniz.</p>
+                                    <input style="display: none" name="email" value="{{session()->has('email') ? session('email') : ''}}">
+                                    <!--label for="email" class="form-label"> {{ __("auth.{$t}") }} </label-->
+                                    <!--p class="border border-green-700 py-2 rounded px-2 font-bold">{{ session()->has('verified_value') ? session('verified_value') : old('email') }}</p-->
+                                    <!--input  id="demoemail" type="email"
                                            class="form-control  @if ($errors->has('email') || session('block')) is-invalid @endif"
                                            name="email" value="{{ session()->has('verified_value') ? session('verified_value') : old('email') }}"
                                            autocomplete="email" autofocus
-                                           placeholder="Email">
+                                           placeholder="Email"-->
                                     <!--small class="form-alert green">{{ __('auth.email_privacy') }}</small-->
 
                                     @if ($errors->has('email'))

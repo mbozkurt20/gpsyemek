@@ -129,7 +129,7 @@ class RoleController extends BackendController
             return redirect(route('admin.role.index'))->withError('The Data Not Deleted Successfully');
         } else {
             Role::findOrFail($id)->delete();
-            return redirect(route('admin.role.index'))->withSuccess('The Data Deleted Successfully');
+            return redirect(route('admin.role.index'))->withSuccess('Veri Başarıyla Silindi.');
         }
     }
 

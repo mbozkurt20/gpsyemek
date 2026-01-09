@@ -32,8 +32,12 @@
 
 
     @php
-        $currenttime = \Carbon\Carbon::now()->format('H:i:s');
+        $status = \App\Helpers\RestaurantHelper::getStatus($restaurant);
+
+        $closedUntil = $restaurant->temporary_closed_until ? \Carbon\Carbon::parse($restaurant->temporary_closed_until) : null;
+        $restaurantUrl = '';
     @endphp
+
     @if (!blank($categories_products))
         @foreach ($categories_products as $categories_product_key => $categories_product)
             @if ($activeCategory == 'all' || $activeCategory == $categories_product_key)
@@ -61,7 +65,7 @@
 
                                             <div class="product-card-content">
 
-                                                @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+                                                @if ($status != 'open')
                                                     <h4 class="product-card-title showClosedNotification">
                                                         {{ \Illuminate\Support\Str::limit($menu_item['name'], 20) }}
                                                     </h4>
@@ -94,7 +98,7 @@
                                                     </div>
 
 
-                                                    @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+                                                    @if ($status != 'open')
                                                         <button class="product-card-add showClosedNotification">
                                                             <svg width="14" height="14" viewBox="0 0 14 14"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +154,7 @@
                                         </div>
                                     </figure>
                                     <div class="product-card-content">
-                                        @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+                                        @if ($status != 'open')
                                             <h4 class="product-card-title showClosedNotification">
                                                 {{ \Illuminate\Support\Str::limit($other_product['name'], 20) }}
                                             </h4>
@@ -182,7 +186,7 @@
                                             </div>
 
 
-                                            @if ($restaurant->opening_time > $currenttime || $restaurant->closing_time < $currenttime)
+                                            @if ($status != 'open')
                                                 <button class="product-card-add showClosedNotification">
                                                     <svg width="14" height="14" viewBox="0 0 14 14"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
