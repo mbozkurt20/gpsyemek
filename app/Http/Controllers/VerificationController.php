@@ -38,6 +38,10 @@ class VerificationController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        if (User::where('phone',$request->input('phone'))->exists()) {
+            return redirect()->back()->with('error', 'Üzgünüz, doğrulamak istediğiniz telefon numarasına ait hesap bulunmuyor!');
+        }
+
         $otp = rand(100000, 999999);
         if (Verification::where('otp', $otp)->exists()) {
             $otp = rand(100000, 999999);
