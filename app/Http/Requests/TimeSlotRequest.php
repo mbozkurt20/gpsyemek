@@ -27,6 +27,7 @@ class TimeSlotRequest extends FormRequest
         return [
             'restaurant_id'    => 'required|numeric',
             'start_time'    => 'required',
+            'day'           => 'required',
             'end_time'      => 'required',
             'status'        => 'required|numeric',
         ];
@@ -37,6 +38,7 @@ class TimeSlotRequest extends FormRequest
         return [
             'start_time'    => trans('validation.attributes.start_time'),
             'end_time'      => trans('validation.attributes.end_time'),
+            'day'            => trans('validation.attributes.day'),
             'status'        => trans('validation.attributes.status'),
         ];
     }

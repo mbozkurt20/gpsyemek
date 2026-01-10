@@ -56,6 +56,7 @@ class TimeSlotController extends BackendController
         $timeSlot             = new TimeSlot;
         $timeSlot->start_time = date('H:i:s', strtotime($request->start_time));
         $timeSlot->end_time   = date('H:i:s', strtotime($request->end_time));
+        $timeSlot->day     = $request->day;
         $timeSlot->restaurant_id     = $request->restaurant_id;
         $timeSlot->status     = $request->status;
         $timeSlot->save();
@@ -88,6 +89,7 @@ class TimeSlotController extends BackendController
         $timeSlot             = TimeSlot::findOrFail($id);
         $timeSlot->start_time = date('H:i:s', strtotime($request->start_time));
         $timeSlot->end_time   = date('H:i:s', strtotime($request->end_time));
+        $timeSlot->day        = $request->day;
         $timeSlot->restaurant_id     = $request->restaurant_id;
         $timeSlot->status     = $request->status;
         $timeSlot->save();
@@ -135,6 +137,9 @@ class TimeSlotController extends BackendController
                 })
                 ->editColumn('restaurant_id', function ($timeSlot) {
                     return Str::limit($timeSlot->restaurant->name ?? null, 30);
+                })
+                ->editColumn('day', function ($timeSlot) {
+                    return trans('validation.attributes.'.$timeSlot->day);
                 })
                 ->editColumn('start_time', function ($timeSlot) {
                     return Carbon::create($timeSlot->start_time)->format('H:i');

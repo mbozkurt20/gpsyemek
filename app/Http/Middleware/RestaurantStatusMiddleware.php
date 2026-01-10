@@ -36,10 +36,13 @@ class RestaurantStatusMiddleware
         $restaurant = $request->route('restaurant');
 
         $now = Carbon::now();
+        $nowDay = strtolower($now->format('l'));
+
         if ($restaurant->permanently_closed || ($restaurant->temporary_closed_until && Carbon::parse($restaurant->temporary_closed_until)->isFuture())) {
             return redirect()->route('home');
         }
-        $activeTimeSlots = $restaurant->timeSlots->where('status', 5)->values();
+        $activeTimeSlots = $restaurant->timeSlots->where('status', 5)->where('day', $nowDay)->values();
+
         $isOpen = false;
         if ($activeTimeSlots->isNotEmpty()) {
             foreach ($activeTimeSlots as $slot) {

@@ -33,7 +33,7 @@
 										@endif
 									</select>
 								</div>
-	
+
 								@error('restaurant_id')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
@@ -45,21 +45,39 @@
 							<div class="form-col-12 sm:form-col-6 md:form-col-4">
 								<label class="db-field-title required" for="start_time">{{ __('levels.start_time') }}</label>
 								<input type="time" name="start_time" id="start_time" class="db-field-control @error('start_time') invalid @enderror" value="{{ old('start_time', $timeSlot->start_time) }}">
-	
+
 								@error('start_time')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
 
-							<div class="form-col-12 sm:form-col-6 md:form-col-4">
+                                <div class="form-col-12 sm:form-col-6 md:form-col-4">
+                                    <label class="db-field-title required" for="day">Çalışma Günü</label>
+
+                                    <select name="day" class="db-field-control @error('day') invalid @enderror">
+                                        <option value="monday" {{ old('day', $timeSlot->day) == 'monday' ? 'selected' : '' }}>Pazartesi</option>
+                                        <option value="tuesday" {{ old('day', $timeSlot->day) == 'tuesday' ? 'selected' : '' }}>Salı</option>
+                                        <option value="wednesday" {{ old('day', $timeSlot->day) == 'wednesday' ? 'selected' : '' }}>Çarşamba</option>
+                                        <option value="thursday" {{ old('day', $timeSlot->day) == 'thursday' ? 'selected' : '' }}>Perşembe</option>
+                                        <option value="friday" {{ old('day', $timeSlot->day) == 'friday' ? 'selected' : '' }}>Cuma</option>
+                                        <option value="saturday" {{ old('day', $timeSlot->day) == 'saturday' ? 'selected' : '' }}>Cumartesi</option>
+                                        <option value="sunday" {{ old('day', $timeSlot->day) == 'sunday' ? 'selected' : '' }}>Pazar</option>
+                                    </select>
+
+                                    @error('day')
+                                    <small class="db-field-alert">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="form-col-12 sm:form-col-6 md:form-col-4">
 								<label class="db-field-title required" for="end_time">{{ __('levels.end_time') }}</label>
 								<input type="time" name="end_time" id="end_time" class="db-field-control @error('end_time') invalid @enderror" value="{{ old('end_time', $timeSlot->end_time) }}">
-	
+
 								@error('end_time')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
-							
+
 							<div class="form-col-12 sm:form-col-6 md:form-col-4">
 								<label class="db-field-title required">{{ __('levels.status') }}</label>
 								<div class="db-field-down-arrow">
@@ -70,19 +88,19 @@
 										@endforeach
 									</select>
 								</div>
-	
+
 								@error('status')
 								<small class="db-field-alert">{{ $message }}</small>
 								@enderror
 							</div>
-	
+
 							<div class="col-12">
 								<button type="submit" class="db-btn text-white bg-primary">
 									<i class="fa-solid fa-circle-check"></i>
 									<span>{{ __('levels.save') }}</span>
 								</button>
 							</div>
-							
+
 						</div>
 					</form>
 				</div>

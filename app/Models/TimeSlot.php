@@ -11,12 +11,12 @@ class TimeSlot extends BaseModel
 
     protected $table       = 'time_slots';
     protected $auditColumn       = true;
-    protected $fillable    = ['start_time', 'end_time', 'restaurant_id', 'status'];
+    protected $fillable    = ['start_time', 'end_time', 'restaurant_id', 'status','day'];
     protected $casts = [
         'status' => 'int',
     ];
 
-    
+
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);

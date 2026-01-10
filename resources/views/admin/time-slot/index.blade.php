@@ -28,6 +28,7 @@
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ __('levels.restaurant') }}</th>
+                                <th class="db-table-head-th">Çalışma Günü</th>
                                 <th class="db-table-head-th">{{ __('levels.start_time') }}</th>
                                 <th class="db-table-head-th">{{ __('levels.end_time') }}</th>
                                 <th class="db-table-head-th">{{ __('levels.status') }}</th>

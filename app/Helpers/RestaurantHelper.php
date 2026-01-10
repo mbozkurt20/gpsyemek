@@ -9,6 +9,7 @@ class RestaurantHelper
     public static function getStatus($restaurant)
     {
         $now = Carbon::now();
+        $nowDay = strtolower($now->format('l'));
         $closedUntil = $restaurant->temporary_closed_until ? Carbon::parse($restaurant->temporary_closed_until) : null;
 
         // 1. Kalıcı veya Geçici Kapalı mı?
@@ -17,7 +18,8 @@ class RestaurantHelper
         }
 
         // 2. Zaman Dilimi Kontrolü
-        $activeTimeSlots = $restaurant->timeSlots->where('status', 5);
+        $activeTimeSlots = $restaurant->timeSlots->where('status', 5)->where('day', $nowDay)->values();
+
         $isOpen = false;
 
         if ($activeTimeSlots->isNotEmpty()) {

@@ -15,10 +15,11 @@ class VerifyMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        /*
         if (!(session()->has('verified_type') && session()->has('verified_value'))){
             return redirect()->route('verify.code');
         }
-
+*/
         return $next($request);
     }
 }

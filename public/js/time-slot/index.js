@@ -31,6 +31,7 @@ function load_data(status = '') {
         },
         columns: [
             { data: 'restaurant_id', name: 'restaurant_id' },
+            { data: 'day', name: 'day' },
             { data: 'start_time', name: 'start_time' },
             { data: 'end_time', name: 'end_time' },
             { data: 'status', name: 'status' },
