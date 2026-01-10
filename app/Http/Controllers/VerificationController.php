@@ -149,7 +149,7 @@ class VerificationController extends Controller
                 Mail::to($request->value)->send(new VerifyCodeMail($otp));
             });
         } else {
-            /*
+
             $netgsm = new NetGsmService();
             $message =
                 "GpsYemek hesabınız için doğrulama kodunuz: {$otp}. "
@@ -158,7 +158,6 @@ class VerificationController extends Controller
                 . "GpsYemek";
             $netgsm->sendSms($request->value, $message);
             Log::info("SMS OTP gönderildi: {$otp} - {$request->value}");
-             */
         }
 
 
