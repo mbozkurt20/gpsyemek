@@ -63,7 +63,7 @@ class WebhookController extends Controller
                 $orderStatus = OrderStatus::ACCEPT;
                 break;
 
-            case 'ASSIGNED':
+            case 'HANDOVER':
                 $orderStatus = OrderStatus::ON_THE_WAY;
                 break;
 
