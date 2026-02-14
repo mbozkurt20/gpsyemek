@@ -177,7 +177,7 @@
                                 <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Az</label>
                                 <input type="number" name="groups[${gIndex}][min_count]" value="0" class="db-field-control !w-20 border-gray-300 text-sm">
                             </div>
-                          // Şablonun içindeki ilgili kısım:
+
 <div class="flex flex-col">
     <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Fazla (Sınırsız için 0 giriniz)</label>
     <input type="number" name="groups[${gIndex}][max_count]" value="0" class="db-field-control !w-24 border-gray-300 text-sm max-count-input" placeholder="0 = ∞">
