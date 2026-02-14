@@ -21,13 +21,14 @@ class MenuItemResource extends JsonResource
             "name"              => $this->name,
             "slug"              => $this->slug,
             "menu_number"       => $this->menu_number,
-            "unit_price"        => $this->unit_price,
-            "discount_price"    => $this->discount_price,
+            "unit_price"        => (float)$this->unit_price,
+            "discount_price"    => (float)$this->discount_price,
             "currency_code"     => setting('currency_code'),
             "image"             => $this->image,
             "description"       => strip_tags($this->description),
-            'variations'      => MenuItemVariationResource::collection($this->variations),
-            'options'         => $this->options!=null?MenuItemOptionResource::collection($this->options):[],
+            //'variations'        => MenuItemVariationResource::collection($this->variations),
+            // Opsiyonları gruplarıyla birlikte gönderiyoruz
+            'option_groups'     => MenuItemOptionGroupResource::collection($this->optionGroups),
         ];
     }
 

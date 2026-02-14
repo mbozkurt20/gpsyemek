@@ -385,114 +385,62 @@ class MenuItemController extends BackendController
         $this->data['menu_item_variations'] = $menuItem->variations;
         $this->data['menu_item_options']    = $menuItem->options;
 
+        // YENİ: Restorandaki diğer tüm ürünleri (içecekler vb.) çekiyoruz
+        $this->data['allMenuItems'] = MenuItem::where('restaurant_id', $menuItem->restaurant_id)
+            ->where('id', '!=', $id)
+            ->get(['id', 'name', 'unit_price as price']); // unit_price'ı price olarak gönderiyoruz
+
         return view('admin.menu-item.modify', $this->data);
     }
 
     public function modifyUpdate(Request $request, $id)
     {
-        if (blank($request->all())) {
-            return redirect(route('admin.menu-items.modify', $id))->withError("İstenen menü öğesi varyasyonu/seçeneği.");
-        }
+        $menuItem = MenuItem::owner()->findOrFail($id);
 
-        $menuItem       = MenuItem::owner()->findOrFail($id);
+        // 1. Mevcut grupları ve seçenekleri temizle (Overwrite mantığı)
+        $menuItem->optionGroups()->each(function($group) {
+            $group->options()->delete();
+            $group->delete();
+        });
 
-        $variationArray = $request->variation;
+        if ($request->has('groups')) {
+            foreach ($request->groups as $groupData) {
+                if (empty($groupData['name'])) continue;
 
-        if (!blank($variationArray)) {
-            $requestArray['variation.*.name']           = ['required', 'string'];
-            $requestArray['variation.*.price']          = ['required', 'numeric', 'gt:0', new IniAmount()];
-            $requestArray['variation.*.discount_price'] = ['nullable', 'numeric', 'gte:0', new IniAmount()];
-        }
+                // 2. Grubu oluştur (min_count ve max_count eklendi)
+                $group = $menuItem->optionGroups()->create([
+                    'restaurant_id' => $menuItem->restaurant_id,
+                    'name'          => $groupData['name'],
+                    'type'          => $groupData['type'] ?? 'radio',
+                    'is_required'   => isset($groupData['is_required']) ? true : false,
+                    'min_count'     => $groupData['min_count'] ?? 0,
+                    'max_count'     => $groupData['max_count'] ?? 0,
+                ]);
 
-        $requestArray['option.*.name']  = ['nullable', 'string'];
-        $requestArray['option.*.price'] = ['nullable', 'numeric', 'gt:0', new IniAmount()];
+                // 3. Gruba ait alt seçenekleri oluştur
+                if (isset($groupData['items']) && is_array($groupData['items'])) {
+                    foreach ($groupData['items'] as $itemData) {
+                        if (empty($itemData['name']) && empty($itemData['linked_item_id'])) continue;
 
-        $validator = Validator::make($request->all(), $requestArray);
-        $validator->after(function ($validator) use ($request) {
-            $requestVariationArray = $request->variation;
-            if (!blank($requestVariationArray)) {
-                foreach ($requestVariationArray as $key => $variation) {
-                    if ($this->priceValidationCheck($variation)) {
-                        $validator->errors()->add("variation.$key.discount_price", 'This discount price cann\'t be greater than unit price.');
+                        // Eğer isim boşsa ama ürün bağlandıysa, bağlı ürünün adını otomatik alabiliriz
+                        $optionName = $itemData['name'];
+                        if (empty($optionName) && !empty($itemData['linked_item_id'])) {
+                            $linkedItem = MenuItem::find($itemData['linked_item_id']);
+                            $optionName = $linkedItem ? $linkedItem->name : 'Bağlı Ürün';
+                        }
+
+                        $group->options()->create([
+                            'restaurant_id'  => $menuItem->restaurant_id,
+                            'name'           => $optionName,
+                            'price'          => $itemData['price'] ?? 0,
+                            'linked_item_id' => $itemData['linked_item_id'] ?? null, // YENİ ALAN
+                        ]);
                     }
                 }
             }
-        });
-
-        if ($validator->fails()) {
-            $sessionVariationArray = !blank($request->variation) ? array_keys($request->variation) : [];
-            $request->session()->flash('variation', $sessionVariationArray);
-
-            $sessionOptionArray = !blank($request->option) ? array_keys($request->option) : [];
-            $request->session()->flash('option', $sessionOptionArray);
-            return redirect(route('admin.menu-items.modify', $menuItem))->withErrors($validator)->withInput();
         }
 
-        if (!blank($variationArray)) {
-
-            $key                = array_key_first($variationArray);
-
-            $smallPrice         = isset($variationArray[$key]) ? $variationArray[$key]['price'] : 0;
-            $smallDiscountPrice = isset($variationArray[$key]) ? $variationArray[$key]['discount_price'] : 0;
-
-            $menuItemVariation = MenuItemVariation::where('menu_item_id', $menuItem->id)->get()->pluck('id', 'id')->toArray();
-
-            $setVariationArray = [];
-            foreach ($variationArray as $key => $variation) {
-
-                $setVariationArray[$key] = $key;
-
-                if ($variation['price'] < $smallPrice) {
-                    $smallPrice         = $variation['price'];
-                    $smallDiscountPrice = $variation['discount_price'];
-                }
-
-                if (isset($menuItemVariation[$key])) {
-                    $menuItemVariationItem = MenuItemVariation::where(['id' => $key])->first();
-
-                    $menuItemVariationItem->menu_item_id   = $menuItem->id;
-                    $menuItemVariationItem->restaurant_id  = $menuItem->restaurant_id;
-                    $menuItemVariationItem->name           = $variation['name'];
-                    $menuItemVariationItem->price          = $variation['price'];
-                    $menuItemVariationItem->discount_price = $variation['discount_price'] ?? 0;
-                    $menuItemVariationItem->save();
-                } else {
-                    $menuItemVariationArray['menu_item_id']   = $menuItem->id;
-                    $menuItemVariationArray['restaurant_id']  = $menuItem->restaurant_id;
-                    $menuItemVariationArray['name']           = $variation['name'];
-                    $menuItemVariationArray['price']          = $variation['price'];
-                    $menuItemVariationArray['discount_price'] = $variation['discount_price'] ?? 0;
-                    MenuItemVariation::insert($menuItemVariationArray);
-                }
-            }
-
-            $menuItem->unit_price     = $smallPrice;
-            $menuItem->discount_price = $smallDiscountPrice ?? 0;
-            $menuItem->save();
-
-        } else {
-            MenuItemVariation::where(['menu_item_id' => $menuItem->id, 'restaurant_id' => $menuItem->restaurant_id])->delete();
-        }
-
-        MenuItemOption::where('menu_item_id', $id)->delete();
-        $mainOptionArray = $request->option;
-        if (!blank($mainOptionArray)) {
-            $i           = 0;
-            $optionArray = [];
-            foreach ($mainOptionArray as $option) {
-                if ($option['name'] == '' || $option['price'] == '') {
-                    continue;
-                }
-                $optionArray[$i]['restaurant_id'] = $menuItem->restaurant_id;
-                $optionArray[$i]['menu_item_id']  = $id;
-                $optionArray[$i]['name']          = $option['name'];
-                $optionArray[$i]['price']         = $option['price'];
-                $i++;
-            }
-            MenuItemOption::insert($optionArray);
-        }
-
-        return redirect(route('admin.menu-items.modify', $id))->withSuccess("Menü öğesi başarıyla güncellendi.");
+        return redirect(route('admin.menu-items.modify', $id))->withSuccess("Menü opsiyonları ve grupları başarıyla güncellendi.");
     }
 
     private function priceValidationCheck($array)

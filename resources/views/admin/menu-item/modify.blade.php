@@ -1,243 +1,115 @@
 @extends('admin.app')
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('backend/lib/bootstrap-social/bootstrap-social.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/lib/summernote/summernote-bs4.css') }}">
-@endpush
-
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="custome-breadcrumb">
-        {{ Breadcrumbs::render('menu-items/edit', $menuItem) }}
-        </div>
-    </div>
-
-    <div class="col-12 db-card  px-6">
-        @if (auth()->user()->myrole == 1)
-
-            <div class="flex flex-col sm:flex-row gap-4">
-
-                <div class="border border-gray-300 rounded-xl p-3 gap-4">
-                    {{-- Ürün Seçenekleri İçe Aktarma --}}
-                    <form action="{{ route('admin.menu-option-import') }}" method="POST" enctype="multipart/form-data"
-                          class="inline-flex items-center gap-2 import-form">
-                        @csrf
-                        <input value="{{ $menuItem->id }}" name="menuItemId" type="hidden">
-
-                        <label for="importOptionsFile" class="db-card-filter-btn pseudo-none cursor-pointer">
-                            <i class="fa-solid fa-file-import"></i>
-                            <span>Ürün Seçenekleri İçe Aktar</span>
-                        </label>
-
-                        <input type="file" name="importFile" id="importOptionsFile" class="hidden" accept=".csv,.xlsx">
-                        <button type="submit" class="hidden"></button>
-                    </form>
-
-                    <a  download href="{{ asset('/imports/menu-options.csv') }}" class="px-3 text-indigo-600 underline text-sm">
-                        Örnek Ürün Seçeneği Excel
-                    </a>
+    <div class="row">
+        <div class="col-12">
+            <div class="db-card shadow-sm">
+                <div class="db-card-header !bg-gray-100 flex justify-between items-center py-3">
+                    <h3 class="db-card-title text-lg font-bold text-gray-700">
+                        <i class="fa-solid fa-utensils mr-2"></i> {{ $menuItem->name }} - Opsiyon Yönetimi
+                    </h3>
+                    <button type="button" class="db-btn h-[38px] text-white bg-primary hover:bg-primary-dark transition-all" id="add-group">
+                        <i class="fa-solid fa-circle-plus mr-1"></i>
+                        <span>Yeni Grup Ekle</span>
+                    </button>
                 </div>
 
-
-                <div class="border border-gray-300 rounded-xl gap-4 p-5">
-                    {{-- Ürün Varyantları İçe Aktarma --}}
-                    <form action="{{ route('admin.menu-variant-import') }}" method="POST" enctype="multipart/form-data"
-                          class="inline-flex items-center gap-2 import-form">
+                <div class="db-card-body p-6">
+                    <form action="{{ route('admin.menu-items.modify', $menuItem) }}" method="POST" id="option-form">
                         @csrf
-                        <input value="{{ $menuItem->id }}" name="menuItemId" type="hidden">
+                        @method('PUT')
 
-                        <label for="importVariantFile" class="db-card-filter-btn pseudo-none cursor-pointer">
-                            <i class="fa-solid fa-file-import"></i>
-                            <span>Ürün Varyantlarını İçe Aktar</span>
-                        </label>
+                        <div id="groups-container">
+                            @foreach($menuItem->optionGroups ?? [] as $gIndex => $group)
+                                <div class="db-card border border-gray-300 mb-8 group-item rounded-lg overflow-hidden shadow-sm" data-index="{{ $gIndex }}">
+                                    <div class="db-card-header bg-gray-50 flex justify-between items-center border-b p-4">
+                                        <div class="flex gap-4 items-center flex-wrap">
+                                            <div class="flex flex-col">
+                                                <label class="text-xs font-bold uppercase text-gray-500 mb-1">Grup Adı</label>
+                                                <input type="text" name="groups[{{ $gIndex }}][name]" value="{{ $group->name }}" placeholder="Örn: Ekstralar" class="db-field-control !w-64 border-gray-300 focus:ring-primary text-sm">
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <label class="text-xs font-bold uppercase text-gray-500 mb-1">Seçim Tipi</label>
+                                                <select name="groups[{{ $gIndex }}][type]" class="db-field-control !w-44 border-gray-300 type-select text-sm">
+                                                    <option value="radio" {{ $group->type == 'radio' ? 'selected' : '' }}>Tekli Seçim (Radio)</option>
+                                                    <option value="checkbox" {{ $group->type == 'checkbox' ? 'selected' : '' }}>Çoklu Seçim (Checkbox)</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex gap-2 count-settings {{ $group->type == 'radio' ? 'hidden' : '' }}">
+                                                <div class="flex flex-col">
+                                                    <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Az</label>
+                                                    <input type="number" name="groups[{{ $gIndex }}][min_count]" value="{{ $group->min_count ?? 0 }}" class="db-field-control !w-20 border-gray-300 text-sm">
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Fazla (Sınırsız için 0 giriniz)</label>
+                                                    <div class="relative">
+                                                        <input type="number" name="groups[{{ $gIndex }}][max_count]" value="{{ $group->max_count ?? 0 }}" class="db-field-control !w-24 border-gray-300 text-sm max-count-input" placeholder="0 = ∞">
+                                                        @if(($group->max_count ?? 0) == 0)
+                                                            <span class="text-[10px] text-primary font-bold block mt-1">Sınırsız (∞)</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center mt-5 ml-2">
+                                                <label class="inline-flex items-center cursor-pointer">
+                                                    <input type="checkbox" name="groups[{{ $gIndex }}][is_required]" class="w-4 h-4 text-primary rounded border-gray-300" {{ $group->is_required ? 'checked' : '' }}>
+                                                    <span class="ml-2 text-sm font-semibold text-gray-700">Zorunlu</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="text-red-500 remove-group text-sm font-bold"><i class="fa-solid fa-trash-can mr-1"></i> Grubu Sil</button>
+                                    </div>
 
-                        <input type="file" name="importFile" id="importVariantFile" class="hidden" accept=".csv,.xlsx">
-                        <button type="submit" class="hidden"></button>
+                                    <div class="db-card-body !p-0">
+                                        <table class="w-full text-left border-collapse">
+                                            <thead class="bg-gray-100 border-b">
+                                            <tr>
+                                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600">Seçenek Adı / Bağlı Ürün</th>
+                                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600 w-48">Ek Fiyat (₺)</th>
+                                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600 w-20 text-center">İşlem</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="items-container divide-y divide-gray-200">
+                                            @foreach($group->options as $iIndex => $option)
+                                                <tr class="hover:bg-gray-50 transition-colors">
+                                                    <td class="p-3">
+                                                        <div class="flex gap-2">
+                                                            <input type="text" name="groups[{{ $gIndex }}][items][{{ $iIndex }}][name]" value="{{ $option->name }}" placeholder="Seçenek Adı" class="db-field-control !w-1/2 text-sm opt-name">
+                                                            <select name="groups[{{ $gIndex }}][items][{{ $iIndex }}][linked_item_id]" class="db-field-control !w-1/2 text-sm border-gray-200 linked-item-select">
+                                                                <option value="">-- Ürün Bağla (Opsiyonel) --</option>
+                                                                @foreach($allMenuItems as $item)
+                                                                    <option value="{{ $item->id }}" {{ $option->linked_item_id == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-3">
+                                                        <input type="number" step="0.01" name="groups[{{ $gIndex }}][items][{{ $iIndex }}][price]" value="{{ $option->price }}" class="db-field-control !w-full text-sm">
+                                                    </td>
+                                                    <td class="p-3 text-center">
+                                                        <button type="button" class="text-gray-400 hover:text-red-500 remove-item"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="p-4 bg-white border-t">
+                                            <button type="button" class="text-sm font-bold text-primary add-item" data-group="{{ $gIndex }}">
+                                                <i class="fa-solid fa-plus-circle mr-1"></i> Yeni Seçenek Ekle
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="db-btn px-10 py-3 text-white bg-primary rounded-full font-bold">
+                                <i class="fa-solid fa-save mr-2"></i> AYARLARI KAYDET
+                            </button>
+                        </div>
                     </form>
-
-                    <a download href="{{ asset('/imports/menu-variant.csv') }}" class="px-3 text-indigo-600 underline text-sm">
-                        Örnek Ürün Varyant Excel
-                    </a>
                 </div>
-            </div>
-
-            <script>
-                // Tüm import-form'lar için tek script
-                document.querySelectorAll('.import-form').forEach(form => {
-                    const fileInput = form.querySelector('input[type="file"]');
-                    const submitBtn = form.querySelector('button[type="submit"]');
-
-                    fileInput.addEventListener('change', () => {
-                        if (fileInput.files.length > 0) {
-                            submitBtn.click();
-                        }
-                    });
-                });
-            </script>
-        @endif
-
-        <hr>
-
-        {{-- Mesajlar --}}
-        @if (session('success'))
-            <div class="mt-3 p-3 rounded-xl bg-green-100 text-green-700 text-sm font-medium flex items-center gap-2">
-                <i class="fa-solid fa-check-circle"></i>
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="mt-3 p-3 rounded-xl bg-red-100 text-red-700 text-sm font-medium flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                {{ session('error') }}
-            </div>
-        @endif
-
-    </div>
-    <div class="col-12">
-        <div class="db-card">
-            <div class="db-card-header">
-                <h3 class="db-card-title">{{ $menuItem->name }}</h3>
-            </div>
-            <div class="db-card-body">
-                <form action="{{ route('admin.menu-items.modify', $menuItem) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="db-card">
-                        <div class="db-card-header">
-                            <h3 class="db-card-title">{{ __('restaurant.product_variation') }}</h3>
-                            <button class="db-btn h-[38px] text-white bg-primary" id="variation-add">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span>Yeni Ekle</span>
-                            </button>
-                        </div>
-                        <div class="db-card-body">
-                            <div class="db-table-responsive">
-                                <table class="db-table">
-                                    <thead class="db-table-head border-none">
-                                        <tr class="db-table-head-tr">
-                                            <th class="db-table-head-th">İsim</th>
-                                            <th class="db-table-head-th">Fiyat</th>
-                                            <th class="db-table-head-th">İndirim</th>
-                                            <th class="db-table-head-th">İşlemler</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="db-table-body" id="variationTbody">
-                                        @if(!blank(session('variation')))
-                                            @foreach(session('variation') as $variation)
-                                                <tr class="db-table-body-tr border-none">
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name") }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price") }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="İndirim" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price") }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @elseif(!blank($menu_item_variations))
-                                            @foreach($menu_item_variations as $menu_item_variation)
-                                                @php
-                                                    $variation = $menu_item_variation->id;
-                                                    $loopindex = $loop->index + 1;
-                                                @endphp
-                                                <tr class="db-table-body-tr border-none">
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" name="variation[<?=$variation?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("variation.$variation.name") invalid @enderror" value="{{ old("variation.$variation.name", $menu_item_variation->name) }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("variation.$variation.price") invalid @enderror" value="{{ old("variation.$variation.price", $menu_item_variation->price) }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="variation[<?=$variation?>][discount_price]" placeholder="İndirim" class="db-field-control form-control-sm !w-auto change-productdiscountprice @error("variation.$variation.discount_price") invalid @enderror" value="{{ old("variation.$variation.discount_price",$menu_item_variation->discount_price) }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4"></div>
-
-                    <div class="db-card">
-                        <div class="db-card-header">
-                            <h3 class="db-card-title">{{ __('restaurant.product_option') }}</h3>
-
-                            <button class="db-btn h-[38px] text-white bg-primary" id="option-add">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span>Yeni Ekle</span>
-                            </button>
-                        </div>
-                        <div class="db-card-body">
-                            <div class="db-table-responsive">
-                                <table class="db-table">
-                                    <thead class="db-table-head border-none">
-                                        <tr class="db-table-head-tr">
-                                            <th class="db-table-head-th">İsim</th>
-                                            <th class="db-table-head-th">Fiyat</th>
-                                            <th class="db-table-head-th">İşlemler</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="db-table-body" id="optionTbody">
-                                        @if(!blank(session('option')))
-                                            @foreach(session('option') as $option)
-                                                <tr class="db-table-body-tr border-none">
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name") }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price") }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">delete</span></button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            @elseif(!blank($menu_item_options))
-                                            @foreach($menu_item_options as $menu_item_option)
-                                                @php
-                                                    $option = $loop->index + 1;
-                                                @endphp
-                                                <tr class="db-table-body-tr border-none">
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" name="option[<?=$option?>][name]" placeholder="İsim" class="db-field-control form-control-sm !w-auto @error("option.$option.name") invalid @enderror" value="{{ old("option.$option.name", $menu_item_option->name) }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <input type="text" step="0.01" name="option[<?=$option?>][price]" placeholder="Fiyat" class="db-field-control form-control-sm !w-auto change-productprice @error("option.$option.price") invalid @enderror" value="{{ old("option.$option.price", $menu_item_option->price) }}">
-                                                    </td>
-                                                    <td class="db-table-body-td">
-                                                        <button class="db-table-action delete removeBtn"> <i class="fa-solid fa-trash-can"></i> <span class="db-tooltip">Sil</span></button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <button type="submit" class="db-btn text-white bg-primary">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <span>{{ __('levels.save') }}</span>
-                        </button>
-                    </div>
-
-                </form>
             </div>
         </div>
     </div>
@@ -245,24 +117,144 @@
 
 @push('js')
     <script>
-        @php
-            $menu_item_variation_count = 0;
-            if(!blank(session('variation'))) {
-                $menu_item_variation_count = count(session('variation'));
-            } else {
-                $menu_item_variation_count = $menu_item_variations->count();
-            }
+        // Veriyi alıyoruz (Artık içinde price var)
+        const allMenuItems = @json($allMenuItems ?? []);
 
-            $menu_item_option_count = 0;
-            if(!blank(session('option'))) {
-                $menu_item_option_count = count(session('option'));
-            } else {
-                $menu_item_option_count = $menu_item_options->count();
-            }
-        @endphp
+        // Ürün seçildiğinde ismi VE fiyatı otomatik dolduran fonksiyon
+        $(document).on('change', '.linked-item-select', function() {
+            const selectedId = $(this).val();
+            const row = $(this).closest('tr');
+            const nameInput = row.find('.opt-name');
+            const priceInput = row.find('input[type="number"]');
 
-        var menu_item_variation_count  = <?=$menu_item_variation_count?>;
-        var menu_item_option_count     = <?=$menu_item_option_count?>;
+            if (selectedId !== "") {
+                const selectedProduct = allMenuItems.find(item => item.id == selectedId);
+
+                if (selectedProduct) {
+                    // Kullanıcıyı uyarmadan ismi ve fiyatı doldur
+                    nameInput.val(selectedProduct.name);
+                    priceInput.val(selectedProduct.price);
+                }
+            }
+        });
+
+        // Tip Değişimi (Radio/Checkbox)
+        function handleTypeChange(selectElement) {
+            let container = $(selectElement).closest('.group-item').find('.count-settings');
+            if ($(selectElement).val() === 'checkbox') {
+                container.removeClass('hidden').addClass('flex');
+            } else {
+                container.removeClass('flex').addClass('hidden');
+            }
+        }
+
+        $(document).ready(function() {
+            $('.type-select').each(function() { handleTypeChange(this); });
+        });
+
+        $(document).on('change', '.type-select', function() { handleTypeChange(this); });
+
+        // Grup Ekleme (Aynı kalıyor ama price uyumu eklendi)
+        $(document).on('click', '#add-group', function() {
+            let gIndex = $('.group-item').length;
+            let groupHtml = `
+            <div class="db-card border border-gray-300 mb-8 group-item rounded-lg overflow-hidden shadow-sm" data-index="${gIndex}">
+                <div class="db-card-header bg-gray-50 flex justify-between items-center border-b p-4">
+                    <div class="flex gap-4 items-center flex-wrap">
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold uppercase text-gray-500 mb-1">Grup Adı</label>
+                            <input type="text" name="groups[${gIndex}][name]" placeholder="Yeni Grup Adı" class="db-field-control !w-64 border-gray-300 text-sm">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold uppercase text-gray-500 mb-1">Seçim Tipi</label>
+                            <select name="groups[${gIndex}][type]" class="db-field-control !w-44 border-gray-300 type-select text-sm">
+                                <option value="radio">Tekli Seçim (Radio)</option>
+                                <option value="checkbox">Çoklu Seçim (Checkbox)</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2 count-settings hidden">
+                            <div class="flex flex-col">
+                                <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Az</label>
+                                <input type="number" name="groups[${gIndex}][min_count]" value="0" class="db-field-control !w-20 border-gray-300 text-sm">
+                            </div>
+                          // Şablonun içindeki ilgili kısım:
+<div class="flex flex-col">
+    <label class="text-xs font-bold uppercase text-gray-500 mb-1">En Fazla (Sınırsız için 0 giriniz)</label>
+    <input type="number" name="groups[${gIndex}][max_count]" value="0" class="db-field-control !w-24 border-gray-300 text-sm max-count-input" placeholder="0 = ∞">
+    <span class="infinity-badge text-[10px] text-primary font-bold block mt-1">Sınırsız (∞)</span>
+</div>
+                        </div>
+                        <div class="flex items-center mt-5 ml-2">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="groups[${gIndex}][is_required]" class="w-4 h-4 text-primary rounded border-gray-300">
+                                <span class="ml-2 text-sm font-semibold text-gray-700">Zorunlu</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" class="text-red-500 remove-group text-sm font-bold"><i class="fa-solid fa-trash-can mr-1"></i> Grubu Sil</button>
+                </div>
+                <div class="db-card-body !p-0">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100 border-b">
+                            <tr>
+                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600">Seçenek Adı / Bağlı Ürün</th>
+                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600 w-48">Ek Fiyat (₺)</th>
+                                <th class="px-4 py-3 text-xs font-bold uppercase text-gray-600 w-20 text-center">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody class="items-container divide-y divide-gray-200"></tbody>
+                    </table>
+                    <div class="p-4 bg-white border-t">
+                        <button type="button" class="text-sm font-bold text-primary add-item" data-group="${gIndex}">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> Yeni Seçenek Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+            $('#groups-container').append(groupHtml);
+        });
+
+        // Seçenek Ekleme
+        $(document).on('click', '.add-item', function() {
+            let gIndex = $(this).closest('.group-item').attr('data-index');
+            let iIndex = $(this).closest('.db-card-body').find('tbody tr').length;
+
+            let productOptions = '<option value="">-- Ürün Bağla (Opsiyonel) --</option>';
+            allMenuItems.forEach(item => {
+                productOptions += `<option value="${item.id}">${item.name}</option>`;
+            });
+
+            let itemHtml = `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-3">
+                    <div class="flex gap-2">
+                        <input type="text" name="groups[${gIndex}][items][${iIndex}][name]" placeholder="Seçenek Adı" class="db-field-control !w-1/2 text-sm opt-name">
+                        <select name="groups[${gIndex}][items][${iIndex}][linked_item_id]" class="db-field-control !w-1/2 text-sm border-gray-200 linked-item-select">
+                            ${productOptions}
+                        </select>
+                    </div>
+                </td>
+                <td class="p-3">
+                    <input type="number" step="0.01" name="groups[${gIndex}][items][${iIndex}][price]" value="0.00" class="db-field-control !w-full text-sm">
+                </td>
+                <td class="p-3 text-center">
+                    <button type="button" class="text-gray-400 hover:text-red-500 remove-item"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
+                </td>
+            </tr>`;
+            $(this).closest('.db-card-body').find('.items-container').append(itemHtml);
+        });
+
+        $(document).on('click', '.remove-group', function() { if(confirm('Emin misiniz?')) $(this).closest('.group-item').remove(); });
+        $(document).on('click', '.remove-item', function() { $(this).closest('tr').remove(); });
+
+        $(document).on('input', '.max-count-input', function() {
+            let val = $(this).val();
+            let parent = $(this).closest('.flex-col');
+            parent.find('.infinity-badge').remove(); // Eski uyarıyı temizle
+
+            if (val == 0 || val == "") {
+                $(this).after('<span class="infinity-badge text-[10px] text-primary font-bold block mt-1">Sınırsız (∞)</span>');
+            }
+        });
     </script>
-    <script src="{{ asset('js/menu-item/modify.js') }}"></script>
 @endpush

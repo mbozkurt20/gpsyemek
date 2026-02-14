@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class MenuItemVariation extends Model
 {
-    public $timestamps  = false;
-    protected $fillable = ['menu_item_id', 'restaurant_id', 'name', 'price','discount_price'];
+    protected $fillable = [
+        'option_group_id',
+        'restaurant_id',
+        'name',
+        'price',
+        'discount_price'
+    ];
+
+    public function group()
+    {
+        return $this->belongsTo(MenuItemOptionGroup::class, 'option_group_id');
+    }
 }

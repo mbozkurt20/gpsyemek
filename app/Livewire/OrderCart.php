@@ -74,21 +74,31 @@ class OrderCart extends Component
     public function addCart($item)
     {
         $status = true;
-        if (!blank($this->carts) && count($this->carts['items']) != 0) {
+
+        // 1. Sepet boş değilse kontrol et
+        if (!blank($this->carts) && isset($this->carts['items']) && count($this->carts['items']) != 0) {
             foreach ($this->carts['items'] as $key => $cart) {
-                if ($item['id'] == $this->carts['items'][$key]['id'] && $item['variationID'] == $this->carts['items'][$key]['variationID']) {
+
+                // 2. Kontrol: Ürün ID aynı mı VE Seçilen Opsiyonlar (variationID) aynı mı?
+                // Not: ShowCart'ta variationID içine opsiyonların ID'lerini (örn: "1-5-10") basmıştık.
+                $currentCartVariation = $this->carts['items'][$key]['variationID'] ?? null;
+                $newItemVariation = $item['variationID'] ?? null;
+
+                if ($item['id'] == $this->carts['items'][$key]['id'] && $newItemVariation === $currentCartVariation) {
+                    // Her şey aynıysa sadece adedi artır
                     $this->carts['items'][$key]['qty'] += $item['qty'];
                     $status = false;
-                } elseif ($item['id'] == $this->carts['items'][$key]['id']) {
-                    $this->carts['items'][$key]['qty'] += $item['qty'];
-                    $status = false;
+                    break; // Eşleşme bulundu, döngüden çık
                 }
             }
         }
+
+        // 3. Eğer eşleşen ürün bulunamadıysa (Yeni ürün veya farklı opsiyon seçimi)
         if ($status) {
             $this->carts['items'][] = $item;
         }
 
+        // 4. Toplam tutarı yeniden hesapla
         $this->totalCartAmount();
     }
 

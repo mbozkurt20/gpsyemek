@@ -14,6 +14,7 @@ class MenuItemService
     public function allMenuItems($request)
     {
         $q = trim($request->id);
+
         if ($q) {
             $this->data['menuItems'] = MenuItem::owner()->with('categories')->where('status', MenuItemStatus::ACTIVE)->where('name', 'like', '%' . $q . '%')->orWhere('description', 'like', '%' . $q . '%')->descending()->get();
         } else {

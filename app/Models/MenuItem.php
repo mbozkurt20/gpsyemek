@@ -35,6 +35,22 @@ class MenuItem extends BaseModel implements HasMedia
         return request()->segment(1) === 'admin' ? 'id' : 'slug';
     }
 
+    public function optionGroups()
+    {
+        return $this->hasMany(MenuItemOptionGroup::class, 'menu_item_id');
+    }
+
+    public function options()
+    {
+        return $this->hasManyThrough(
+            MenuItemOption::class,
+            MenuItemOptionGroup::class,
+            'menu_item_id',    // OptionGroup tablosundaki foreign key
+            'option_group_id', // MenuItemOption tablosundaki foreign key
+            'id',              // MenuItem tablosundaki local key
+            'id'               // OptionGroup tablosundaki local key
+        );
+    }
 
     public function creator()
     {
@@ -176,11 +192,6 @@ class MenuItem extends BaseModel implements HasMedia
     public function variations()
     {
         return $this->hasMany(MenuItemVariation::class);
-    }
-
-    public function options()
-    {
-        return $this->hasMany(MenuItemOption::class);
     }
 
     public function getStatusNameAttribute()

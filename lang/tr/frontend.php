@@ -87,7 +87,7 @@ return array(
     'place_order' => 'SİPARİŞİ VER',
     'select_variations' => 'Varyasyon Seçin',
     'select_options' => 'Seçenekleri Seçin',
-    'optional' => 'Opsiyonel',
+    'optional' => 'İsteğe Bağlı',
     'special_instructions' => 'Özel Notlar',
     'menu_subtitle' => 'Özel bir tercihiniz var mı? Restorana bildirin.',
     'add_to_cart' => 'SEPETE EKLE',

@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('menu_item_options', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('menu_item_id');
+            $table->foreignId('linked_item_id')->nullable()->constrained('menu_items')->nullOnDelete();
+            $table->unsignedBigInteger('option_group_id');
             $table->unsignedBigInteger('restaurant_id');
             $table->string('name');
             $table->decimal('price', 13, 2);
+            $table->timestamps();
         });
     }
 
