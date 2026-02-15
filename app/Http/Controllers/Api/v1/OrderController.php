@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Services\PushNotificationService;
+use App\Models\MenuItemOption;
 use App\Models\Restaurant;
 use Carbon\Carbon;
 use App\Models\Order;
@@ -105,128 +106,92 @@ class OrderController extends Controller
         $validator = new OrderStoreRequest();
         $validator = Validator::make($request->all(), $validator->rules());
 
-        $restaurantId = $request->restaurant_id;
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'message' => $validator->errors()], 422);
+        }
 
-        $restaurant = Restaurant::find($restaurantId);
+        $restaurant = Restaurant::find($request->restaurant_id);
 
         if (!$restaurant) {
-            return response()->json([
-                'status'  => 400,
-                'message' => 'Restoran Bulunamadı'
-            ], 400);
+            return response()->json(['status' => 400, 'message' => 'Restoran Bulunamadı'], 400);
         }
 
-        $closedUntil = $restaurant->temporary_closed_until
-            ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
-            : null;
-
-        if ($restaurant->permanently_closed){
-            return response()->json([
-                'status'  => 400,
-                'message' => 'Restarurant Kapalı'
-            ], 400);
+        // Restoran kapalılık kontrolü
+        $closedUntil = $restaurant->temporary_closed_until ? \Carbon\Carbon::parse($restaurant->temporary_closed_until) : null;
+        if ($restaurant->permanently_closed) {
+            return response()->json(['status' => 400, 'message' => 'Restoran Kapalı'], 400);
         } elseif ($closedUntil && $closedUntil->isFuture()) {
-            return response()->json([
-                'status'  => 400,
-                'message' => "Restarurant Şu an kapalı ". $closedUntil->diffForHumans(). " sonra açılacaktır"
-            ], 400);
-
+            return response()->json(['status' => 400, 'message' => "Restoran şu an kapalı. " . $closedUntil->diffForHumans() . " sonra açılacaktır"], 400);
         }
 
-        if (!$validator->fails()) {
-            $orderItems = json_decode($request->items);
+        // JSON Decode
+        $orderItems = is_string($request->items) ? json_decode($request->items) : $request->items;
 
-            $items = [];
-            if (!blank($orderItems)) {
-                $i                      = 0;
-                $menuItemVariationId = 0;
-                $options                = [];
-                foreach ($orderItems as $item) {
-                    $variation = [];
-                    if ((int) $item->menu_item_variation_id) {
-                        $menuItemVariationId = $item->menu_item_variation_id;
-                        $getVariation           = MenuItemVariation::find($item->menu_item_variation_id);
+        $items = [];
+        if (!blank($orderItems)) {
+            foreach ($orderItems as $item) {
+                $selectedOptions = [];
 
-                        if (!blank($getVariation)) {
-                            $variation = ['id' => $getVariation->id, 'name' => $getVariation->name, 'price' => $getVariation->price];
-                        }
-                    }
+                // Opsiyon ID'lerini alıyoruz (Service tarafında detaylı kontrol yapıldığı için burada sadece ID gönderiyoruz)
+                // Eğer Service tarafında ID listesi bekliyorsan böyle kalsın:
+                $selectedOptions = isset($item->options) ? (array)$item->options : [];
 
-                    if (isset($item->options) && !empty($item->options)) {
-                        $options = json_decode(json_encode($item->options), true);
-                    }
-
-                    $items[$i] = [
-                        'restaurant_id'          => $request->restaurant_id,
-                        'menu_item_variation_id' => $menuItemVariationId,
-                        'menu_item_id'           => $item->menuItem_id,
-                        'unit_price'             => (float) $item->unit_price,
-                        'quantity'               => (int) $item->quantity,
-                        'discounted_price'       => (float) $item->discounted_price,
-                        'variation'              => $variation,
-                        'options'                => $options,
-                        'instructions'           => $item->instructions,
-                    ];
-                    $i++;
-                }
+                $items[] = [
+                    'restaurant_id'    => $request->restaurant_id,
+                    'menu_item_id'     => $item->menuItem_id, // SERVICE TARAFINDAKİYLE AYNI YAPTIK
+                    'unit_price'       => (float) $item->unit_price,
+                    'quantity'         => (int) $item->quantity,
+                    'discounted_price' => (float) $item->discounted_price,
+                    'options'          => $selectedOptions,
+                    'instructions'     => $item->instructions ?? '',
+                ];
             }
-
-            $request->request->add([
-                'items'           => $items,
-                'order_type'      => $request->order_type,
-                'restaurant_id'   => $request->restaurant_id,
-                'user_id'         => auth()->user()->id,
-                'total'           => $request->total,
-                'delivery_charge' => $request->delivery_charge,
-            ]);
-
-            if(($request->paid_amount == '' || $request->paid_amount == 0) || $request->payment_method == PaymentMethod::CASH_ON_DELIVERY) {
-                $request->request->add([
-                    'paid_amount'           => 0,
-                    'payment_method'        => PaymentMethod::CASH_ON_DELIVERY,
-                    'payment_status'        => PaymentStatus::UNPAID
-                ]);
-            } else {
-                $request->request->add([
-                    'paid_amount'           => $request->paid_amount,
-                    'payment_method'        => $request->payment_type,
-                    'payment_status'        => PaymentStatus::PAID
-                ]);
-            }
-
-            $orderService = app(OrderService::class)->order($request);
-
-            if ($orderService->status) {
-                $order = Order::find($orderService->order_id);
-
-                try {
-                    app(PushNotificationService::class)->NotificationForRestaurant($order, $order->restaurant->user, 'restaurant');
-                    app(PushNotificationService::class)->NotificationForCustomer($order,  $order->user, 'customer');
-
-                    app(PushNotificationService::class)->NotificationForAppRestaurant($order, $order->restaurant->user, 'restaurant');
-                    app(PushNotificationService::class)->NotificationForAppCustomer($order,  $order->user, 'customer');
-                } catch (\Exception $exception) {
-                    //
-                }
-
-                return response()->json([
-                    'status'  => 200,
-                    'message' => 'Siparişiniz Başarıyla Alındı.',
-                    'data'    => $this->orderResponse($order),
-                ], 200);
-            } else {
-                return response()->json([
-                    'status'  => 401,
-                    'message' => $orderService->message,
-                ], 401);
-            }
-
-        } else {
-            return response()->json([
-                'status'  => 422,
-                'message' => $validator->errors(),
-            ], 422);
         }
+
+        // Ödeme Mantığı Düzenleme
+        $paymentMethod = $request->payment_method ?? PaymentMethod::CASH_ON_DELIVERY;
+        $paymentStatus = PaymentStatus::UNPAID;
+        $paidAmount    = 0;
+
+        if ($request->paid_amount > 0 && $paymentMethod != PaymentMethod::CASH_ON_DELIVERY) {
+            $paymentMethod = $request->payment_method; // Veya $request->payment_type hangisini gönderiyorsan
+            $paymentStatus = PaymentStatus::PAID;
+            $paidAmount    = $request->paid_amount;
+        }
+
+        // Request verilerini merge ederek Service'e hazır hale getiriyoruz
+        $request->merge([
+            'items'           => $items,
+            'user_id'         => $user->id,
+            'payment_method'  => $paymentMethod,
+            'payment_status'  => $paymentStatus,
+            'paid_amount'     => $paidAmount,
+        ]);
+
+        // Service çağrısı (Service array bekliyor demiştin, o yüzden ->all() gönderiyoruz)
+        $orderService = app(OrderService::class)->order($request->all());
+
+        if ($orderService->status) {
+            $order = Order::find($orderService->order_id);
+
+            try {
+                app(PushNotificationService::class)->NotificationForRestaurant($order, $order->restaurant->user, 'restaurant');
+                app(PushNotificationService::class)->NotificationForCustomer($order,  $order->user, 'customer');
+            } catch (\Exception $exception) {
+                // Loglanabilir
+            }
+
+            return response()->json([
+                'status'  => 200,
+                'message' => 'Siparişiniz Başarıyla Alındı.',
+                'data'    => $this->orderResponse($order),
+            ], 200);
+        }
+
+        return response()->json([
+            'status'  => 401,
+            'message' => $orderService->message,
+        ], 401);
     }
 
     private function orderResponse($order)

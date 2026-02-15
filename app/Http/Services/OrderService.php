@@ -516,43 +516,78 @@ class OrderService
             'current_status'  => OrderStatus::PENDING,
         ]);
 
-        if (!blank($data['coupon_id'])) {
+        // isset() ile önce anahtar var mı diye bakıyoruz, sonra boş olup olmadığını kontrol ediyoruz.
+        if (isset($data['coupon_id']) && !blank($data['coupon_id'])) {
             Discount::create([
                 'order_id'  => $orderId,
                 'coupon_id' => $data['coupon_id'],
-                'user_id'   => auth()->user()->id,
-                'amount'    => $data['coupon_amount'],
+                'user_id'   => auth()->id(), // auth()->user()->id yerine auth()->id() daha kısadır
+                'amount'    => $data['coupon_amount'] ?? 0,
                 'status'    => DiscountStatus::ACTIVE,
             ]);
         }
 
         if (!blank($data['items'])) {
-            $i              = 0;
             $orderLineItems = [];
-            foreach ($data['items'] as $item) {
-                $optionTotal = 0;
-                if (isset($item['options']) && !blank($item['options'])) {
-                    foreach ($item['options'] as $option) {
-                        $optionTotal += $option['price'];
+
+            if (!blank($data['items'])) {
+                $orderLineItems = [];
+                // JSON string geliyorsa decode et, dizi geliyorsa direkt kullan
+                $items = is_string($data['items']) ? json_decode($data['items'], true) : $data['items'];
+
+                foreach ($items as $item) {
+                    $optionTotal = 0;
+                    $dbOptionsData = [];
+                    $selectedOptionIds = $item['options'] ?? [];
+
+                    // İlişki ismi 'optionGroups.options' olmalı.
+                    // Anahtar ismi Controller'dan 'menu_item_id' olarak geliyor.
+                    $menuItem = MenuItem::with('optionGroups.options')->find($item['menu_item_id']);
+
+                    if ($menuItem) {
+                        foreach ($menuItem->optionGroups as $group) {
+                            $selectedInGroup = $group->options->whereIn('id', $selectedOptionIds);
+                            $count = $selectedInGroup->count();
+
+                            if ($group->is_required && $count == 0) {
+                                throw new \Exception("{$group->name} seçimi zorunludur.");
+                            }
+                            if ($group->max_count > 0 && $count > $group->max_count) {
+                                throw new \Exception("{$group->name} için en fazla {$group->max_count} seçim yapabilirsiniz.");
+                            }
+
+                            foreach ($selectedInGroup as $opt) {
+                                $optionTotal += (float)$opt->price;
+                                $dbOptionsData[] = [
+                                    'id'    => $opt->id,
+                                    'name'  => $opt->name,
+                                    'price' => (float)$opt->price,
+                                    'group' => $group->name
+                                ];
+                            }
+                        }
                     }
+
+                    $orderLineItems[] = [
+                        'order_id'         => $orderId,
+                        'restaurant_id'    => $item['restaurant_id'] ?? $data['restaurant_id'],
+                        'menu_item_id'     => $item['menu_item_id'], // Küçük harfli ve alt tireli
+                        'quantity'         => $item['quantity'],
+                        'unit_price'       => $item['unit_price'],
+                        'discounted_price' => $item['discounted_price'],
+                        'item_total'       => ($item['unit_price'] + $optionTotal) * $item['quantity'],
+                        'options'          => json_encode($dbOptionsData),
+                        'instructions'     => $item['instructions'] ?? null,
+                        'options_total'    => $optionTotal,
+                        'created_at'       => now(),
+                        'updated_at'       => now(),
+                    ];
                 }
-                $orderLineItems[$i] = [
-                    'order_id'                  => $orderId,
-                    'restaurant_id'             => $item['restaurant_id'],
-                    'menu_item_id'              => $item['menu_item_id'],
-                    'quantity'                  => $item['quantity'],
-                    'unit_price'                => $item['unit_price'],
-                    'discounted_price'          => $item['discounted_price'],
-                    'item_total'                => ($item['unit_price'] * $item['quantity']),
-                    'menu_item_variation_id' => $item['menu_item_variation_id'],
-                    'options'                   => json_encode($item['options']),
-                    'instructions'              => $item['instructions'],
-                    'options_total'             => $optionTotal,
-                    'created_at'                => date('Y-m-d H:i:s'),
-                    'updated_at'                => date('Y-m-d H:i:s'),
-                ];
-                $i++;
+
+                OrderLineItem::insert($orderLineItems);
+                ResponseService::set(['status' => true, 'order_id' => $orderId]);
             }
+
             OrderLineItem::insert($orderLineItems);
             ResponseService::set([
                 'status'   => true,
