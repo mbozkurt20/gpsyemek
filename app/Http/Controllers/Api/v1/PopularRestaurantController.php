@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\CurrentStatus;
 use App\Enums\RestaurantStatus;
+use App\Helpers\MapHelper;
+use App\Helpers\OrdersHelper;
 use App\Http\Resources\v1\PopularRestaurantResource;
 use App\Models\Restaurant;
 use App\Traits\ApiResponse;
@@ -26,31 +28,47 @@ class PopularRestaurantController extends BackendController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         $current_time = now()->format('H:i');
 
-        $bestSellingRestaurants  = Restaurant::leftJoin('orders', 'restaurant_id', '=', 'restaurants.id')
-            ->select('restaurants.id', 'restaurants.name', 'restaurants.slug','restaurants.description','restaurants.address','restaurants.address')
-            ->selectRaw('count("orders.id") as orders_count')
-            ->groupBy('restaurants.id')
-            ->orderBy('orders_count', 'desc')
+        $latitude = $request->lat;
+        $longitude = $request->long;
+        $radius = 20; // km
+
+        $bestSellingRestaurants = Restaurant::query()
+            ->leftJoin('orders', 'orders.restaurant_id', '=', 'restaurants.id')
+            ->select(
+                'restaurants.id',
+                'restaurants.name',
+                'restaurants.slug',
+                'restaurants.description',
+                'restaurants.address',
+                'restaurants.latitude',
+                'restaurants.longitude'
+            )
+            ->selectRaw(
+                '(6371 * acos(cos(radians(?)) * cos(radians(restaurants.latitude)) * cos(radians(restaurants.longitude) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.latitude)))) AS distance',
+                [$latitude, $longitude, $latitude]
+            )
+            ->selectRaw('count(orders.id) as orders_count')
             ->where('restaurants.status', RestaurantStatus::ACTIVE)
             ->where('restaurants.current_status', CurrentStatus::YES)
+            ->groupBy('restaurants.id', 'restaurants.name', 'restaurants.slug', 'restaurants.description', 'restaurants.address', 'restaurants.latitude', 'restaurants.longitude')
+            ->having('distance', '<=', $radius)
+            ->orderBy('orders_count', 'desc')
             ->get();
 
-        //  ->where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-        //            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-        try{
-
-            return $this->successResponse(['status'=> 200, 'data' =>  PopularRestaurantResource::collection(($bestSellingRestaurants))]);
-        } catch (\Exception $e){
+        try {
+            return $this->successResponse([
+                'status' => 200,
+                'data' => PopularRestaurantResource::collection($bestSellingRestaurants)
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'exception' => get_class($e),
-                'message' => $e->getMessage(),
-                'trace' => $e->getTrace(),
+                'message' => $e->getMessage()
             ]);
         }
-
     }
 }
