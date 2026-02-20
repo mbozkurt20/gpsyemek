@@ -267,6 +267,10 @@ class MenuItemController extends BackendController
                 ->editColumn('id', function ($menuItem) use (&$i) {
                     return ++$i;
                 })
+                ->editColumn('restaurants', function ($menuItem) {
+                    $categories = implode(', ', $menuItem->restaurants()->pluck('name')->toArray());
+                    return Str::limit($categories, 30);
+                })
                 ->editColumn('categories', function ($menuItem) {
                     $categories = implode(', ', $menuItem->categories()->pluck('name')->toArray());
                     return Str::limit($categories, 30);

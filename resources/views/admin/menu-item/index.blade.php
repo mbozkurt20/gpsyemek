@@ -41,10 +41,7 @@
         </div>
     </div>
 </div>
-
 @endsection
-
-
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('backend/lib/datatable/css/dataTables.tailwindcss.css') }}">

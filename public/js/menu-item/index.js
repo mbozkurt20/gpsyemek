@@ -44,6 +44,7 @@ function load_data(status = '') {
                 }
             },
             {data : 'name', name : 'name'},
+            {data : 'restaurants', name : 'restaurants'},
             {data : 'categories', name : 'categories'},
             {data : 'status', name : 'status'},
             {data : 'unit_price', name : 'unit_price'},
