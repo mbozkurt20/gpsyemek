@@ -51,10 +51,6 @@ class PaymentService
             ];
         }
 
-        \Illuminate\Support\Facades\Log::info('girdi');
-
-        \Illuminate\Support\Facades\Log::info('request payment type', ['request' => $request]);
-        \Illuminate\Support\Facades\Log::info('cart 1', ['cart 1' => $cart]);
         if ($request['payment_type'] == PaymentMethod::STRIPE && $paymentSuccess) {
             $this->data['paid_amount'] = $cart['totalAmount'] + $delivery_charge;
             $this->data['payment_method'] = $request['payment_type'];

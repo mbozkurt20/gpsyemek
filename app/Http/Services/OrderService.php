@@ -436,103 +436,102 @@ class OrderService
 
     public function order($data): object
     {
-        $address = "";
-        $latitude = "";
-        $longitude = "";
+        \DB::beginTransaction();
 
-        if (isset($data['addressLabel'])) {
-            if ($data['addressLabel'] == 'current') {
-                $latitude = $data['lat'];
-                $longitude = $data['long'];
-                $address = json_encode([
-                    'address' => $data['address'],
-                    'apartment' => ""
-                ]);
-            } else {
-                $address = Address::where('label_name', $data['addressLabel'])->first();
+        try {
+            $address = "";
+            $latitude = "";
+            $longitude = "";
 
-                if (!$address){
-                    ResponseService::set(['message' => 'Address label not found']);
+            if (isset($data['addressLabel'])) {
+                if ($data['addressLabel'] == 'current') {
+                    $latitude = $data['lat'];
+                    $longitude = $data['long'];
+                    $address = json_encode([
+                        'address' => $data['address'],
+                        'apartment' => ""
+                    ]);
+                } else {
+                    $address = Address::where('label_name', $data['addressLabel'])->first();
+
+                    if (!$address) {
+                        ResponseService::set(['message' => 'Address label not found']);
+                        return ResponseService::response();
+                    }
+
+                    $latitude = $address->latitude;
+                    $longitude = $address->longitude;
+                    $address = json_encode([
+                        'address' => $address->address,
+                        'apartment' => $address->apartment
+                    ]);
                 }
-
-                $latitude = $address->latitude;
-                $longitude = $address->longitude;
-                $address = json_encode([
-                    'address' => $address->address,
-                    'apartment' => $address->apartment
-                ]);
-            }
-        } else {
-            if (!empty($data['address_id'])) {
-                $addr = Address::find($data['address_id']);
-                if (!$addr) {
-                    ResponseService::set(['message' => 'Address not found']);
-                    return ResponseService::response();
-                }
-
-                $latitude  = $addr->latitude;
-                $longitude = $addr->longitude;
-
-                $address = json_encode([
-                    'address'   => $addr->address,
-                    'apartment' => $addr->apartment
-                ]);
             } else {
-                // manuel adres
-                $latitude  = $data['lat'] ?? 0;
-                $longitude = $data['long'] ?? 0;
+                if (!empty($data['address_id'])) {
+                    $addr = Address::find($data['address_id']);
+                    if (!$addr) {
+                        ResponseService::set(['message' => 'Address not found']);
+                        return ResponseService::response();
+                    }
 
-                $address = json_encode([
-                    'address'   => $data['address'],
-                    'apartment' => ''
-                ]);
+                    $latitude = $addr->latitude;
+                    $longitude = $addr->longitude;
+
+                    $address = json_encode([
+                        'address' => $addr->address,
+                        'apartment' => $addr->apartment
+                    ]);
+                } else {
+                    $latitude = $data['lat'] ?? 0;
+                    $longitude = $data['long'] ?? 0;
+
+                    $address = json_encode([
+                        'address' => $data['address'],
+                        'apartment' => ''
+                    ]);
+                }
             }
-        }
 
-        $order = [
-            'user_id'         => $data['user_id'],
-            'restaurant_id'   => $data['restaurant_id'],
-            'total'           => $data['total'] + $data['delivery_charge'],
-            'sub_total'       => $data['total'],
-            'delivery_charge' => $data['delivery_charge'],
-            'status'          => OrderStatus::PENDING,
-            'order_type'      => $data['order_type'],
-            'address'         => $address,
-            'mobile'          => $data['mobile'],
-            'payment_id'      => $data['payment_id']??null,
-            'lat'             => $latitude,
-            'long'            => $longitude,
-            'misc'            => json_encode(["remarks" => '']),
-            'payment_method'  => $data['payment_method'],
-            'payment_status'  => $data['payment_status'],
-            'paid_amount'     => $data['paid_amount'],
-        ];
+            $orderData = [
+                'user_id'         => $data['user_id'],
+                'restaurant_id'   => $data['restaurant_id'],
+                'total'           => $data['total'] + $data['delivery_charge'],
+                'sub_total'       => $data['total'],
+                'delivery_charge' => $data['delivery_charge'],
+                'status'          => OrderStatus::PENDING,
+                'order_type'      => $data['order_type'],
+                'address'         => $address,
+                'mobile'          => $data['mobile'],
+                'payment_id'      => $data['payment_id'] ?? null,
+                'lat'             => $latitude,
+                'long'            => $longitude,
+                'misc'            => json_encode(["remarks" => '']),
+                'payment_method'  => $data['payment_method'],
+                'payment_status'  => $data['payment_status'],
+                'paid_amount'     => $data['paid_amount'],
+            ];
 
-        $order   = Order::create($order);
-        $orderId = $order->id;
-        OrderHistory::create([
-            'order_id'        => $orderId,
-            'previous_status' => null,
-            'current_status'  => OrderStatus::PENDING,
-        ]);
+            $order = Order::create($orderData);
+            $orderId = $order->id;
 
-        // isset() ile önce anahtar var mı diye bakıyoruz, sonra boş olup olmadığını kontrol ediyoruz.
-        if (isset($data['coupon_id']) && !blank($data['coupon_id'])) {
-            Discount::create([
-                'order_id'  => $orderId,
-                'coupon_id' => $data['coupon_id'],
-                'user_id'   => auth()->id(), // auth()->user()->id yerine auth()->id() daha kısadır
-                'amount'    => $data['coupon_amount'] ?? 0,
-                'status'    => DiscountStatus::ACTIVE,
+            OrderHistory::create([
+                'order_id'        => $orderId,
+                'previous_status' => null,
+                'current_status'  => OrderStatus::PENDING,
             ]);
-        }
 
-        if (!blank($data['items'])) {
-            $orderLineItems = [];
+            if (isset($data['coupon_id']) && !blank($data['coupon_id'])) {
+                Discount::create([
+                    'order_id'  => $orderId,
+                    'coupon_id' => $data['coupon_id'],
+                    'user_id'   => auth()->id(),
+                    'amount'    => $data['coupon_amount'] ?? 0,
+                    'status'    => DiscountStatus::ACTIVE,
+                ]);
+            }
 
             if (!blank($data['items'])) {
                 $orderLineItems = [];
-                // JSON string geliyorsa decode et, dizi geliyorsa direkt kullan
                 $items = is_string($data['items']) ? json_decode($data['items'], true) : $data['items'];
 
                 foreach ($items as $item) {
@@ -540,8 +539,6 @@ class OrderService
                     $dbOptionsData = [];
                     $selectedOptionIds = $item['options'] ?? [];
 
-                    // İlişki ismi 'optionGroups.options' olmalı.
-                    // Anahtar ismi Controller'dan 'menu_item_id' olarak geliyor.
                     $menuItem = MenuItem::with('optionGroups.options')->find($item['menu_item_id']);
 
                     if ($menuItem) {
@@ -571,7 +568,7 @@ class OrderService
                     $orderLineItems[] = [
                         'order_id'         => $orderId,
                         'restaurant_id'    => $item['restaurant_id'] ?? $data['restaurant_id'],
-                        'menu_item_id'     => $item['menu_item_id'], // Küçük harfli ve alt tireli
+                        'menu_item_id'     => $item['menu_item_id'],
                         'quantity'         => $item['quantity'],
                         'unit_price'       => $item['unit_price'],
                         'discounted_price' => $item['discounted_price'],
@@ -585,35 +582,38 @@ class OrderService
                 }
 
                 OrderLineItem::insert($orderLineItems);
+
+                $order->misc = json_encode([
+                    'order_code' => 'ORD-' . MyString::code($orderId),
+                    'remarks'    => $data['remarks'] ?? '',
+                ]);
+                $order->save();
+
+                if ($data['payment_status'] == PaymentStatus::PAID) {
+                    if ($data['payment_method'] != PaymentMethod::WALLET) {
+                        app(TransactionService::class)->addFund(0, $order->user->balance_id, $data['payment_method'], $order->total, $orderId);
+                    }
+
+                    if ($this->adminBalanceId != $order->user->balance_id) {
+                        app(TransactionService::class)->payment($order->user->balance_id, $this->adminBalanceId, $order->total, $orderId);
+                    }
+                }
+
+                \DB::commit();
                 ResponseService::set(['status' => true, 'order_id' => $orderId]);
+                return ResponseService::response();
+
+            } else {
+                \DB::rollBack();
+                ResponseService::set(['message' => 'Items not found']);
+                return ResponseService::response();
             }
 
-            OrderLineItem::insert($orderLineItems);
-            ResponseService::set([
-                'status'   => true,
-                'order_id' => $orderId,
-            ]);
-        } else {
-            ResponseService::set(['message' => 'Items not found']);
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            ResponseService::set(['message' => $e->getMessage(), 'status' => false]);
+            return ResponseService::response();
         }
-
-        $order       = Order::findOrFail($orderId);
-        $order->misc = json_encode([
-            'order_code' => 'ORD-' . MyString::code($orderId),
-            'remarks'    => isset($data['remarks']) ? $data['remarks'] : '',
-        ]);
-        $order->save();
-        if ($data['payment_status'] == PaymentStatus::PAID) {
-            if ($data['payment_method'] != PaymentMethod::WALLET) {
-                $addFund = app(TransactionService::class)->addFund(0, $order->user->balance_id, $data['payment_method'], $order->total, $orderId);
-            }
-
-            if ($this->adminBalanceId != $order->user->balance_id) {
-                app(TransactionService::class)->payment($order->user->balance_id, $this->adminBalanceId, $order->total, $orderId);
-            }
-        }
-
-        return ResponseService::response();
     }
 
     public function orderUpdate(int $orderId, int $status)
