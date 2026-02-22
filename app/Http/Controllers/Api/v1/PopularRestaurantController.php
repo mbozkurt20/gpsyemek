@@ -34,28 +34,48 @@ class PopularRestaurantController extends BackendController
 
         $latitude = $request->lat;
         $longitude = $request->long;
-        $radius = 20; // km
+        $radius = 20;
 
-        $bestSellingRestaurants  = Restaurant::leftJoin('orders', 'restaurant_id', '=', 'restaurants.id')
-            ->select('restaurants.id', 'restaurants.name', 'restaurants.slug','restaurants.description','restaurants.address','restaurants.address')
-            ->selectRaw('count("orders.id") as orders_count')
-            ->groupBy('restaurants.id')
-            ->orderBy('orders_count', 'desc')
+        $bestSellingRestaurants = Restaurant::leftJoin('orders', 'restaurants.id', '=', 'orders.restaurant_id')
+            ->select(
+                'restaurants.id',
+                'restaurants.name',
+                'restaurants.slug',
+                'restaurants.description',
+                'restaurants.address',
+                'restaurants.lat',
+                'restaurants.long'
+            )
+            ->selectRaw(
+                "(6371 * acos(cos(radians(?)) * cos(radians(restaurants.lat)) * cos(radians(restaurants.long) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.lat)))) AS distance",
+                [$latitude, $longitude, $latitude]
+            )
+            ->selectRaw('count(orders.id) as orders_count')
             ->where('restaurants.status', RestaurantStatus::ACTIVE)
             ->where('restaurants.current_status', CurrentStatus::YES)
+            ->groupBy(
+                'restaurants.id',
+                'restaurants.name',
+                'restaurants.slug',
+                'restaurants.description',
+                'restaurants.address',
+                'restaurants.lat',
+                'restaurants.long'
+            )
+            ->having('distance', '<=', $radius)
+            ->orderBy('orders_count', 'desc')
             ->get();
 
-        //  ->where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-        //            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-        try{
-
-            return $this->successResponse(['status'=> 200, 'data' =>  PopularRestaurantResource::collection(($bestSellingRestaurants))]);
-        } catch (\Exception $e){
+        try {
+            return $this->successResponse([
+                'status' => 200,
+                'data' => PopularRestaurantResource::collection($bestSellingRestaurants)
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'exception' => get_class($e),
-                'message' => $e->getMessage(),
-                'trace' => $e->getTrace(),
-            ]);
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }
