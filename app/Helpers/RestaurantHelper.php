@@ -35,7 +35,7 @@ class RestaurantHelper
         $closedUntil = $restaurant->temporary_closed_until ? Carbon::parse($restaurant->temporary_closed_until) : null;
 
         if ($restaurant->permanently_closed) {
-            return 'Süresiz kapalı';
+            return 'Şu An Kapalı';
         }
 
         if ($closedUntil && $closedUntil->isFuture()) {

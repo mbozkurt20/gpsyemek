@@ -351,7 +351,7 @@
                                     </div>
 
                                     @if ($restaurant->permanently_closed)
-                                        <p class="off">Süresiz kapalı</p>
+                                        <p class="off">Şu An Kapalı</p>
                                     @elseif ($closedUntil && $closedUntil->isFuture())
                                         <p class="off">{{ __('frontend.close_now') }}
                                             ({{ $closedUntil->diffForHumans() }} sonra açılacak)</p>

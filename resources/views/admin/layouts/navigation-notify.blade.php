@@ -43,10 +43,17 @@
         {{-- SOL TARAF --}}
         <div class="flex items-center space-x-3">
 
-            <button id="openModalBtn"
-                    class="bg-primary text-white px-3 mr-4 py-1 rounded">
-                Süreli Kapat
-            </button>
+            @if ($restaurant->permanently_closed)
+                <button id="openRestaurantBtn"
+                        class="bg-green-500 text-white px-3 mr-4 py-1 rounded">
+                    Restoranı Aç
+                </button>
+            @else
+                <button id="openModalBtn"
+                        class="bg-primary text-white px-3 mr-4 py-1 rounded">
+                    Kapat
+                </button>
+            @endif
 
             @php
                 $restaurant   = auth()->user()->restaurant;
@@ -67,7 +74,7 @@
 
             <div class="mr-4 font-bold">
                 @if ($restaurant->permanently_closed)
-                    <p class="text-red-500 font-semibold">Süresiz kapalı</p>
+                    <p class="text-red-500 font-semibold">Şu An Kapalı</p>
 
                 @elseif ($closedUntil && $closedUntil->isFuture())
                     <p class="text-red-700">
@@ -107,6 +114,7 @@
                 <button class="close-btn bg-gray-200 hover:bg-primary hover:text-white py-2 rounded" data-duration="30">30 Dk</button>
                 <button class="close-btn bg-gray-200 hover:bg-primary hover:text-white py-2 rounded" data-duration="45">45 Dk</button>
                 <button class="close-btn bg-gray-200 hover:bg-primary hover:text-white py-2 rounded" data-duration="60">1 Saat</button>
+                <button id="permanentCloseBtn" class="bg-red-500 text-white py-2 rounded hover:bg-red-700">Süresiz Kapat</button>
             </div>
 
             <button id="cancelModal" class="mt-4 text-red-500">İptal</button>
@@ -138,26 +146,46 @@
 
     {{-- MODAL JS --}}
     <script>
-        const openModalBtn = document.getElementById('openModalBtn');
         const modal = document.getElementById('closeModal');
         const cancelModal = document.getElementById('cancelModal');
         const restaurantId = "{{ auth()->user()->restaurant->id }}";
+        const csrfToken = '{{ csrf_token() }}';
 
-        openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        const openModalBtn = document.getElementById('openModalBtn');
+        if (openModalBtn) openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
         cancelModal.addEventListener('click', () => modal.classList.add('hidden'));
 
         document.querySelectorAll('.close-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 fetch(`/restaurant/close/${restaurantId}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
                     body: JSON.stringify({ duration: btn.dataset.duration })
                 }).then(() => location.reload());
             });
         });
+
+        const permanentCloseBtn = document.getElementById('permanentCloseBtn');
+        if (permanentCloseBtn) {
+            permanentCloseBtn.addEventListener('click', () => {
+                fetch(`/restaurant/close-status/${restaurantId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({ permanently_closed: 1 })
+                }).then(() => location.reload());
+            });
+        }
+
+        const openRestaurantBtn = document.getElementById('openRestaurantBtn');
+        if (openRestaurantBtn) {
+            openRestaurantBtn.addEventListener('click', () => {
+                fetch(`/restaurant/close-status/${restaurantId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({ permanently_closed: 0 })
+                }).then(() => location.reload());
+            });
+        }
     </script>
 
     {{-- SWITCH STYLE --}}
