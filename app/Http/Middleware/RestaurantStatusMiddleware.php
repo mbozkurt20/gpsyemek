@@ -44,15 +44,11 @@ class RestaurantStatusMiddleware
         $activeTimeSlots = $restaurant->timeSlots->where('status', 5)->where('day', $nowDay)->values();
 
         $isOpen = false;
-        if ($activeTimeSlots->isNotEmpty()) {
-            foreach ($activeTimeSlots as $slot) {
-                if (isNowInTimeRange::isNowInTimeRange($slot->start_time, $slot->end_time, $now)) {
-                    $isOpen = true;
-                    break;
-                }
+        foreach ($activeTimeSlots as $slot) {
+            if (isNowInTimeRange::isNowInTimeRange($slot->start_time, $slot->end_time, $now)) {
+                $isOpen = true;
+                break;
             }
-        } else {
-            $isOpen = isNowInTimeRange::isNowInTimeRange($restaurant->opening_time, $restaurant->closing_time, $now);
         }
         if (!$isOpen) {
             return redirect()->route('home');

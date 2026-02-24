@@ -43,7 +43,9 @@ class PopularRestaurantController extends BackendController
                 'restaurants.description',
                 'restaurants.address',
                 'restaurants.lat',
-                'restaurants.long'
+                'restaurants.long',
+                'restaurants.permanently_closed',
+                'restaurants.temporary_closed_until'
             )
             ->selectRaw('count(orders.id) as orders_count')
             ->where('restaurants.status', RestaurantStatus::ACTIVE)
@@ -55,8 +57,11 @@ class PopularRestaurantController extends BackendController
                 'restaurants.description',
                 'restaurants.address',
                 'restaurants.lat',
-                'restaurants.long'
-            );
+                'restaurants.long',
+                'restaurants.permanently_closed',
+                'restaurants.temporary_closed_until'
+            )
+            ->with('timeSlots');
 
         // Lat ve Long gelmişse mesafe hesaplamasını ve filtresini ekle
         $query->when($latitude && $longitude, function ($q) use ($latitude, $longitude, $radius) {

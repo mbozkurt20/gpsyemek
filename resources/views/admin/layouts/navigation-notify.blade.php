@@ -49,13 +49,24 @@
             </button>
 
             @php
-                $closedUntil = auth()->user()->restaurant->temporary_closed_until
-                    ? \Carbon\Carbon::parse(auth()->user()->restaurant->temporary_closed_until)
+                $restaurant   = auth()->user()->restaurant;
+                $closedUntil  = $restaurant->temporary_closed_until
+                    ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
                     : null;
+                $now          = \Carbon\Carbon::now();
+                $nowDay       = strtolower($now->format('l'));
+                $activeSlots  = $restaurant->timeSlots->where('status', 5)->where('day', $nowDay);
+                $isOpenNow    = false;
+                foreach ($activeSlots as $slot) {
+                    if (\App\Helpers\isNowInTimeRange::isNowInTimeRange($slot->start_time, $slot->end_time, $now)) {
+                        $isOpenNow = true;
+                        break;
+                    }
+                }
             @endphp
 
             <div class="mr-4 font-bold">
-                @if (auth()->user()->restaurant->permanently_closed)
+                @if ($restaurant->permanently_closed)
                     <p class="text-red-500 font-semibold">Süresiz kapalı</p>
 
                 @elseif ($closedUntil && $closedUntil->isFuture())
@@ -63,10 +74,7 @@
                         {{ __('frontend.close_now') }} ({{ $closedUntil->diffForHumans() }} sonra açılacak)
                     </p>
 
-                @elseif (
-                    auth()->user()->restaurant->opening_time < now()->format('H:i:s') &&
-                    auth()->user()->restaurant->closing_time > now()->format('H:i:s')
-                )
+                @elseif ($isOpenNow)
                     <p class="text-green-500 font-semibold">{{ __('frontend.open_now') }}</p>
 
                 @else
@@ -75,12 +83,14 @@
             </div>
         </div>
 
-        {{-- SAĞ TARAF --}}
-        <div class="text-gray-600 whitespace-nowrap px-2">
+        {{-- SAĞ TARAF Değişti --}}
+        {{--
+         <div class="text-gray-600 whitespace-nowrap px-2">
             ({{ date('H:i', strtotime(auth()->user()->restaurant->opening_time)) }}
             -
             {{ date('H:i', strtotime(auth()->user()->restaurant->closing_time)) }})
         </div>
+        --}}
     </div>
 
     {{-- MODAL --}}
