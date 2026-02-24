@@ -28,7 +28,7 @@ class PopularRestaurantResource extends JsonResource
             "avgRating" => $this->avgRatings['avgRating'],
             "avgRatingUser" => $this->avgRatings['countUser'],
             "isOpen" => $isOpen,
-            "isOpenMessage" => $isOpen ? null : RestaurantHelper::getStatusMessage($this->resource),
+            "isOpenMessage" => $isOpen ? 'Şimdi Açık' : RestaurantHelper::getStatusMessage($this->resource),
         ];
     }
 }
