@@ -109,3 +109,15 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    window.addEventListener('alert', event => {
+        Swal.fire({
+            title: event.detail[0].type === 'success' ? 'Başarılı' : 'Hata!',
+            text: event.detail[0].message,
+            icon: event.detail[0].type,
+            confirmButtonText: 'Tamam'
+        });
+    });
+</script>

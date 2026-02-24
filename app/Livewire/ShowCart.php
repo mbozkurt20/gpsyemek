@@ -60,23 +60,39 @@ class ShowCart extends Component
                 $selectedCount = is_array($selection) ? count(array_filter($selection)) : (!empty($selection) ? 1 : 0);
 
                 // Seçim yapılmamışsa veya checkbox dizisi boşsa
-                if (is_null($selection) || (is_array($selection) && !array_filter($selection))) {
+                if (is_array($selection)) {
+                    // Checkbox: Sadece 'true' olanları say
+                    $selectedCount = count(array_filter($selection));
+                } else {
+                    // Radio: Boş değilse 1, boşsa 0
+                    $selectedCount = !empty($selection) ? 1 : 0;
+                }
+
+                // Zorunluluk Kontrolü
+                if ($group->is_required && $selectedCount === 0) {
+                    $ms = ucfirst($group->name);
                     $this->dispatch('alert', [
                         'type' => 'error',
-                        'message' => "{$group->name} " . __('frontend.required')
+                        'message' => "{$ms} " . __('frontend.required')
                     ]);
                     return;
                 }
 
-                // 2. MIN ADET KONTROLÜ (Eğer min_count > 0 ise ve seçim yetersizse)
+                // Minimum Seçim Kontrolü
                 if ($group->min_count > 0 && $selectedCount < $group->min_count) {
-                    $this->dispatch('alert', ['type' => 'error', 'message' => "{$group->name} grubundan en az {$group->min_count} seçim yapmalısınız!"]);
+                    $this->dispatch('alert', [
+                        'type' => 'error',
+                        'message' => "{$group->name} grubundan en az {$group->min_count} seçim yapmalısınız!"
+                    ]);
                     return;
                 }
 
-                // 3. MAX ADET KONTROLÜ (Seçim sınırı aşılmışsa)
+                // Maksimum Seçim Kontrolü
                 if ($group->max_count > 0 && $selectedCount > $group->max_count) {
-                    $this->dispatch('alert', ['type' => 'error', 'message' => "{$group->name} grubundan en fazla {$group->max_count} seçim yapabilirsiniz!"]);
+                    $this->dispatch('alert', [
+                        'type' => 'error',
+                        'message' => "{$group->name} grubundan en fazla {$group->max_count} seçim yapabilirsiniz!"
+                    ]);
                     return;
                 }
             }

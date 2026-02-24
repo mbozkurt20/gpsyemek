@@ -171,7 +171,7 @@ class AccountController extends FrontendController
     public function orderShow($id)
     {
         $this->data['order'] = Order::where('user_id', auth()->id())->findOrFail($id);
-        $this->data['items'] = OrderLineItem::with('menuItem', 'variation')->with('restaurant')->where(['order_id' => $this->data['order']->id])->get();
+        $this->data['items'] = OrderLineItem::with(['menuItem' ,'restaurant'])->where(['order_id' => $this->data['order']->id])->get();
 
         return view('frontend.account.order_details', $this->data);
     }

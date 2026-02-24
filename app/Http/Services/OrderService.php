@@ -544,14 +544,6 @@ class OrderService
                     if ($menuItem) {
                         foreach ($menuItem->optionGroups as $group) {
                             $selectedInGroup = $group->options->whereIn('id', $selectedOptionIds);
-                            $count = $selectedInGroup->count();
-
-                            if ($group->is_required && $count == 0) {
-                                throw new \Exception("{$group->name} seçimi zorunludur.");
-                            }
-                            if ($group->max_count > 0 && $count > $group->max_count) {
-                                throw new \Exception("{$group->name} için en fazla {$group->max_count} seçim yapabilirsiniz.");
-                            }
 
                             foreach ($selectedInGroup as $opt) {
                                 $optionTotal += (float)$opt->price;

@@ -31,12 +31,11 @@ class PopularRestaurantController extends BackendController
     public function index(Request $request)
     {
         $current_time = now()->format('H:i');
-
         $latitude = $request->lat;
         $longitude = $request->long;
         $radius = 20;
 
-        $bestSellingRestaurants = Restaurant::leftJoin('orders', 'restaurants.id', '=', 'orders.restaurant_id')
+        $query = Restaurant::leftJoin('orders', 'restaurants.id', '=', 'orders.restaurant_id')
             ->select(
                 'restaurants.id',
                 'restaurants.name',
@@ -45,10 +44,6 @@ class PopularRestaurantController extends BackendController
                 'restaurants.address',
                 'restaurants.lat',
                 'restaurants.long'
-            )
-            ->selectRaw(
-                "(6371 * acos(cos(radians(?)) * cos(radians(restaurants.lat)) * cos(radians(restaurants.long) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.lat)))) AS distance",
-                [$latitude, $longitude, $latitude]
             )
             ->selectRaw('count(orders.id) as orders_count')
             ->where('restaurants.status', RestaurantStatus::ACTIVE)
@@ -61,10 +56,17 @@ class PopularRestaurantController extends BackendController
                 'restaurants.address',
                 'restaurants.lat',
                 'restaurants.long'
-            )
-            ->having('distance', '<=', $radius)
-            ->orderBy('orders_count', 'desc')
-            ->get();
+            );
+
+        // Lat ve Long gelmişse mesafe hesaplamasını ve filtresini ekle
+        $query->when($latitude && $longitude, function ($q) use ($latitude, $longitude, $radius) {
+            $q->selectRaw(
+                "(6371 * acos(cos(radians(?)) * cos(radians(restaurants.lat)) * cos(radians(restaurants.long) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.lat)))) AS distance",
+                [$latitude, $longitude, $latitude]
+            )->having('distance', '<=', $radius);
+        });
+
+        $bestSellingRestaurants = $query->orderBy('orders_count', 'desc')->get();
 
         try {
             return $this->successResponse([
