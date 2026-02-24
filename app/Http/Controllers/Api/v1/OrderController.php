@@ -20,6 +20,7 @@ use App\Http\Services\FileService;
 use App\Http\Services\OrderService;
 use App\Notifications\OrderCreated;
 use App\Notifications\OrderUpdated;
+use App\Helpers\RestaurantHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Resources\v1\UserResource;
@@ -110,18 +111,17 @@ class OrderController extends Controller
             return response()->json(['status' => 422, 'message' => $validator->errors()], 422);
         }
 
-        $restaurant = Restaurant::find($request->restaurant_id);
+        $restaurant = Restaurant::with('timeSlots')->find($request->restaurant_id);
 
         if (!$restaurant) {
             return response()->json(['status' => 400, 'message' => 'Restoran Bulunamadı'], 400);
         }
 
-        // Restoran kapalılık kontrolü
-        $closedUntil = $restaurant->temporary_closed_until ? \Carbon\Carbon::parse($restaurant->temporary_closed_until) : null;
-        if ($restaurant->permanently_closed) {
-            return response()->json(['status' => 400, 'message' => 'Restoran Kapalı'], 400);
-        } elseif ($closedUntil && $closedUntil->isFuture()) {
-            return response()->json(['status' => 400, 'message' => "Restoran şu an kapalı. " . $closedUntil->diffForHumans() . " sonra açılacaktır"], 400);
+        if (RestaurantHelper::getStatus($restaurant) === 'closed') {
+            return response()->json([
+                'status'  => 400,
+                'message' => RestaurantHelper::getStatusMessage($restaurant),
+            ], 400);
         }
 
         // JSON Decode
