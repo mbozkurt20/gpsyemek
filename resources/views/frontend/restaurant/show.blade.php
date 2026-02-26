@@ -65,7 +65,7 @@
                         <div class="rest-profile">
                             <div class="rest-info">
                                 <h1 class="rest-name">
-                                    @if ($restaurant->opening_time < $currenttime && $restaurant->closing_time > $currenttime)
+                                    @if (\App\Helpers\RestaurantHelper::getStatus($restaurant) === 'open')
                                         <span class="dot on me-1" title="Open Now"></span>
                                     @else
                                         <span class="dot off me-1" title="Close Now"></span>
@@ -325,8 +325,14 @@
                             @endforeach
                         </h4>
                     @endif
-                    <p>{{ __('frontend.open') }} {{ date('h:i', strtotime($restaurant->opening_time)) }} -
-                        {{ date('h:i', strtotime($restaurant->closing_time)) }} </p>
+                    @php $todaySlots = $restaurant->timeSlots->where('status', 5)->where('day', strtolower(now()->format('l')))->sortBy('start_time'); @endphp
+                    @if ($todaySlots->isNotEmpty())
+                        <p>{{ __('frontend.open') }}
+                            @foreach($todaySlots as $slot)
+                                {{ \Carbon\Carbon::parse($slot->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($slot->end_time)->format('H:i') }}@if(!$loop->last), @endif
+                            @endforeach
+                        </p>
+                    @endif
                 </div>
                 <div class="nav nav-tabs">
                     <a class="nav-link active" data-bs-toggle="tab" href="#about">{{ __('frontend.about') }}</a>
@@ -338,8 +344,14 @@
                             <ul>
                                 <li>
                                     <h3>{{ __('frontend.delivery_hours') }} </h3>
-                                    <p> {{ date('h:i', strtotime($restaurant->opening_time)) }} -
-                                        {{ date('h:i', strtotime($restaurant->closing_time)) }} </p>
+                                    @php $todaySlotsAbout = $restaurant->timeSlots->where('status', 5)->where('day', strtolower(now()->format('l')))->sortBy('start_time'); @endphp
+                                    @if ($todaySlotsAbout->isNotEmpty())
+                                        <p>@foreach($todaySlotsAbout as $slot)
+                                            {{ \Carbon\Carbon::parse($slot->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($slot->end_time)->format('H:i') }}@if(!$loop->last), @endif
+                                        @endforeach</p>
+                                    @else
+                                        <p>-</p>
+                                    @endif
                                 </li>
                                 <li>
                                     <h3>{{ __('frontend.address') }}</h3>

@@ -269,20 +269,24 @@ class DashboardController extends BackendController
         $revenueStatistics = [];
 
         if (auth()->user()->myrole == UserRole::RESTAURANTOWNER && auth()->user()->restaurant->id) {
-            $data = auth()->user()->restaurant->where('user_id', auth()->id())->get();
-            $hourList         = [];
-            $orderByHour      = [];
+            $data    = auth()->user()->restaurant->where('user_id', auth()->id())->get()->load('timeSlots');
+            $hourList    = [];
+            $orderByHour = [];
+            $nowDay      = strtolower(now()->format('l'));
             foreach ($data as $key => $restaurant) {
-                $hourLists = CarbonPeriod::create(Carbon::parse($restaurant->opening_time), '1 hour', Carbon::parse($restaurant->closing_time));
                 $orderActivity = Order::where('restaurant_id', $restaurant->id)
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->selectRaw('hour(created_at) as hour, count(*) as orderCount')
                     ->groupBy('hour')
                     ->orderBy('hour')
                     ->get();
-                foreach ($hourLists as $key => $hour) {
-                    $hourList[]         = $hour->format('H');
-                    $orderByHour[]      = $orderActivity->where('hour', $hour->format('H'))->first()->orderCount ?? 0;
+                $todaySlots = $restaurant->timeSlots->where('status', 5)->where('day', $nowDay);
+                foreach ($todaySlots as $slot) {
+                    $hourLists = CarbonPeriod::create(Carbon::parse($slot->start_time), '1 hour', Carbon::parse($slot->end_time));
+                    foreach ($hourLists as $hour) {
+                        $hourList[]    = $hour->format('H');
+                        $orderByHour[] = $orderActivity->where('hour', $hour->format('H'))->first()->orderCount ?? 0;
+                    }
                 }
             }
             $revenueStatistics = (object) [

@@ -20,16 +20,7 @@
 
                 @php
                     $restaurant = auth()->user()->restaurant;
-
-                    $closedUntil = $restaurant->temporary_closed_until
-                        ? \Carbon\Carbon::parse($restaurant->temporary_closed_until)
-                        : null;
-
-                    $isOpen =
-                        !$restaurant->permanently_closed &&
-                        !($closedUntil && $closedUntil->isFuture()) &&
-                        $restaurant->opening_time < now()->format('H:i:s') &&
-                        $restaurant->closing_time > now()->format('H:i:s');
+                    $isOpen = \App\Helpers\RestaurantHelper::getStatus($restaurant) === 'open';
                 @endphp
 
                 <label class="switch">

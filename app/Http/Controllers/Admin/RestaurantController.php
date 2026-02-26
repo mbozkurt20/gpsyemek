@@ -92,8 +92,8 @@ class RestaurantController extends BackendController
         $restaurant->description     = $request->description;
         $restaurant->lat             = $request->lat;
         $restaurant->long            = $request->long;
-        $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-        $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
+       // $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
+       // $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
         $restaurant->address         = $request->restaurantaddress;
         $restaurant->current_status  = $request->current_status;
         $restaurant->waiter_status   = $request->waiter_status;
@@ -209,8 +209,8 @@ class RestaurantController extends BackendController
                 $restaurant->description     = $request->description;
                 $restaurant->lat             = $request->lat;
                 $restaurant->long            = $request->long;
-                $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-                $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
+               //$restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
+                //$restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
                 $restaurant->address         = $request->restaurantaddress;
                 $restaurant->current_status  = $request->current_status;
                 $restaurant->waiter_status   = $request->waiter_status;
@@ -393,8 +393,8 @@ class RestaurantController extends BackendController
         $restaurant->description     = $request->description;
         $restaurant->lat             = $request->lat;
         $restaurant->long            = $request->long;
-        $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-        $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
+        //$restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
+        //$restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
         $restaurant->address         = $request->address;
         $restaurant->current_status  = $request->current_status;
         $restaurant->waiter_status   = $request->waiter_status;
@@ -433,8 +433,8 @@ class RestaurantController extends BackendController
         $restaurant->description     = $request->description;
         $restaurant->lat             = $request->lat;
         $restaurant->long            = $request->long;
-        $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-        $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
+        //$restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
+        //$restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
         $restaurant->address         = $request->address;
         $restaurant->current_status  = $request->current_status;
         $restaurant->waiter_status   = $request->waiter_status;

@@ -31,8 +31,6 @@ class ReservationResource extends JsonResource
             "restaurant_name"         => $this->restaurant->name,
             "restaurant_phone"        => $this->restaurant->user->phone,
             "restaurant_email"        => $this->restaurant->user->email,
-            "restaurant_opening_time" => Carbon::parse($this->opening_time)->format('h:i'),
-            "restaurant_closing_time" => Carbon::parse($this->closing_time)->format('h:i'),
 
         ];
     }

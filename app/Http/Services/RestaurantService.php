@@ -33,15 +33,12 @@ class RestaurantService
             if (!empty($applied)) {
                 $queryArray['applied'] = $applied;
             }
-            $current_time = now()->format('H:i');
             if (!blank($queryArray)) {
-                $restaurants = Restaurant::where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-                    ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-                    ->where($queryArray)->restaurantowner()->descending()->select()->get();
+                $restaurants = Restaurant::where($queryArray)->restaurantowner()->descending()->with('timeSlots')->get()
+                    ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
             } else {
-                $restaurants = Restaurant::where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-                    ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])->
-                    restaurantowner()->descending()->select()->get();
+                $restaurants = Restaurant::restaurantowner()->descending()->with('timeSlots')->get()
+                    ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
             }
 
             return  $restaurants;
@@ -99,8 +96,6 @@ class RestaurantService
         $restaurant->description     = $request->description;
         $restaurant->lat             = $request->lat;
         $restaurant->long            = $request->long;
-        $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-        $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
         $restaurant->address         = $request->restaurantaddress;
         $restaurant->current_status  = $request->current_status;
         $restaurant->delivery_status = $request->delivery_status;
@@ -173,8 +168,6 @@ class RestaurantService
                 $restaurant->description     = $request->description;
                 $restaurant->lat             = $request->lat;
                 $restaurant->long            = $request->long;
-                $restaurant->opening_time    = date('H:i:s', strtotime($request->opening_time));
-                $restaurant->closing_time    = date('H:i:s', strtotime($request->closing_time));
                 $restaurant->address         = $request->restaurantaddress;
                 $restaurant->current_status  = $request->current_status;
                 $restaurant->delivery_status = $request->delivery_status;

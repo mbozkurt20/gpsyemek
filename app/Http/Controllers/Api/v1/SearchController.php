@@ -79,30 +79,24 @@ class SearchController extends BackendController
         }
 
 
-        $current_time = now()->format('H:i');
-
         if (!blank($queryArray) && !blank($name)) {
-            $restaurants = Restaurant::where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-            ->where($queryArray)->where('name', 'like', '%' . $name . '%')
-            ->descending()->select()->get();
+            $restaurants = Restaurant::where($queryArray)->where('name', 'like', '%' . $name . '%')
+                ->descending()->with('timeSlots')->get()
+                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
         } elseif (!blank($expedition)) {
-            $restaurants = Restaurant::where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-            ->where($queryArray)
-            ->descending()->select()->get();
+            $restaurants = Restaurant::where($queryArray)
+                ->descending()->with('timeSlots')->get()
+                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
         } elseif (!blank($name)) {
             $restaurants = Restaurant::where('name', 'like', '%' . $name . '%')
-            ->where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-            ->descending()->select()->get();
+                ->descending()->with('timeSlots')->get()
+                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
         } else {
-            $restaurants = Restaurant::where([['opening_time', '>', 'closing_time'],['opening_time', '<', $current_time]])
-            ->Orwhere([['opening_time', '<', 'closing_time'],['opening_time', '<', $current_time],['closing_time', '>', $current_time]])
-            ->where($queryArray)
-            ->descending()->select()->get();
+            $restaurants = Restaurant::where($queryArray)
+                ->descending()->with('timeSlots')->get()
+                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
         }
 
-        return  $restaurants;
+        return $restaurants;
     }
 }

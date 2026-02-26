@@ -51,8 +51,6 @@ class RestaurantImport implements ToModel, WithHeadingRow ,WithValidation , Skip
         $restaurant->user_id                = $user->id;
         $restaurant->name                   = $row['name'];
         $restaurant->description            = $row['description'];
-        $restaurant->opening_time           = $row['opening_time'];
-        $restaurant->closing_time           = $row['closing_time'];
         $restaurant->lat                    = $row['latitude'];
         $restaurant->long                   = $row['longitude'];
         $restaurant->address                = $row['address'];

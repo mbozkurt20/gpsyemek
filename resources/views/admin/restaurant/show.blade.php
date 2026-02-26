@@ -282,18 +282,6 @@
 
                                 <div class="col-12 sm:col-6 !py-1.5">
                                     <div class="db-list-item p-0">
-                                        <span class="db-list-item-title w-full sm:w-1/2">{{ __('levels.opening_time') }}</span>
-                                        <span class="db-list-item-text w-full sm:w-1/2">{{ date('h:i', strtotime($restaurant->opening_time)) }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-12 sm:col-6 !py-1.5">
-                                    <div class="db-list-item p-0">
-                                        <span class="db-list-item-title w-full sm:w-1/2">{{ __('levels.closing_time') }}</span>
-                                        <span class="db-list-item-text w-full sm:w-1/2">{{ date('h:i', strtotime($restaurant->closing_time)) }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-12 sm:col-6 !py-1.5">
-                                    <div class="db-list-item p-0">
                                         <span class="db-list-item-title w-full sm:w-1/2">{{ __('levels.api_token') }}</span>
                                         <span class="fw-bold db-list-item-text w-full sm:w-1/2">
             <span id="apiToken" class="hidden">{{ $restaurant->api_token }}</span>

@@ -88,7 +88,8 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-col-6 sm:form-col-6 md:form-col-6">
+                                    {{--
+                                      <div class="form-col-6 sm:form-col-6 md:form-col-6">
                                         <label class="db-field-title"
                                                for="opening_time">{{ __('levels.opening_time') }}</label>
                                         <input type="time" name="opening_time" id="opening_time"
@@ -111,6 +112,7 @@
                                         <small class="db-field-alert">{{ $message }}</small>
                                         @enderror
                                     </div>
+                                    --}}
 
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
                                         <label class="db-field-title" for="cuisines">{{ __('levels.cuisines') }}</label>

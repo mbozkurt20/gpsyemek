@@ -286,9 +286,7 @@
                                  $restaurantUrl = 'javascript:void(0) 3';
                             }
 
-                            $isOpen = !$restaurant->permanently_closed &&
-                                        !($closedUntil && $closedUntil->isFuture()) &&
-                                        ($restaurant->opening_time < now()->format('H:i:s') && $restaurant->closing_time > now()->format('H:i:s'));
+                            $isOpen = $status === 'open';
                         @endphp
 
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
