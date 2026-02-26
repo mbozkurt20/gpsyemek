@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\CategoryStatus;
 use App\Enums\MenuItemStatus;
 use App\Enums\Status;
+use App\Models\Cuisine;
 use App\Http\Controllers\BackendController;
 use App\Http\Requests\MenuItemRequest;
 use App\Imports\ProductImport;
@@ -132,6 +133,7 @@ class MenuItemController extends BackendController
     {
         $this->data['categories'] = Category::where(['status' => CategoryStatus::ACTIVE])->get();
         $this->data['restaurants'] = Restaurant::where(['status' => Status::ACTIVE])->get();
+        $this->data['cuisines']   = Cuisine::where(['status' => Status::ACTIVE])->get();
         return view('admin.menu-item.create', $this->data);
     }
 
@@ -156,7 +158,8 @@ class MenuItemController extends BackendController
         $menuItem->unit_price     = $request->get('unit_price');
         $menuItem->discount_price = $request->get('discount_price') ?? 0;
         $menuItem->status         = $request->get('status');
-        $menuItem->menu_number         = $menuNumber;
+        $menuItem->cuisine_id     = $request->get('cuisine_id') ?: null;
+        $menuItem->menu_number    = $menuNumber;
         $menuItem->save();
 
         $menuItem->categories()->sync($request->get('categories'));
@@ -191,7 +194,8 @@ class MenuItemController extends BackendController
         $this->data['menuItem']            = $menuItem;
         $this->data['categories']          = Category::where(['status' => CategoryStatus::ACTIVE])->get();
         $this->data['menuItem_categories'] = $menuItem->categories()->pluck('id')->toArray();
-        $this->data['restaurants'] = Restaurant::where(['status' => Status::ACTIVE])->get();
+        $this->data['restaurants']         = Restaurant::where(['status' => Status::ACTIVE])->get();
+        $this->data['cuisines']            = Cuisine::where(['status' => Status::ACTIVE])->get();
 
         return view('admin.menu-item.edit', $this->data);
     }
@@ -211,6 +215,7 @@ class MenuItemController extends BackendController
         $menuItem->unit_price     = $request->get('unit_price');
         $menuItem->discount_price = $request->get('discount_price') ?? 0;
         $menuItem->status         = $request->get('status');
+        $menuItem->cuisine_id     = $request->get('cuisine_id') ?: null;
         $menuItem->save();
 
         $menuItem->categories()->sync($request->get('categories'));

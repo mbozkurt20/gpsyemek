@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\OrderStatus;
 use App\Enums\MenuItemStatus;
+use App\Models\Cuisine;
 use Spatie\Sluggable\HasSlug;
 use App\Models\MenuItemOption;
 use App\Models\MenuItemVariation;
@@ -182,7 +183,7 @@ class MenuItem extends BaseModel implements HasMedia
 
     public function cuisine()
     {
-        return $this->belongsTo(cuisine::class);
+        return $this->belongsTo(Cuisine::class);
     }
     public function category()
     {

@@ -21,6 +21,8 @@ class MenuItemResource extends JsonResource
             "name"              => $this->name,
             "slug"              => $this->slug,
             "menu_number"       => $this->menu_number,
+            "cuisine_id"        => $this->cuisine_id,
+            "cuisine"           => $this->cuisine?->name,
             "unit_price"        => (float)$this->unit_price,
             "discount_price"    => (float)$this->discount_price,
             "currency_code"     => setting('currency_code'),

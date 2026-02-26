@@ -67,6 +67,24 @@
 							</div>
 
                             <div class="col-12 sm:col-6 md:col-4 xl:col-3">
+								<label class="db-field-title" for="cuisine_id">{{ __('cuisine.cuisines') }}</label>
+								<div class="db-field-down-arrow">
+									<select name="cuisine_id" id="cuisine_id" class="db-field-control appearance-none select2 custom-select2 @error('cuisine_id') invalid @enderror">
+										<option value="">---</option>
+										@if(!blank($cuisines))
+                                        @foreach($cuisines as $cuisine)
+											<option value="{{ $cuisine->id }}" {{ (old('cuisine_id') == $cuisine->id) ? 'selected' : '' }}>{{ $cuisine->name }}</option>
+										@endforeach
+                                        @endif
+									</select>
+								</div>
+
+								@error('cuisine_id')
+								<small class="db-field-alert">{{ $message }}</small>
+								@enderror
+							</div>
+
+                            <div class="col-12 sm:col-6 md:col-4 xl:col-3">
 								<label class="db-field-title required" for="unit_price">{{ __('levels.unit_price') }}</label>
 								<input type="text" name="unit_price" id="unit_price" class="db-field-control @error('unit_price') invalid @enderror" value="{{ old('unit_price') }}">
 

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\MenuItem;
+use App\Models\Restaurant;
 use App\Enums\CategoryStatus;
 use Spatie\Sluggable\HasSlug;
 use App\Enums\CategoryRequested;
@@ -107,6 +109,11 @@ class Cuisine extends BaseModel implements HasMedia
     public function restaurants()
     {
         return $this->belongsToMany(Restaurant::class, 'restaurant_cuisines');
+    }
+
+    public function menuItems()
+    {
+        return $this->hasMany(MenuItem::class);
     }
 
     public function getStatusNameAttribute()
