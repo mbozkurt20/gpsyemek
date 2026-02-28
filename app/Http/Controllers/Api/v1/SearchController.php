@@ -96,17 +96,13 @@ class SearchController extends BackendController
         }
 
         if ($latitude && $longitude) {
-            $query->selectRaw(
-                "*, (6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) AS distance",
-                [$latitude, $longitude, $latitude]
-            )->having('distance', '<=', $radius)
-             ->orderBy('distance', 'asc');
+            $distanceRaw = "(6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat))))";
+            $query->whereRaw("$distanceRaw <= ?", [$latitude, $longitude, $latitude, $radius])
+                  ->orderByRaw("$distanceRaw ASC", [$latitude, $longitude, $latitude]);
         } else {
             $query->descending();
         }
 
-        return $query->get()
-            ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')
-            ->values();
+        return $query->get()->values();
     }
 }
