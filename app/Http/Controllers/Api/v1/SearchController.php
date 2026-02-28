@@ -49,8 +49,13 @@ class SearchController extends BackendController
         if (!blank($request->get('expedition'))) {
             $expedition = $request->get('expedition');
         }
+
+        $latitude  = $request->get('lat');
+        $longitude = $request->get('long');
+        $radius    = 20;
+
         try {
-            $restaurants = $this->getallrestaurant($name, $expedition);
+            $restaurants = $this->getallrestaurant($name, $expedition, $latitude, $longitude, $radius);
             return $this->successResponse(['status' => 200, 'data' => PopularRestaurantResource::collection($restaurants)]);
         } catch (\Exception $e) {
             return response()->json([
@@ -62,11 +67,11 @@ class SearchController extends BackendController
     }
 
 
-    public function getallrestaurant($name, $expedition)
+    public function getallrestaurant($name, $expedition, $latitude = null, $longitude = null, $radius = 20)
     {
         $queryArray = [];
-        $queryArray['status']=RestaurantStatus::ACTIVE;
-        $queryArray['current_status']=CurrentStatus::YES;
+        $queryArray['status']         = RestaurantStatus::ACTIVE;
+        $queryArray['current_status'] = CurrentStatus::YES;
 
         if (!blank($expedition)) {
             if ($expedition == 'delivery') {
@@ -78,25 +83,30 @@ class SearchController extends BackendController
             }
         }
 
+        $query = Restaurant::with('timeSlots');
 
-        if (!blank($queryArray) && !blank($name)) {
-            $restaurants = Restaurant::where($queryArray)->where('name', 'like', '%' . $name . '%')
-                ->descending()->with('timeSlots')->get()
-                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
+        if (!blank($name) && !blank($expedition)) {
+            $query->where($queryArray)->where('name', 'like', '%' . $name . '%');
         } elseif (!blank($expedition)) {
-            $restaurants = Restaurant::where($queryArray)
-                ->descending()->with('timeSlots')->get()
-                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
+            $query->where($queryArray);
         } elseif (!blank($name)) {
-            $restaurants = Restaurant::where('name', 'like', '%' . $name . '%')
-                ->descending()->with('timeSlots')->get()
-                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
+            $query->where('name', 'like', '%' . $name . '%');
         } else {
-            $restaurants = Restaurant::where($queryArray)
-                ->descending()->with('timeSlots')->get()
-                ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')->values();
+            $query->where($queryArray);
         }
 
-        return $restaurants;
+        if ($latitude && $longitude) {
+            $query->selectRaw(
+                "*, (6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) AS distance",
+                [$latitude, $longitude, $latitude]
+            )->having('distance', '<=', $radius)
+             ->orderBy('distance', 'asc');
+        } else {
+            $query->descending();
+        }
+
+        return $query->get()
+            ->filter(fn($r) => \App\Helpers\RestaurantHelper::getStatus($r) === 'open')
+            ->values();
     }
 }
