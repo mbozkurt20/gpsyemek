@@ -414,7 +414,7 @@
 
                                         <button type="button" id="show-on-map"
                                                 class="db-btn rounded-full text-white mt-2" style="background: #14179e">
-                                            Haritada Göster
+                                            Adrese Göre Güncelle
                                         </button>
                                     </div>
                                 </div>
