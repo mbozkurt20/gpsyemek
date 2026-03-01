@@ -370,7 +370,14 @@
                             <div class="db-card-body">
                                 <div class="row">
                                     <div class="form-col-12 sm:form-col-12 md:form-col-12">
-                                        <div id="googleMap"></div>
+                                        <div style="position: relative;">
+                                            <input id="map-search-input" type="text" placeholder="Adres ara..."
+                                                   style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+                                                          z-index: 5; width: 80%; padding: 8px 12px; border: 1px solid #ccc;
+                                                          border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 14px;
+                                                          background-color: #fff; color: #333;">
+                                            <div id="googleMap" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+                                        </div>
                                     </div>
 
                                     <div class="form-col-6 sm:form-col-6 md:form-col-6">
@@ -772,91 +779,90 @@
         }
 
         async function initMap() {
+            const geocoder = new google.maps.Geocoder();
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                        getLatLongPosition(position);
-                    },
-                    function (error) {
-                        console.log('Location access denied. Using default location.')
-                        getLatLongPosition({
-                            coords: {
-                                latitude: {{$restaurant->lat}},
-                                longitude: {{$restaurant->long}}
-                            }
-                        }); // Default: Dhaka
+            const savedLat = parseFloat(document.getElementById('lat').value) || {{ $restaurant->lat ?? 41.0082 }};
+            const savedLng = parseFloat(document.getElementById('long').value) || {{ $restaurant->long ?? 28.9784 }};
+
+            const myLatlng = { lat: savedLat, lng: savedLng };
+
+            const map = new google.maps.Map(document.getElementById("googleMap"), {
+                zoom: 15,
+                center: myLatlng,
+                mapTypeId: 'roadmap',
+                disableDefaultUI: false,
+            });
+
+            let marker = new google.maps.Marker({
+                position: myLatlng,
+                map,
+                draggable: true,
+                title: "Restoran Konumu",
+            });
+
+            function reverseGeocode(lat, lng) {
+                geocoder.geocode({ location: { lat, lng } }, function (results, status) {
+                    if (status === "OK" && results[0]) {
+                        document.getElementById('address-input').value = results[0].formatted_address;
                     }
-                );
-            } else {
-                alert("Sorry, your browser does not support HTML5 geolocation.");
-            }
-
-            function getLatLongPosition(position) {
-
-                let latitude = position.coords.latitude;
-                let longitude = position.coords.longitude;
-
-                const myLatlng = {lat: latitude, lng: longitude};
-
-                const map = new google.maps.Map(document.getElementById("googleMap"), {
-                    zoom: 15,
-                    center: myLatlng,
-                });
-
-                // Create the initial InfoWindow.
-                let infoWindow = new google.maps.InfoWindow({
-                    content: "Click the map to get latitude & longitude!",
-                    position: myLatlng,
-                });
-
-                infoWindow.open(map);
-                // Configure the click listener.
-                var marker;
-
-                map.addListener("click", (mapsMouseEvent) => {
-                    // Close the current InfoWindow.
-                    infoWindow.close();
-                    // Create a new InfoWindow.
-                    infoWindow = new google.maps.InfoWindow({
-                        position: mapsMouseEvent.latLng,
-                    });
-
-                    var latLng = mapsMouseEvent.latLng.toJSON();
-                    $('#lat').val(latLng.lat);
-                    $('#long').val(latLng.lng);
-                    if (marker)
-                        marker.setMap(null);
-                    marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map,
-                        draggable: true,
-                        title: "Your current location.",
-                    });
-
-                    changeMarkerPosition(latLng, marker)
-
-                });
-
-                marker = new google.maps.Marker({
-                    position: myLatlng,
-                    map,
-                    draggable: true,
-                    title: "Your current location.",
                 });
             }
-        }
 
-        function changeMarkerPosition(latLng, marker) {
-            var latlng = new google.maps.LatLng(latLng.lat, latLng.lng);
-            marker.setPosition(latlng);
+            function updatePosition(lat, lng, skipGeocode) {
+                const latlng = new google.maps.LatLng(lat, lng);
+                marker.setPosition(latlng);
+                map.setCenter(latlng);
+                document.getElementById('lat').value = lat;
+                document.getElementById('long').value = lng;
+                if (!skipGeocode) {
+                    reverseGeocode(lat, lng);
+                }
+            }
+
+            // Haritaya tıklayınca marker'ı taşı ve adresi güncelle
+            map.addListener("click", (mapsMouseEvent) => {
+                const { lat, lng } = mapsMouseEvent.latLng.toJSON();
+                updatePosition(lat, lng);
+            });
+
+            // Marker sürüklenince inputları ve adresi güncelle
+            marker.addListener("dragend", function (event) {
+                updatePosition(event.latLng.lat(), event.latLng.lng());
+            });
+
+            // Harita üstündeki arama kutusu → Places Autocomplete
+            const searchInput = document.getElementById('map-search-input');
+            const autocomplete = new google.maps.places.Autocomplete(searchInput, { fields: ['geometry', 'formatted_address'] });
+            autocomplete.bindTo('bounds', map);
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place.geometry || !place.geometry.location) return;
+                updatePosition(place.geometry.location.lat(), place.geometry.location.lng(), true);
+                document.getElementById('address-input').value = place.formatted_address || searchInput.value;
+                map.setZoom(16);
+            });
+
+            // "Haritada Göster" butonu → adresi geocode et, marker'ı taşı
+            document.getElementById('show-on-map').addEventListener('click', function () {
+                const address = document.getElementById('address-input').value.trim();
+                if (!address) {
+                    alert("Lütfen bir adres giriniz.");
+                    return;
+                }
+                geocoder.geocode({ address }, function (results, status) {
+                    if (status === "OK") {
+                        const location = results[0].geometry.location;
+                        updatePosition(location.lat(), location.lng());
+                        map.setZoom(15);
+                    } else {
+                        alert("Adres bulunamadı: " + status);
+                    }
+                });
+            });
         }
 
         $(document).ready(function () {
             $('.select2').select2();
         });
     </script>
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key={{ setting('google_map_api_key') }}&libraries=places&callback=initMap"></script>
-    <script src="{{ asset('js/restaurant/create.js') }}"></script>
 @endpush
