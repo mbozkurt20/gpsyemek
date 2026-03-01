@@ -65,12 +65,10 @@ class PopularRestaurantController extends BackendController
             ->with('timeSlots');
 
         // Lat ve Long gelmişse mesafe hesaplamasını ve filtresini ekle
-        $query->when($latitude && $longitude, function ($q) use ($latitude, $longitude, $radius) {
-            $q->selectRaw(
-                "(6371 * acos(cos(radians(?)) * cos(radians(restaurants.lat)) * cos(radians(restaurants.long) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.lat)))) AS distance",
-                [$latitude, $longitude, $latitude]
-            )->having('distance', '<=', $radius);
-        });
+        if (is_numeric($latitude) && is_numeric($longitude)) {
+            $distanceRaw = "(6371 * acos(cos(radians(?)) * cos(radians(restaurants.lat)) * cos(radians(restaurants.`long`) - radians(?)) + sin(radians(?)) * sin(radians(restaurants.lat))))";
+            $query->whereRaw("$distanceRaw <= ?", [$latitude, $longitude, $latitude, $radius]);
+        }
 
         $bestSellingRestaurants = $query->orderBy('orders_count', 'desc')->get()
             ->sortByDesc(fn($r) => RestaurantHelper::getStatus($r) === 'open' ? 1 : 0)

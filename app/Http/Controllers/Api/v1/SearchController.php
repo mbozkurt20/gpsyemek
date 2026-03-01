@@ -96,12 +96,12 @@ class SearchController extends BackendController
             $query->where($queryArray);
         }
 
-        if ($latitude && $longitude) {
+        if (is_numeric($latitude) && is_numeric($longitude)) {
             $distanceRaw = "(6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(`long`) - radians(?)) + sin(radians(?)) * sin(radians(lat))))";
             $query->whereRaw("$distanceRaw <= ?", [$latitude, $longitude, $latitude, $radius])
                   ->orderByRaw("$distanceRaw ASC", [$latitude, $longitude, $latitude]);
         } else {
-            $query->descending();
+            $query->orderBy('id', 'desc');
         }
 
         return $query->get()
