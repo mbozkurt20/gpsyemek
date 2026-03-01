@@ -17,6 +17,7 @@ use App\Models\RestaurantRating;
 use App\Http\Services\RatingsService;
 use App\Http\Services\RestaurantService;
 use App\Http\Resources\v1\RatingResource;
+use App\Helpers\RestaurantHelper;
 use App\Http\Controllers\BackendController;
 use App\Http\Resources\v1\MenuItemResource;
 use App\Http\Resources\v1\RestaurantResource;
@@ -103,6 +104,8 @@ class SearchController extends BackendController
             $query->descending();
         }
 
-        return $query->get()->values();
+        return $query->get()
+            ->sortByDesc(fn($r) => RestaurantHelper::getStatus($r) === 'open' ? 1 : 0)
+            ->values();
     }
 }

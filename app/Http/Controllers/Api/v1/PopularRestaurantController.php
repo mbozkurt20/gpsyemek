@@ -6,6 +6,7 @@ use App\Enums\CurrentStatus;
 use App\Enums\RestaurantStatus;
 use App\Helpers\MapHelper;
 use App\Helpers\OrdersHelper;
+use App\Helpers\RestaurantHelper;
 use App\Http\Resources\v1\PopularRestaurantResource;
 use App\Models\Restaurant;
 use App\Traits\ApiResponse;
@@ -71,7 +72,9 @@ class PopularRestaurantController extends BackendController
             )->having('distance', '<=', $radius);
         });
 
-        $bestSellingRestaurants = $query->orderBy('orders_count', 'desc')->get();
+        $bestSellingRestaurants = $query->orderBy('orders_count', 'desc')->get()
+            ->sortByDesc(fn($r) => RestaurantHelper::getStatus($r) === 'open' ? 1 : 0)
+            ->values();
 
         try {
             return $this->successResponse([
