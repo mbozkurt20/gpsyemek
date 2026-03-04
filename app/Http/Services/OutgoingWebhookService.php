@@ -63,9 +63,11 @@ class OutgoingWebhookService
 
         // Eski format: tek URL string
         if (!is_array($decoded)) {
-            return filter_var($restaurant->webhook_url, FILTER_VALIDATE_URL)
-                ? [['url' => $restaurant->webhook_url, 'domain' => null]]
-                : [];
+            if (!filter_var($restaurant->webhook_url, FILTER_VALIDATE_URL)) {
+                return [];
+            }
+            $parsed = parse_url($restaurant->webhook_url);
+            return [['url' => $restaurant->webhook_url, 'domain' => $parsed['host'] ?? null]];
         }
 
         $targets = [];
@@ -74,9 +76,10 @@ class OutgoingWebhookService
             if (is_array($item) && !empty($item['url'])) {
                 $targets[] = ['url' => $item['url'], 'domain' => $item['domain'] ?? null];
             }
-            // Eski format: düz URL string
+            // Eski format: düz URL string — host'u domain olarak kullan
             elseif (is_string($item) && filter_var($item, FILTER_VALIDATE_URL)) {
-                $targets[] = ['url' => $item, 'domain' => null];
+                $parsed    = parse_url($item);
+                $targets[] = ['url' => $item, 'domain' => $parsed['host'] ?? null];
             }
         }
 
