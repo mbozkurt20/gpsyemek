@@ -280,41 +280,48 @@
 
 
 
-                                <div class="col-12 sm:col-6 !py-1.5">
-                                    <div class="db-list-item p-0">
-                                        <span class="db-list-item-title w-full sm:w-1/2">{{ __('levels.api_token') }}</span>
-                                        <span class="fw-bold db-list-item-text w-full sm:w-1/2">
-            <span id="apiToken" class="hidden">{{ $restaurant->api_token }}</span>
-            <button type="button" id="toggleApiToken" class=" text-primary-500 underline">Göster</button>
-        </span>
-                                    </div>
-                                </div>
+                                <div class="col-12 !py-2">
+                                    @php
+                                        $savedUrls = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
+                                        $webhookOptions = [
+                                            'https://at.gpskurye.com/api/gpsyemek/inbound'  => 'Pos Sistemi (at.gpskurye.com)',
+                                            'https://app.gpskurye.com/api/gpsyemek/inbound' => 'Kurye Sistemi (app.gpskurye.com)',
+                                        ];
+                                    @endphp
+                                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px 20px;">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <span style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">API &amp; Webhook</span>
+                                        </div>
 
-                                <div class="col-12 !py-1.5">
-                                    <div class="db-card mt-3 p-4" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;">
-                                        <h6 class="fw-bold mb-3" style="color:#334155;">Sipariş Push Bildirimi (Webhook URL)</h6>
-                                        @php
-                                            $savedUrls = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
-                                            $webhookOptions = [
-                                                'https://at.gpskurye.com/api/gpsyemek/inbound'  => 'Pos Sistemi (at.gpskurye.com)',
-                                                'https://app.gpskurye.com/api/gpsyemek/inbound' => 'Kurye Sistemi (app.gpskurye.com)',
-                                            ];
-                                        @endphp
+                                        {{-- API Token --}}
+                                        <div class="d-flex align-items-center justify-content-between mb-3 p-2" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px;">
+                                            <span style="font-size:0.8rem; color:#475569; font-weight:600;">{{ __('levels.api_token') }}</span>
+                                            <span class="d-flex align-items-center gap-2">
+                                                <code id="apiToken" class="hidden" style="font-size:0.75rem; color:#334155; background:#f1f5f9; padding:2px 8px; border-radius:6px;">{{ $restaurant->api_token }}</code>
+                                                <button type="button" id="toggleApiToken" style="font-size:0.8rem; color:#6366f1; background:none; border:none; cursor:pointer; text-decoration:underline;">Göster</button>
+                                            </span>
+                                        </div>
+
+                                        {{-- Webhook URLs --}}
                                         <form method="POST" action="{{ route('admin.restaurants.webhook-urls', $restaurant->id) }}">
                                             @csrf
+                                            <div class="mb-2" style="font-size:0.8rem; color:#475569; font-weight:600;">Push Bildirimi (Webhook)</div>
                                             <div class="d-flex flex-column gap-2 mb-3">
                                                 @foreach($webhookOptions as $url => $label)
-                                                    <label class="d-flex align-items-center gap-2" style="cursor:pointer; font-size:0.9rem;">
+                                                    <label class="d-flex align-items-center gap-2 p-2" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; cursor:pointer; font-size:0.85rem; color:#334155;">
                                                         <input type="checkbox"
                                                                name="webhook_urls[]"
                                                                value="{{ $url }}"
                                                                {{ in_array($url, $savedUrls) ? 'checked' : '' }}>
                                                         <span>{{ $label }}</span>
+                                                        @if(in_array($url, $savedUrls))
+                                                            <span class="ms-auto" style="font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
+                                                        @endif
                                                     </label>
                                                 @endforeach
                                             </div>
-                                            <button type="submit" class="db-btn text-white bg-primary" style="padding:6px 16px; font-size:0.85rem;">
-                                                Kaydet
+                                            <button type="submit" class="db-btn text-white bg-primary" style="padding:6px 20px; font-size:0.82rem; border-radius:8px;">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Kaydet
                                             </button>
                                         </form>
                                     </div>
