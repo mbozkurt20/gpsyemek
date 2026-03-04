@@ -362,6 +362,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::get('test-coupon',                               [CouponController::class, 'testFunction']);
 
     Route::resource('restaurants',                           RestaurantsController::class);
+    Route::post('restaurants/{restaurant}/webhook-urls',    [RestaurantsController::class, 'updateWebhookUrls'])->name('restaurants.webhook-urls');
     Route::get('get-restaurant',                            [RestaurantsController::class, 'getRestaurant'])->name('restaurant.get-restaurant');
     Route::get('get-menu-item',                             [RestaurantsController::class, 'getMenuItem'])->name('restaurant.get-menu-items');
     Route::post('restaurant-store',                         [RestaurantsController::class, 'restaurantStore'])->name('restaurant.restaurant-store');

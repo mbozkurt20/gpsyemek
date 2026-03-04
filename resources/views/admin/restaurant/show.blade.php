@@ -289,6 +289,36 @@
         </span>
                                     </div>
                                 </div>
+
+                                <div class="col-12 !py-1.5">
+                                    <div class="db-card mt-3 p-4" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;">
+                                        <h6 class="fw-bold mb-3" style="color:#334155;">Sipariş Push Bildirimi (Webhook URL)</h6>
+                                        @php
+                                            $savedUrls = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
+                                            $webhookOptions = [
+                                                'https://at.gpskurye.com/api/gpsyemek/inbound'  => 'Pos Sistemi (at.gpskurye.com)',
+                                                'https://app.gpskurye.com/api/gpsyemek/inbound' => 'Kurye Sistemi (app.gpskurye.com)',
+                                            ];
+                                        @endphp
+                                        <form method="POST" action="{{ route('admin.restaurants.webhook-urls', $restaurant->id) }}">
+                                            @csrf
+                                            <div class="d-flex flex-column gap-2 mb-3">
+                                                @foreach($webhookOptions as $url => $label)
+                                                    <label class="d-flex align-items-center gap-2" style="cursor:pointer; font-size:0.9rem;">
+                                                        <input type="checkbox"
+                                                               name="webhook_urls[]"
+                                                               value="{{ $url }}"
+                                                               {{ in_array($url, $savedUrls) ? 'checked' : '' }}>
+                                                        <span>{{ $label }}</span>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                            <button type="submit" class="db-btn text-white bg-primary" style="padding:6px 16px; font-size:0.85rem;">
+                                                Kaydet
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="col-12 sm:col-12 !py-1.5">
                                     <div class="db-list-item p-0">
                                         <span class="db-list-item-title w-min sm:w-1/4">{{ __('levels.address') }}</span>

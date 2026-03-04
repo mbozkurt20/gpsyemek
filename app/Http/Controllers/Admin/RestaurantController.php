@@ -294,6 +294,15 @@ class RestaurantController extends BackendController
         return redirect(route('admin.restaurants.index'))->withSuccess('Restaurant Başarıyla Silindi');
     }
 
+    public function updateWebhookUrls(Request $request, $restaurant)
+    {
+        $restaurant = Restaurant::findOrFail($restaurant);
+        $restaurant->webhook_url = json_encode($request->webhook_urls ?? []);
+        $restaurant->save();
+
+        return redirect()->back()->withSuccess('Webhook URL\'leri güncellendi.');
+    }
+
     public function getRestaurant(Request $request)
     {
         if (request()->ajax()) {
