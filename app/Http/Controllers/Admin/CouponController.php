@@ -53,27 +53,6 @@ class CouponController extends BackendController
      */
     public function create()
     {
-        if (!blank(auth()->user()->restaurant)) {
-            $today = date('Y-m-d h:i:s');
-            $coupons = Coupon::where('restaurant_id', auth()->user()->restaurant->id)
-                ->whereDate('to_date', '>=', $today)
-                ->whereDate('from_date', '<=', $today)
-                ->where('limit', '>', 0)
-                ->get();
-
-            $data = [];
-            if (!blank($coupons)) {
-                foreach ($coupons as $coupon) {
-                    $total_used = Discount::where('coupon_id', $coupon->id)->where('status', \App\Enums\DiscountStatus::ACTIVE)->count();
-                    if ($total_used < $coupon->limit) {
-                        $data[] = $coupon;
-                    }
-                }
-            }
-            if (!blank($data)) {
-                return redirect()->back()->withError('Bu Restoranın zaten aktif bir kuponu var.');
-            }
-        }
         $this->data['restaurants'] = Restaurant::select('id', 'name')->get();
         $this->data['users'] = User::orderBy('id','asc')->where('status',UserStatus::ACTIVE)->get();
         return view('admin.coupon.create', $this->data);

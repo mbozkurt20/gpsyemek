@@ -58,17 +58,6 @@ class CouponRequest extends FormRequest
                 $validator->errors()->add('amount', 'Percentage amount can\'t be greater than 99.');
             }
 
-            if ($this->route('coupon') == null)
-            {
-                if (request('restaurant_id') != 0) {
-                    if ($this->activeCoupon()) {
-                        if (auth()->user()->restaurant_id != 0) {
-                            $validator->errors()->add('name', 'Bu restoranın zaten aktif bir kuponu var.');
-                        }
-                        $validator->errors()->add('restaurant_id', 'Bu restoranın halihazırda aktif bir kuponu var.');
-                    }
-                }
-            };
         });
     }
 
