@@ -297,7 +297,18 @@ class RestaurantController extends BackendController
     public function updateWebhookUrls(Request $request, $restaurant)
     {
         $restaurant = Restaurant::findOrFail($restaurant);
-        $restaurant->webhook_url = json_encode($request->webhook_urls ?? []);
+
+        $webhooks = [];
+        foreach ($request->webhooks ?? [] as $item) {
+            if (!empty($item['enabled'])) {
+                $webhooks[] = [
+                    'url'    => $item['url'],
+                    'domain' => $item['domain'] ?? '',
+                ];
+            }
+        }
+
+        $restaurant->webhook_url = json_encode($webhooks);
         $restaurant->save();
 
         return redirect()->back()->withSuccess('Webhook URL\'leri güncellendi.');

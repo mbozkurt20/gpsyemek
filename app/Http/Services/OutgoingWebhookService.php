@@ -16,25 +16,25 @@ class OutgoingWebhookService
     public function sendOrderCreated(Order $order): void
     {
         $restaurant = $order->restaurant;
-        $urls       = $this->getWebhookUrls($restaurant);
+        $targets    = $this->getWebhookTargets($restaurant);
 
-        if (empty($urls)) {
+        if (empty($targets)) {
             return;
         }
 
         $payload = array_merge(['event' => 'new_order'], $this->buildOrderPayload($order));
 
-        foreach ($urls as $url) {
-            $this->send($url, $restaurant->api_token, $payload);
+        foreach ($targets as $target) {
+            $this->send($target['url'], $restaurant->api_token, $payload, $target['domain'] ?? null);
         }
     }
 
     public function sendOrderStatusChanged(Order $order): void
     {
         $restaurant = $order->restaurant;
-        $urls       = $this->getWebhookUrls($restaurant);
+        $targets    = $this->getWebhookTargets($restaurant);
 
-        if (empty($urls)) {
+        if (empty($targets)) {
             return;
         }
 
@@ -44,12 +44,16 @@ class OutgoingWebhookService
             'status'     => $this->mapStatus($order->status),
         ];
 
-        foreach ($urls as $url) {
-            $this->send($url, $restaurant->api_token, $payload);
+        foreach ($targets as $target) {
+            $this->send($target['url'], $restaurant->api_token, $payload, $target['domain'] ?? null);
         }
     }
 
-    private function getWebhookUrls($restaurant): array
+    /**
+     * Webhook hedeflerini [{url, domain}] formatında döner.
+     * Eski format (düz URL dizisi veya tek URL string) geriye dönük desteklenir.
+     */
+    private function getWebhookTargets($restaurant): array
     {
         if (!$restaurant || blank($restaurant->webhook_url)) {
             return [];
@@ -59,10 +63,24 @@ class OutgoingWebhookService
 
         // Eski format: tek URL string
         if (!is_array($decoded)) {
-            return filter_var($restaurant->webhook_url, FILTER_VALIDATE_URL) ? [$restaurant->webhook_url] : [];
+            return filter_var($restaurant->webhook_url, FILTER_VALIDATE_URL)
+                ? [['url' => $restaurant->webhook_url, 'domain' => null]]
+                : [];
         }
 
-        return array_filter($decoded);
+        $targets = [];
+        foreach ($decoded as $item) {
+            // Yeni format: {url, domain}
+            if (is_array($item) && !empty($item['url'])) {
+                $targets[] = ['url' => $item['url'], 'domain' => $item['domain'] ?? null];
+            }
+            // Eski format: düz URL string
+            elseif (is_string($item) && filter_var($item, FILTER_VALIDATE_URL)) {
+                $targets[] = ['url' => $item, 'domain' => null];
+            }
+        }
+
+        return $targets;
     }
 
     private function buildOrderPayload(Order $order): array
@@ -112,9 +130,14 @@ class OutgoingWebhookService
         };
     }
 
-    private function send(string $url, ?string $apiToken, array $payload): void
+    private function send(string $url, ?string $apiToken, array $payload, ?string $domain = null): void
     {
         try {
+            // Spatie Multitenancy için domain parametresi payload'a eklenir
+            if ($domain) {
+                $payload['domain'] = $domain;
+            }
+
             $request = Http::timeout(5);
 
             if ($apiToken) {

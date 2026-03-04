@@ -282,10 +282,19 @@
 
                                 <div class="col-12 !py-2">
                                     @php
-                                        $savedUrls = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
+                                        $rawWebhooks  = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
+                                        // Yeni format: [{url, domain}] — eski format: [url, url] (geriye dönük)
+                                        $savedWebhooks = [];
+                                        foreach ($rawWebhooks as $item) {
+                                            if (is_array($item)) {
+                                                $savedWebhooks[$item['url']] = $item['domain'] ?? '';
+                                            } else {
+                                                $savedWebhooks[$item] = '';
+                                            }
+                                        }
                                         $webhookOptions = [
-                                            'https://at.gpskurye.com/api/gpsyemek/inbound'  => 'Pos Sistemi (at.gpskurye.com)',
-                                            'https://app.gpskurye.com/api/gpsyemek/inbound' => 'Kurye Sistemi (app.gpskurye.com)',
+                                            'https://at.gpskurye.com/api/gpsyemek/inbound'  => ['label' => 'Pos Sistemi (at.gpskurye.com)',   'needs_domain' => true],
+                                            'https://app.gpskurye.com/api/gpsyemek/inbound' => ['label' => 'Kurye Sistemi (app.gpskurye.com)', 'needs_domain' => false],
                                         ];
                                     @endphp
                                     <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px 20px;">
@@ -307,17 +316,33 @@
                                             @csrf
                                             <div class="mb-2" style="font-size:0.8rem; color:#475569; font-weight:600;">Push Bildirimi (Webhook)</div>
                                             <div class="d-flex flex-column gap-2 mb-3">
-                                                @foreach($webhookOptions as $url => $label)
-                                                    <label class="d-flex align-items-center gap-2 p-2" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; cursor:pointer; font-size:0.85rem; color:#334155;">
-                                                        <input type="checkbox"
-                                                               name="webhook_urls[]"
-                                                               value="{{ $url }}"
-                                                               {{ in_array($url, $savedUrls) ? 'checked' : '' }}>
-                                                        <span>{{ $label }}</span>
-                                                        @if(in_array($url, $savedUrls))
-                                                            <span class="ms-auto" style="font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
+                                                @foreach($webhookOptions as $url => $opt)
+                                                    @php $isActive = array_key_exists($url, $savedWebhooks); @endphp
+                                                    <div class="p-2" style="background:#fff; border:1px solid {{ $isActive ? '#86efac' : '#e2e8f0' }}; border-radius:8px;">
+                                                        <label class="d-flex align-items-center gap-2" style="cursor:pointer; font-size:0.85rem; color:#334155; margin:0;">
+                                                            <input type="checkbox"
+                                                                   name="webhooks[{{ $loop->index }}][enabled]"
+                                                                   value="1"
+                                                                   data-url="{{ $url }}"
+                                                                   {{ $isActive ? 'checked' : '' }}>
+                                                            <input type="hidden" name="webhooks[{{ $loop->index }}][url]" value="{{ $url }}">
+                                                            <span>{{ $opt['label'] }}</span>
+                                                            @if($isActive)
+                                                                <span class="ms-auto" style="font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
+                                                            @endif
+                                                        </label>
+                                                        @if($opt['needs_domain'])
+                                                            <div class="mt-2" style="padding-left:22px;">
+                                                                <input type="text"
+                                                                       name="webhooks[{{ $loop->index }}][domain]"
+                                                                       value="{{ $savedWebhooks[$url] ?? '' }}"
+                                                                       placeholder="Tenant domain (örn: testisletme853)"
+                                                                       style="font-size:0.8rem; border:1px solid #e2e8f0; border-radius:6px; padding:4px 10px; width:100%; color:#334155;">
+                                                            </div>
+                                                        @else
+                                                            <input type="hidden" name="webhooks[{{ $loop->index }}][domain]" value="">
                                                         @endif
-                                                    </label>
+                                                    </div>
                                                 @endforeach
                                             </div>
                                             <button type="submit" class="db-btn text-white bg-primary" style="padding:6px 20px; font-size:0.82rem; border-radius:8px;">
