@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
 use App\Models\Restaurant;
+use App\Observers\OrderObserver;
 use App\Observers\RestaurantObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Restaurant::observe(RestaurantObserver::class);
+        Order::observe(OrderObserver::class);
 
         if (file_exists(storage_path('installed'))) {
 

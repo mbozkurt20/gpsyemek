@@ -8,6 +8,10 @@ class RestaurantHelper
 {
     public static function getStatus($restaurant)
     {
+        if (!$restaurant) {
+            return 'closed';
+        }
+
         $now = Carbon::now();
         $nowDay = strtolower($now->format('l'));
         $closedUntil = $restaurant->temporary_closed_until ? Carbon::parse($restaurant->temporary_closed_until) : null;
@@ -32,6 +36,10 @@ class RestaurantHelper
 
     public static function getStatusMessage($restaurant): ?string
     {
+        if (!$restaurant) {
+            return null;
+        }
+
         $closedUntil = $restaurant->temporary_closed_until ? Carbon::parse($restaurant->temporary_closed_until) : null;
 
         if ($restaurant->permanently_closed) {

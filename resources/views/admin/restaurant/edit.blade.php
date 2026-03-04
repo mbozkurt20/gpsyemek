@@ -351,6 +351,31 @@
                                         @enderror
                                     </div>
 
+                                    <div class="form-col-12">
+                                        <label class="db-field-title">Webhook URL <small class="text-gray-400">(Sipariş push bildirimi — birden fazla seçilebilir)</small></label>
+                                        @php
+                                            $savedUrls = json_decode($restaurant->webhook_url ?? '[]', true) ?: [];
+                                            $webhookOptions = [
+                                                'https://at.gpskurye.com/api/gpsyemek/inbound'  => 'Pos Sistemi (at.gpskurye.com)',
+                                                'https://app.gpskurye.com/api/gpsyemek/inbound' => 'Kurye Sistemi (app.gpskurye.com)',
+                                            ];
+                                        @endphp
+                                        <div class="d-flex flex-column gap-2 mt-1">
+                                            @foreach($webhookOptions as $url => $label)
+                                                <label class="d-flex align-items-center gap-2" style="cursor:pointer;">
+                                                    <input type="checkbox"
+                                                           name="webhook_urls[]"
+                                                           value="{{ $url }}"
+                                                           {{ in_array($url, old('webhook_urls', $savedUrls)) ? 'checked' : '' }}>
+                                                    <span>{{ $label }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                        @error('webhook_urls')
+                                        <small class="db-field-alert">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
                                     <div class="col-12 mt-4">
                                         <button type="submit" class="db-btn text-white bg-primary">
                                             <i class="fa-solid fa-circle-check"></i>

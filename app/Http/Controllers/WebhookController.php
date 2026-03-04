@@ -32,6 +32,10 @@ class WebhookController extends Controller
                 return $this->updateOrder($restaurant->id, $data);
             case 'restaurant_status_changed':
                 return $this->restaurantOrderChange($restaurant->id);
+            case 'restaurant_permanently_close':
+                return $this->restaurantPermanentlyClose($restaurant->id);
+            case 'restaurant_open':
+                return $this->restaurantOpen($restaurant->id);
             default:
                 return response()->json(['error' => 'Unknown event'], 400);
         }
@@ -47,8 +51,13 @@ class WebhookController extends Controller
             ->get();
 
         return response()->json([
-            'success' => true,
-            'orders' => RestaurantOrderResource::collection($orders),
+            'success'            => true,
+            'orders'             => RestaurantOrderResource::collection($orders),
+            'restaurant_status'  => [
+                'current_status'         => $restaurant->current_status,
+                'permanently_closed'     => (bool) $restaurant->permanently_closed,
+                'temporary_closed_until' => $restaurant->temporary_closed_until,
+            ],
         ]);
     }
 
@@ -86,17 +95,46 @@ class WebhookController extends Controller
         }
     }
 
-    private function restaurantOrderChange($restaurant_id){
+    private function restaurantOrderChange($restaurant_id)
+    {
+        $restaurant = Restaurant::where('id', $restaurant_id)->first();
 
-        $restaurant = Restaurant::where('id',$restaurant_id)->first();
-
-        if (!$restaurant){
+        if (!$restaurant) {
             return response()->json(['error' => 'Restaurant not found'], 404);
         }
 
         $restaurant->current_status = $restaurant->current_status == 5 ? 0 : 5;
         $restaurant->update();
 
-        return response()->json(['success' => true,'restaurant' => $restaurant]);
+        return response()->json(['success' => true, 'restaurant' => $restaurant]);
+    }
+
+    private function restaurantPermanentlyClose($restaurant_id)
+    {
+        $restaurant = Restaurant::where('id', $restaurant_id)->first();
+
+        if (!$restaurant) {
+            return response()->json(['error' => 'Restaurant not found'], 404);
+        }
+
+        $restaurant->permanently_closed = true;
+        $restaurant->update();
+
+        return response()->json(['success' => true, 'permanently_closed' => true]);
+    }
+
+    private function restaurantOpen($restaurant_id)
+    {
+        $restaurant = Restaurant::where('id', $restaurant_id)->first();
+
+        if (!$restaurant) {
+            return response()->json(['error' => 'Restaurant not found'], 404);
+        }
+
+        $restaurant->permanently_closed      = false;
+        $restaurant->temporary_closed_until  = null;
+        $restaurant->update();
+
+        return response()->json(['success' => true, 'permanently_closed' => false]);
     }
 }

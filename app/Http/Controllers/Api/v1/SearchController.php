@@ -84,7 +84,13 @@ class SearchController extends BackendController
             }
         }
 
-        $query = Restaurant::with('timeSlots');
+        $today = now()->toDateString();
+
+        $query = Restaurant::withCount('orders')->with(['timeSlots', 'coupons' => function ($q) use ($today) {
+            $q->whereDate('from_date', '<=', $today)
+              ->whereDate('to_date', '>=', $today)
+              ->where('limit', '>', 0);
+        }]);
 
         if (!blank($name) && !blank($expedition)) {
             $query->where($queryArray)->where('name', 'like', '%' . $name . '%');
@@ -105,7 +111,11 @@ class SearchController extends BackendController
         }
 
         return $query->get()
-            ->sortByDesc(fn($r) => RestaurantHelper::getStatus($r) === 'open' ? 1 : 0)
+            ->sortBy([
+                fn($a, $b) => (RestaurantHelper::getStatus($b) === 'open') <=> (RestaurantHelper::getStatus($a) === 'open'),
+                fn($a, $b) => $b->coupons->isNotEmpty() <=> $a->coupons->isNotEmpty(),
+                fn($a, $b) => $b->orders_count <=> $a->orders_count,
+            ])
             ->values();
     }
 }

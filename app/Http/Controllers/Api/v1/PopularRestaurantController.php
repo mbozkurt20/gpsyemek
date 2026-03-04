@@ -36,6 +36,8 @@ class PopularRestaurantController extends BackendController
         $longitude = $request->long;
         $radius = 20;
 
+        $today = now()->toDateString();
+
         $query = Restaurant::leftJoin('orders', 'restaurants.id', '=', 'orders.restaurant_id')
             ->select(
                 'restaurants.id',
@@ -62,7 +64,11 @@ class PopularRestaurantController extends BackendController
                 'restaurants.permanently_closed',
                 'restaurants.temporary_closed_until'
             )
-            ->with('timeSlots');
+            ->with(['timeSlots', 'coupons' => function ($q) use ($today) {
+                $q->whereDate('from_date', '<=', $today)
+                  ->whereDate('to_date', '>=', $today)
+                  ->where('limit', '>', 0);
+            }]);
 
         // Lat ve Long gelmişse mesafe hesaplamasını ve filtresini ekle
         if (is_numeric($latitude) && is_numeric($longitude)) {
@@ -71,7 +77,11 @@ class PopularRestaurantController extends BackendController
         }
 
         $bestSellingRestaurants = $query->orderBy('orders_count', 'desc')->get()
-            ->sortByDesc(fn($r) => RestaurantHelper::getStatus($r) === 'open' ? 1 : 0)
+            ->sortBy([
+                fn($a, $b) => (RestaurantHelper::getStatus($b) === 'open') <=> (RestaurantHelper::getStatus($a) === 'open'),
+                fn($a, $b) => $b->coupons->isNotEmpty() <=> $a->coupons->isNotEmpty(),
+                fn($a, $b) => $b->orders_count <=> $a->orders_count,
+            ])
             ->values();
 
         try {

@@ -70,7 +70,7 @@
                                 <div class="db-field-down-arrow">
                                     <select name="user_id"
                                             class="db-field-control select2 appearance-none @error('user_id') invalid @enderror">
-                                        <option value="">Müşteri seçiniz</option>
+                                        <option value="0">Müşteri seçiniz</option>
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}"
                                                 {{ $coupon->user_id == $user->id ? 'selected' : '' }}>
@@ -140,7 +140,7 @@
 
 						<div class="form-col-12 sm:form-col-6 md:form-col-4">
 							<label class="db-field-title required">{{ __('levels.starts_at') }}</label>
-							<input type="datetime-local" name="from_date" class="db-field-control datepicker @error('from_date') invalid @enderror" value="{{ old('from_date', $coupon->from_date) }}">
+							<input type="date" name="from_date" class="db-field-control datepicker @error('from_date') invalid @enderror" value="{{ old('from_date', $coupon->from_date ? \Carbon\Carbon::parse($coupon->from_date)->format('Y-m-d') : '') }}">
 
 							@error('from_date')
 							<small class="db-field-alert">{{ $message }}</small>
@@ -149,7 +149,7 @@
 
 						<div class="form-col-12 sm:form-col-6 md:form-col-4">
 							<label class="db-field-title required">{{ __('levels.ends_at') }}</label>
-							<input type="datetime-local" name="to_date" class="db-field-control datepicker @error('to_date') invalid @enderror" value="{{ old('to_date', $coupon->to_date) }}">
+							<input type="date" name="to_date" class="db-field-control datepicker @error('to_date') invalid @enderror" value="{{ old('to_date', $coupon->to_date ? \Carbon\Carbon::parse($coupon->to_date)->format('Y-m-d') : '') }}">
 
 							@error('to_date')
 							<small class="db-field-alert">{{ $message }}</small>

@@ -218,6 +218,7 @@ class RestaurantController extends BackendController
                 $restaurant->pickup_status   = $request->pickup_status;
                 $restaurant->table_status    = $request->table_status;
                 $restaurant->status          = $request->status;
+                $restaurant->webhook_url     = json_encode($request->webhook_urls ?? []);
                 if ($user->status == UserStatus::INACTIVE) {
                     $restaurant->status = RestaurantStatus::INACTIVE;
                 }
