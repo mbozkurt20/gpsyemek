@@ -300,12 +300,33 @@ class RestaurantController extends BackendController
 
         $webhooks = [];
         foreach ($request->webhooks ?? [] as $item) {
-            if (!empty($item['enabled'])) {
-                $webhooks[] = [
-                    'url'    => $item['url'],
-                    'domain' => $item['domain'] ?? '',
-                ];
+            if (empty($item['enabled']) || empty($item['url'])) {
+                continue; // işaretsiz → dahil etme (domain silinir)
             }
+
+            $url    = $item['url'];
+            $parsed = parse_url($url);
+            $base   = ($parsed['scheme'] ?? 'https') . '://' . ($parsed['host'] ?? '');
+            $domain = null;
+
+            // domain'i bmd-pos'tan otomatik çek
+            try {
+                $response = \Illuminate\Support\Facades\Http::timeout(5)
+                    ->get($base . '/restaurant-get-domain', [
+                        'gpsyemek_api_key' => $restaurant->api_token,
+                    ]);
+                if ($response->successful()) {
+                    $fetched = $response->json();
+                    if (is_string($fetched) && !blank($fetched)) {
+                        $domain = $fetched;
+                    }
+                }
+            } catch (\Throwable) {
+                // fetch başarısız → domain null kalır, fallback hostname
+                $domain = $parsed['host'] ?? null;
+            }
+
+            $webhooks[] = ['url' => $url, 'domain' => $domain];
         }
 
         $restaurant->webhook_url = json_encode($webhooks);

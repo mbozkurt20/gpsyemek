@@ -51,7 +51,7 @@ class OutgoingWebhookService
 
     /**
      * Webhook hedeflerini [{url, domain}] formatında döner.
-     * Eski format (düz URL dizisi veya tek URL string) geriye dönük desteklenir.
+     * Domain eksikse bmd-pos /restaurant-get-domain endpoint'inden çeker ve DB'ye kaydeder.
      */
     private function getWebhookTargets($restaurant): array
     {
@@ -66,24 +66,70 @@ class OutgoingWebhookService
             if (!filter_var($restaurant->webhook_url, FILTER_VALIDATE_URL)) {
                 return [];
             }
-            $parsed = parse_url($restaurant->webhook_url);
-            return [['url' => $restaurant->webhook_url, 'domain' => $parsed['host'] ?? null]];
+            $decoded = [$restaurant->webhook_url];
         }
 
         $targets = [];
+        $needsSave = false;
+
         foreach ($decoded as $item) {
-            // Yeni format: {url, domain}
             if (is_array($item) && !empty($item['url'])) {
-                $targets[] = ['url' => $item['url'], 'domain' => $item['domain'] ?? null];
-            }
-            // Eski format: düz URL string — host'u domain olarak kullan
-            elseif (is_string($item) && filter_var($item, FILTER_VALIDATE_URL)) {
-                $parsed    = parse_url($item);
-                $targets[] = ['url' => $item, 'domain' => $parsed['host'] ?? null];
+                // Domain yoksa veya boşsa fetch et
+                if (empty($item['domain'])) {
+                    $item['domain'] = $this->fetchTenantDomain($item['url'], $restaurant->api_token);
+                    $needsSave = true;
+                }
+                $targets[] = ['url' => $item['url'], 'domain' => $item['domain']];
+            } elseif (is_string($item) && filter_var($item, FILTER_VALIDATE_URL)) {
+                // Eski flat format → domain'i fetch et
+                $domain    = $this->fetchTenantDomain($item, $restaurant->api_token);
+                $targets[] = ['url' => $item, 'domain' => $domain];
+                $needsSave = true;
             }
         }
 
+        // Yeni {url, domain} formatını DB'ye kaydet (bir sonraki seferde fetch gerekmez)
+        if ($needsSave && !empty($targets)) {
+            $restaurant->webhook_url = json_encode(
+                array_map(fn($t) => ['url' => $t['url'], 'domain' => $t['domain']], $targets)
+            );
+            $restaurant->saveQuietly();
+        }
+
         return $targets;
+    }
+
+    /**
+     * bmd-pos'un /restaurant-get-domain endpoint'inden tenant domain'ini çeker.
+     * Başarısız olursa URL'nin host'una fallback yapar.
+     */
+    private function fetchTenantDomain(string $webhookUrl, ?string $apiToken): ?string
+    {
+        $parsed  = parse_url($webhookUrl);
+        $baseUrl = ($parsed['scheme'] ?? 'https') . '://' . ($parsed['host'] ?? '');
+
+        if ($apiToken) {
+            try {
+                $response = Http::timeout(5)->get($baseUrl . '/restaurant-get-domain', [
+                    'gpsyemek_api_key' => $apiToken,
+                ]);
+
+                if ($response->successful()) {
+                    $domain = $response->json();
+                    if (is_string($domain) && !blank($domain)) {
+                        return $domain;
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning('GPS Yemek: tenant domain resolve failed', [
+                    'url'   => $webhookUrl,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        // Fallback: URL'nin hostname'ini kullan
+        return $parsed['host'] ?? null;
     }
 
     private function buildOrderPayload(Order $order): array
