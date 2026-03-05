@@ -73,19 +73,24 @@ class OutgoingWebhookService
         $needsSave = false;
 
         foreach ($decoded as $item) {
-            if (is_array($item) && !empty($item['url'])) {
-                // Domain yoksa veya boşsa fetch et
-                if (empty($item['domain'])) {
-                    $item['domain'] = $this->fetchTenantDomain($item['url'], $restaurant->api_token);
-                    $needsSave = true;
-                }
-                $targets[] = ['url' => $item['url'], 'domain' => $item['domain']];
-            } elseif (is_string($item) && filter_var($item, FILTER_VALIDATE_URL)) {
-                // Eski flat format → domain'i fetch et
-                $domain    = $this->fetchTenantDomain($item, $restaurant->api_token);
-                $targets[] = ['url' => $item, 'domain' => $domain];
+            $url    = is_array($item) ? ($item['url'] ?? null) : $item;
+            $domain = is_array($item) ? ($item['domain'] ?? null) : null;
+
+            if (blank($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
+                continue;
+            }
+
+            if (blank($domain)) {
+                $domain    = $this->fetchTenantDomain($url, $restaurant->api_token);
                 $needsSave = true;
             }
+
+            // Domain çözümlenemezse o hedefi atla (Spatie NoCurrentTenant hatasını önler)
+            if (blank($domain)) {
+                continue;
+            }
+
+            $targets[] = ['url' => $url, 'domain' => $domain];
         }
 
         // Yeni {url, domain} formatını DB'ye kaydet (bir sonraki seferde fetch gerekmez)
