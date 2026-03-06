@@ -15,13 +15,14 @@ class RestaurantRating extends BaseModel implements HasMedia
 
     protected $table       = 'restaurant_ratings';
     protected $auditColumn = true;
-    protected $fillable    = ['user_id', 'restaurant_id', 'rating', 'review', 'status'];
+    protected $fillable    = ['user_id', 'restaurant_id', 'order_id', 'rating', 'review', 'status'];
 
     protected $casts = [
         'status'        => 'int',
         'rating'        => 'int',
         'restaurant_id' => 'int',
         'user_id'       => 'int',
+        'order_id'      => 'int',
     ];
 
 

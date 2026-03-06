@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\v1\PushNotificationController;
 use App\Http\Controllers\Api\v1\RequestWithdrawController;
 use App\Http\Controllers\Api\v1\ReservationController;
 use App\Http\Controllers\Api\v1\RestaurantController;
+use App\Http\Controllers\Api\v1\RestaurantRatingController;
 use App\Http\Controllers\Api\v1\RestaurantOrderController;
 use App\Http\Controllers\Api\v1\RestaurantOwnerSalesReportController;
 use App\Http\Controllers\Api\v1\RestaurantReservationController;
@@ -102,6 +103,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('popular-restaurant',                            [PopularRestaurantController::class, 'index']); //done
     Route::get('/restaurant/index/{id?}/{status?}/{applied?}',  [RestaurantController::class, 'index']); //done
     Route::get('restaurant/{id}',                               [RestaurantController::class, 'show']); //done
+    Route::get('restaurant/{id}/ratings',                       [RestaurantRatingController::class, 'index']); //done
+    Route::post('restaurant/{id}/ratings',                      [RestaurantRatingController::class, 'store']); //done
     Route::get('/search',                                       [SearchController::class, 'index']); //done
 
     Route::post('coupon',                                       [CouponController::class, 'apply']);
