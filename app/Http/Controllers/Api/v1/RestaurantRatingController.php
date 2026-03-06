@@ -99,7 +99,7 @@ class RestaurantRatingController extends Controller
             }
 
             // Sipariş tamamlanma süresi kontrolü (max REVIEW_MAX_DAYS gün)
-            $completedAt = $order->updated_at;
+            $completedAt = $order->created_at;
             $daysPassed  = $completedAt->diffInDays(now());
 
             if ($daysPassed > self::REVIEW_MAX_DAYS) {
