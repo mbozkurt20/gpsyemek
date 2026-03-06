@@ -20,6 +20,7 @@ class RatingResource extends JsonResource
             'restaurant_id'     =>$this->restaurant_id,
             'rating'            =>$this->rating,
             'user_id'           =>(int)$this->user_id,
+            'order_id'           =>(int)$this->order_id,
             'user'              =>$this->user->name,
             'userImage'         =>$this->user->image,
             'image'             =>$this->image,
