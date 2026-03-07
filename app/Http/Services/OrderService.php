@@ -581,6 +581,8 @@ class OrderService
                 ]);
                 $order->save();
 
+                app(\App\Http\Services\OutgoingWebhookService::class)->sendOrderCreated($order);
+
                 if ($data['payment_status'] == PaymentStatus::PAID) {
                     if ($data['payment_method'] != PaymentMethod::WALLET) {
                         app(TransactionService::class)->addFund(0, $order->user->balance_id, $data['payment_method'], $order->total, $orderId);

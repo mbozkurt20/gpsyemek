@@ -14,11 +14,6 @@ class OrderObserver
         $this->webhookService = $webhookService;
     }
 
-    public function created(Order $order): void
-    {
-        $this->webhookService->sendOrderCreated($order);
-    }
-
     public function updated(Order $order): void
     {
         if ($order->isDirty('status')) {
