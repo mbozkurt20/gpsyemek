@@ -4,7 +4,9 @@ namespace App\Http\Services;
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
-use App\Http\Resources\v1\OrderApiResource;
+use App\Http\Resources\v1\OrderItemsResource;
+use App\Http\Resources\v1\RestaurantResource;
+use App\Http\Resources\v1\UserResource;
 use App\Models\Order;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -139,9 +141,9 @@ class OutgoingWebhookService
         return $parsed['host'] ?? null;
     }
 
-    private function buildOrderPayload(Order $order): OrderApiResource
+    private function buildOrderPayload(Order $order): array
     {
-        $order->load(['items', 'user']);
+        $order->load(['items.menuItem', 'user']);
 
         $items = $order->items->map(function ($item) {
             return [
@@ -154,23 +156,22 @@ class OutgoingWebhookService
             ];
         });
 
-        return  new OrderApiResource($order);
-    }
-
-    private function mapPaymentMethod($method): string
-    {
-        return match ((int)$method) {
-            PaymentMethod::CASH_ON_DELIVERY        => 'Kapıda Nakit Ödeme',
-            PaymentMethod::CREDIT_CARD_ON_DELIVERY => 'Kapıda Kart ile Ödeme',
-            PaymentMethod::CARD                    => 'Kredi/Banka Kartı',
-            PaymentMethod::PAYPAL                  => 'PayPal',
-            PaymentMethod::WALLET                  => 'Cüzdan',
-            PaymentMethod::CASH                    => 'Nakit',
-            PaymentMethod::IYZICO                  => 'iyzico',
-            PaymentMethod::TAMI                    => 'Tami',
-            PaymentMethod::PAYTR                   => 'PayTR',
-            default                                => 'Bilinmeyen Ödeme Yöntemi',
-        };
+        return [
+            'order_code'     => $order->order_code,
+            'status'         => $this->mapStatus($order->status),
+            'total'          => $order->total,
+            'sub_total'      => $order->sub_total,
+            'delivery_charge'=> $order->delivery_charge,
+            'payment_method'    => trans('payment_method.' . $order->payment_method),
+            'address'        => $order->address,
+            'mobile'         => $order->mobile,
+            'created_at'     => $order->created_at,
+            'customer'         => new UserResource($order->user),
+            'restaurant'             => new RestaurantResource($order->restaurant),
+            'items'            => OrderItemsResource::collection(
+                $order->whenLoaded('items')
+            ),
+        ];
     }
 
     private function mapStatus(int $status): string
