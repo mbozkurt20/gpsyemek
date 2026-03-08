@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
+use App\Http\Resources\v1\OrderApiResource;
 use App\Models\Order;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -138,9 +139,9 @@ class OutgoingWebhookService
         return $parsed['host'] ?? null;
     }
 
-    private function buildOrderPayload(Order $order): array
+    private function buildOrderPayload(Order $order): OrderApiResource
     {
-        $order->load(['items.menuItem', 'user']);
+        $order->load(['items', 'user']);
 
         $items = $order->items->map(function ($item) {
             return [
@@ -153,23 +154,7 @@ class OutgoingWebhookService
             ];
         });
 
-        return [
-            'order_code'     => $order->order_code,
-            'status'         => $this->mapStatus($order->status),
-            'total'          => $order->total,
-            'sub_total'      => $order->sub_total,
-            'delivery_charge'=> $order->delivery_charge,
-            'payment_method' => $this->mapPaymentMethod($order->payment_method),
-            'address'        => $order->address,
-            'mobile'         => $order->mobile,
-            'created_at'     => $order->created_at,
-            'customer'       => [
-                'first_name' => $order->user->name ?? '',
-                'last_name'  => '',
-                'phone'      => $order->mobile ?? ($order->user->mobile ?? ''),
-            ],
-            'items'          => $items,
-        ];
+        return  new OrderApiResource($order);
     }
 
     private function mapPaymentMethod($method): string
