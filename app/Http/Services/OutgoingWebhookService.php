@@ -151,7 +151,7 @@ class OutgoingWebhookService
             'user'
         ])->first();
         $restaurant = Restaurant::find($order->restaurant_id);
-        return [
+        $ord =  [
             'order_code'     => $order->order_code,
             'status'         => $this->mapStatus($order->status),
             'total'          => $order->total,
@@ -170,6 +170,10 @@ class OutgoingWebhookService
             ],
             'items'           => OrderItemsResource::collection($order->items),
         ];
+
+        Log::info('Giden ORderData: '. json_encode($ord));
+
+        return $ord;
     }
 
     private function mapPaymentMethod($method): string
