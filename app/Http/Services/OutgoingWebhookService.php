@@ -143,7 +143,7 @@ class OutgoingWebhookService
 
     private function buildOrderPayload(Order $order): array
     {
-        $order = Order::where('id',$order->id)->with('items', 'invoice.transactions','restaunant')->first();
+        $order = Order::where('id',$order->id)->with('items', 'invoice.transactions','restaurant')->first();
 
         return [
             'order_code'     => $order->order_code,
