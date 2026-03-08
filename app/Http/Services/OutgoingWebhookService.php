@@ -143,15 +143,7 @@ class OutgoingWebhookService
 
     private function buildOrderPayload(Order $order): array
     {
-        $order->load([
-            'user',
-            'restaurant.timeSlots',
-            'restaurant.cuisines',
-            'items.menuItem.media',
-            'items.menuItem.categories',
-            'items.menuItem.cuisine',
-            'items.menuItem.optionGroups.options',
-        ]);
+        $order = Order::where('id',$order->id)->with('items', 'invoice.transactions','restaunant')->first();
 
         return [
             'order_code'     => $order->order_code,
@@ -164,6 +156,7 @@ class OutgoingWebhookService
             'mobile'         => $order->mobile,
             'created_at'     => $order->created_at,
             'customer'         => new UserResource($order->user),
+            'restaurant_id'    => (int)$order->restaurant_id,
             'restaurant'             => new RestaurantResource($order->restaurant),
             'items'           => OrderItemsResource::collection($order->items),
         ];
