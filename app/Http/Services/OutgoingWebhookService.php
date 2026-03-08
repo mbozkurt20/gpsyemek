@@ -168,9 +168,7 @@ class OutgoingWebhookService
             'created_at'     => $order->created_at,
             'customer'         => new UserResource($order->user),
             'restaurant'             => new RestaurantResource($order->restaurant),
-            'items'            => OrderItemsResource::collection(
-                $order->whenLoaded('items')
-            ),
+            'items'           => OrderItemsResource::collection($order->items),
         ];
     }
 
