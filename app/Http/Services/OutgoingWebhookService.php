@@ -143,7 +143,15 @@ class OutgoingWebhookService
 
     private function buildOrderPayload(Order $order): array
     {
-        $order->load(['items.menuItem', 'user','items','restaurant']);
+        $order->load([
+            'user',
+            'restaurant.timeSlots',
+            'restaurant.cuisines',
+            'items.menuItem.media',
+            'items.menuItem.categories',
+            'items.menuItem.cuisine',
+            'items.menuItem.optionGroups.options',
+        ]);
 
         return [
             'order_code'     => $order->order_code,
