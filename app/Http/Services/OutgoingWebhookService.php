@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Models\Order;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -145,9 +146,10 @@ class OutgoingWebhookService
             return [
                 'name'       => $item->menuItem->name ?? $item->name ?? '',
                 'quantity'   => $item->quantity,
-                'unit_price' => $item->price,
-                'item_total' => $item->price * $item->quantity,
+                'unit_price' => $item->unit_price,
+                'item_total' => $item->unit_price * $item->quantity,
                 'options'    => $item->options ?? [],
+                'image'    => $item->image ?? "",
             ];
         });
 
@@ -155,8 +157,9 @@ class OutgoingWebhookService
             'order_code'     => $order->order_code,
             'status'         => $this->mapStatus($order->status),
             'total'          => $order->total,
+            'sub_total'      => $order->sub_total,
             'delivery_charge'=> $order->delivery_charge,
-            'payment_method' => $order->payment_method,
+            'payment_method' => $this->mapPaymentMethod($order->payment_method),
             'address'        => $order->address,
             'mobile'         => $order->mobile,
             'created_at'     => $order->created_at,
@@ -167,6 +170,22 @@ class OutgoingWebhookService
             ],
             'items'          => $items,
         ];
+    }
+
+    private function mapPaymentMethod($method): string
+    {
+        return match ((int)$method) {
+            PaymentMethod::CASH_ON_DELIVERY        => 'Kapıda Nakit Ödeme',
+            PaymentMethod::CREDIT_CARD_ON_DELIVERY => 'Kapıda Kart ile Ödeme',
+            PaymentMethod::CARD                    => 'Kredi/Banka Kartı',
+            PaymentMethod::PAYPAL                  => 'PayPal',
+            PaymentMethod::WALLET                  => 'Cüzdan',
+            PaymentMethod::CASH                    => 'Nakit',
+            PaymentMethod::IYZICO                  => 'iyzico',
+            PaymentMethod::TAMI                    => 'Tami',
+            PaymentMethod::PAYTR                   => 'PayTR',
+            default                                => 'Bilinmeyen Ödeme Yöntemi',
+        };
     }
 
     private function mapStatus(int $status): string
