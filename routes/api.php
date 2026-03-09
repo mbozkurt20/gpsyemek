@@ -107,7 +107,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('restaurant/{id}/ratings',                      [RestaurantRatingController::class, 'store']); //done
     Route::get('/search',                                       [SearchController::class, 'index']); //done
 
-    Route::post('coupon',                                       [CouponController::class, 'apply']);
+    Route::post('validate-coupon',                                       [CouponController::class, 'apply']);
 
     Route::get('restaurant-menuItem/menuItem',                  [MenuItemController::class, 'index']); //done
     Route::get('restaurant-menuItem/menuItem/{id}',             [MenuItemController::class, 'index']); //done
