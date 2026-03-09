@@ -295,7 +295,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'installed', 'licens
     Route::get('get-page',                                  [PageController::class, 'getPage'])->name('page.get-page');
     Route::get('rating',                                    [RatingController::class, 'index'])->name('rating.index');
     Route::put('rating/{id}',                               [RatingController::class, 'update'])->name('rating.update');
-    Route::get('rating/{id}',                               [RatingController::class, 'destroy'])->name('rating.delete');
+    Route::delete('rating/{id}',                            [RatingController::class, 'destroy'])->name('rating.delete');
     Route::get('get-rating',                                [RatingController::class, 'getRating'])->name('rating.get-rating');
 
     Route::resource('category',                              CategoryController::class);
