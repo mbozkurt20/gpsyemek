@@ -22,6 +22,12 @@ $('#refresh').on('click', function () {
     load_data();
 });
 
+$(document).on('submit', 'form:has([name="_method"][value="DELETE"])', function (e) {
+    if (!confirm('Bu değerlendirmeyi silmek istediğinize emin misiniz?')) {
+        e.preventDefault();
+    }
+});
+
 function load_data(status = '') {
     var table = $('#maintable').DataTable({
         processing : true,

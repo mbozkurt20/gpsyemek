@@ -43,7 +43,7 @@ class RatingController extends BackendController
         $rating = RestaurantRating::findOrFail($id);
         $rating->delete();
 
-        return redirect()->back()->withSuccess('The Rating Deleted Successfully');
+        return redirect(route('admin.rating.index'))->withSuccess('The Rating Deleted Successfully');
     }
 
     public function getRating(Request $request)
@@ -72,8 +72,11 @@ class RatingController extends BackendController
 
             return Datatables::of($ratingArray)
                 ->addColumn('action', function ($rating) {
+                    $button_array = [];
 
-                    $button_array['delete'] = ['route' => route('admin.rating.delete', $rating),'permission' => 'rating'];
+                    if (auth()->user()->myrole !== \App\Enums\UserRole::RESTAURANTOWNER) {
+                        $button_array['delete'] = ['route' => route('admin.rating.delete', $rating), 'permission' => 'rating'];
+                    }
 
                     return action_button($button_array);
                 })
