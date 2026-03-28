@@ -337,15 +337,15 @@
                                                 {{-- Özel (custom) kayıtlı URL'ler --}}
                                                 @foreach(array_values($customUrls) as $ci => $customUrl)
                                                     @php $idx = $predefinedCount + $ci; @endphp
-                                                    <div class="webhook-custom-row d-flex align-items-center gap-2 p-2" style="background:#fff; border:1px solid #86efac; border-radius:8px;">
-                                                        <input type="checkbox" name="webhooks[{{ $idx }}][enabled]" value="1" checked>
+                                                    <div class="webhook-custom-row d-flex align-items-center gap-2 p-2" style="background:#fff; border:1px solid #86efac; border-radius:8px; min-width:0; overflow:hidden;">
+                                                        <input type="checkbox" name="webhooks[{{ $idx }}][enabled]" value="1" checked style="flex-shrink:0;">
                                                         <input type="text"
                                                                name="webhooks[{{ $idx }}][url]"
                                                                value="{{ $customUrl }}"
                                                                placeholder="https://..."
-                                                               style="flex:1; border:none; outline:none; font-size:0.85rem; color:#334155; background:transparent;">
-                                                        <span style="font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
-                                                        <button type="button" onclick="removeWebhookRow(this)" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; line-height:1;" title="Sil">&times;</button>
+                                                               style="flex:1; min-width:0; border:none; outline:none; font-size:0.85rem; color:#334155; background:transparent; overflow:hidden; text-overflow:ellipsis;">
+                                                        <span style="flex-shrink:0; font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
+                                                        <button type="button" onclick="removeWebhookRow(this)" style="flex-shrink:0; background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; line-height:1;" title="Sil">&times;</button>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -369,10 +369,10 @@
                                                 var idx = _webhookIdx++;
                                                 var row = document.createElement('div');
                                                 row.className = 'webhook-custom-row d-flex align-items-center gap-2 p-2';
-                                                row.style.cssText = 'background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px;';
+                                                row.style.cssText = 'background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px; min-width:0; overflow:hidden;';
                                                 row.innerHTML =
-                                                    '<input type="checkbox" name="webhooks[' + idx + '][enabled]" value="1" checked>' +
-                                                    '<input type="text" name="webhooks[' + idx + '][url]" placeholder="https://example.com/webhook" style="flex:1; border:1px solid #e2e8f0; border-radius:6px; padding:4px 8px; font-size:0.85rem; color:#334155;">' +
+                                                    '<input type="checkbox" name="webhooks[' + idx + '][enabled]" value="1" checked style="flex-shrink:0;">' +
+                                                    '<input type="text" name="webhooks[' + idx + '][url]" placeholder="https://example.com/webhook" style="flex:1; min-width:0; border:1px solid #e2e8f0; border-radius:6px; padding:4px 8px; font-size:0.85rem; color:#334155;">' +
                                                     '<button type="button" onclick="removeWebhookRow(this)" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; line-height:1;" title="Sil">&times;</button>';
                                                 document.getElementById('webhookList').appendChild(row);
                                                 row.querySelector('input[type=text]').focus();
