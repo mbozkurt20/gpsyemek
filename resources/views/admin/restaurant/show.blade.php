@@ -369,7 +369,7 @@
                                                 var idx = _webhookIdx++;
                                                 var row = document.createElement('div');
                                                 row.className = 'webhook-custom-row d-flex align-items-center gap-2 p-2';
-                                                row.style.cssText = 'background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px; min-width:0; overflow:hidden;';
+                                                row.style.cssText = 'background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px; min-width:0; overflow:hidden; width:100%; box-sizing:border-box;';
                                                 row.innerHTML =
                                                     '<input type="checkbox" name="webhooks[' + idx + '][enabled]" value="1" checked style="flex-shrink:0;">' +
                                                     '<input type="text" name="webhooks[' + idx + '][url]" placeholder="https://example.com/webhook" style="flex:1; min-width:0; border:1px solid #e2e8f0; border-radius:6px; padding:4px 8px; font-size:0.85rem; color:#334155;">' +
