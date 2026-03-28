@@ -307,10 +307,16 @@
                                         </div>
 
                                         {{-- Webhook URLs --}}
-                                        <form method="POST" action="{{ route('admin.restaurants.webhook-urls', $restaurant->id) }}">
+                                        @php
+                                            $predefinedUrlList = array_keys($webhookOptions);
+                                            $customUrls = array_filter($savedUrls, fn($u) => !in_array($u, $predefinedUrlList));
+                                            $predefinedCount = count($webhookOptions);
+                                        @endphp
+                                        <form method="POST" action="{{ route('admin.restaurants.webhook-urls', $restaurant->id) }}" id="webhookForm">
                                             @csrf
                                             <div class="mb-2" style="font-size:0.8rem; color:#475569; font-weight:600;">Push Bildirimi (Webhook)</div>
-                                            <div class="d-flex flex-column gap-2 mb-3">
+                                            <div class="d-flex flex-column gap-2 mb-2" id="webhookList">
+                                                {{-- Sabit URL'ler --}}
                                                 @foreach($webhookOptions as $url => $label)
                                                     @php $isActive = in_array($url, $savedUrls); @endphp
                                                     <div class="p-2" style="background:#fff; border:1px solid {{ $isActive ? '#86efac' : '#e2e8f0' }}; border-radius:8px;">
@@ -327,11 +333,55 @@
                                                         </label>
                                                     </div>
                                                 @endforeach
+
+                                                {{-- Özel (custom) kayıtlı URL'ler --}}
+                                                @foreach(array_values($customUrls) as $ci => $customUrl)
+                                                    @php $idx = $predefinedCount + $ci; @endphp
+                                                    <div class="webhook-custom-row d-flex align-items-center gap-2 p-2" style="background:#fff; border:1px solid #86efac; border-radius:8px;">
+                                                        <input type="checkbox" name="webhooks[{{ $idx }}][enabled]" value="1" checked>
+                                                        <input type="text"
+                                                               name="webhooks[{{ $idx }}][url]"
+                                                               value="{{ $customUrl }}"
+                                                               placeholder="https://..."
+                                                               style="flex:1; border:none; outline:none; font-size:0.85rem; color:#334155; background:transparent;">
+                                                        <span style="font-size:0.7rem; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:20px;">Aktif</span>
+                                                        <button type="button" onclick="removeWebhookRow(this)" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; line-height:1;" title="Sil">&times;</button>
+                                                    </div>
+                                                @endforeach
                                             </div>
+
+                                            {{-- Yeni URL ekle --}}
+                                            <div class="mb-3">
+                                                <button type="button" onclick="addWebhookRow()" style="font-size:0.8rem; color:#6366f1; background:none; border:1px dashed #6366f1; border-radius:8px; padding:5px 14px; cursor:pointer;">
+                                                    <i class="fa-solid fa-plus me-1"></i> Yeni Webhook URL Ekle
+                                                </button>
+                                            </div>
+
                                             <button type="submit" class="db-btn text-white bg-primary" style="padding:6px 20px; font-size:0.82rem; border-radius:8px;">
                                                 <i class="fa-solid fa-floppy-disk me-1"></i> Kaydet
                                             </button>
                                         </form>
+
+                                        <script>
+                                            var _webhookIdx = {{ $predefinedCount + count($customUrls) }};
+
+                                            function addWebhookRow() {
+                                                var idx = _webhookIdx++;
+                                                var row = document.createElement('div');
+                                                row.className = 'webhook-custom-row d-flex align-items-center gap-2 p-2';
+                                                row.style.cssText = 'background:#fff; border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px;';
+                                                row.innerHTML =
+                                                    '<input type="checkbox" name="webhooks[' + idx + '][enabled]" value="1" checked>' +
+                                                    '<input type="text" name="webhooks[' + idx + '][url]" placeholder="https://example.com/webhook" style="flex:1; border:1px solid #e2e8f0; border-radius:6px; padding:4px 8px; font-size:0.85rem; color:#334155;">' +
+                                                    '<button type="button" onclick="removeWebhookRow(this)" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; line-height:1;" title="Sil">&times;</button>';
+                                                document.getElementById('webhookList').appendChild(row);
+                                                row.querySelector('input[type=text]').focus();
+                                            }
+
+                                            function removeWebhookRow(btn) {
+                                                btn.closest('.webhook-custom-row').remove();
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                                 <div class="col-12 sm:col-12 !py-1.5">

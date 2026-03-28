@@ -1,0 +1,521 @@
+{
+  "info": {
+    "name": "GPS Yemek - Webhook API",
+    "_postman_id": "gps-yemek-webhook-collection",
+    "description": "GPS Yemek webhook endpoint'i için tüm eventleri içeren Postman koleksiyonu.\n\nAuth: Bearer token (restaurant.api_token)\nEndpoint: POST /api/webhook/orders",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://gpsyemek.com",
+      "type": "string"
+    },
+    {
+      "key": "api_token",
+      "value": "RESTAURANT_API_TOKEN_BURAYA",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. get_orders",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"get_orders\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Restoranın bugünkü PENDING (bekleyen) siparişlerini döner.\nAyrıca restoranın mevcut durumunu (current_status, permanently_closed, temporary_closed_until) da içerir."
+      },
+      "response": [
+        {
+          "name": "Başarılı yanıt",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"orders\": [],\n  \"restaurant_status\": {\n    \"current_status\": 0,\n    \"permanently_closed\": false,\n    \"temporary_closed_until\": null\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "2. order_updated - PREPARED (Hazırlandı)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"order_updated\",\n  \"order_code\": \"ORD-12345\",\n  \"status\": \"PREPARED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Sipariş durumunu ACCEPT olarak günceller.\nKullanılabilir status değerleri:\n- PREPARED  → OrderStatus::ACCEPT\n- HANDOVER  → OrderStatus::ON_THE_WAY\n- DELIVERED → OrderStatus::COMPLETED\n- REJECTED  → OrderStatus::REJECT"
+      },
+      "response": [
+        {
+          "name": "Başarılı yanıt",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true\n}"
+        },
+        {
+          "name": "Sipariş bulunamadı",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": false,\n  \"error\": \"Order not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "2. order_updated - HANDOVER (Yola Çıktı)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"order_updated\",\n  \"order_code\": \"ORD-12345\",\n  \"status\": \"HANDOVER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Sipariş durumunu ON_THE_WAY olarak günceller."
+      },
+      "response": []
+    },
+    {
+      "name": "2. order_updated - DELIVERED (Teslim Edildi)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"order_updated\",\n  \"order_code\": \"ORD-12345\",\n  \"status\": \"DELIVERED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Sipariş durumunu COMPLETED olarak günceller."
+      },
+      "response": []
+    },
+    {
+      "name": "2. order_updated - REJECTED (Reddedildi)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"order_updated\",\n  \"order_code\": \"ORD-12345\",\n  \"status\": \"REJECTED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Sipariş durumunu REJECT olarak günceller."
+      },
+      "response": []
+    },
+    {
+      "name": "3. restaurant_status_changed (Durum Değiştir)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"restaurant_status_changed\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Restoranın current_status'unu toggle eder.\ncurrent_status == 5 ise 0 yapar, 0 ise 5 yapar."
+      },
+      "response": [
+        {
+          "name": "Başarılı yanıt",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"restaurant\": {\n    \"id\": 1,\n    \"current_status\": 5\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "4. restaurant_permanently_close (Kalıcı Kapat)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"restaurant_permanently_close\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Restoranı kalıcı olarak kapatır (permanently_closed = true)."
+      },
+      "response": [
+        {
+          "name": "Başarılı yanıt",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"permanently_closed\": true\n}"
+        }
+      ]
+    },
+    {
+      "name": "5. restaurant_open (Restoranı Aç)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"restaurant_open\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Restoranı açık hale getirir.\npermanently_closed = false ve temporary_closed_until = null yapar."
+      },
+      "response": [
+        {
+          "name": "Başarılı yanıt",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"permanently_closed\": false\n}"
+        }
+      ]
+    },
+    {
+      "name": "❌ Hatalı token (401)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "GECERSIZ_TOKEN",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"get_orders\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Geçersiz Bearer token ile yapılan istek. 401 Unauthorized döner."
+      },
+      "response": [
+        {
+          "name": "Unauthorized",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"error\": \"Unauthorized\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "❌ Bilinmeyen event (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{api_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"unknown_event\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/webhook/orders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "webhook", "orders"]
+        },
+        "description": "Tanımsız bir event gönderildiğinde 400 Bad Request döner."
+      },
+      "response": [
+        {
+          "name": "Unknown event",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"error\": \"Unknown event\"\n}"
+        }
+      ]
+    }
+  ]
+}
